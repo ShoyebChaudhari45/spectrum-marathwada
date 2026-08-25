@@ -134,6 +134,10 @@
   // Core transition — builds ONE coordinated GSAP timeline
   // so rapid re-clicks interrupt gracefully (kill + rebuild
   // from whatever the current rendered values are).
+  //
+  // toId may be null, meaning "close whatever is open and return to the
+  // neutral, nothing-active state" — this is what clicking the already-
+  // active panel triggers (toggle-to-close).
   // ---------------------------------------------------
   function switchSection(toId) {
     if (toId === activeSection) return;
@@ -145,7 +149,9 @@
 
     const durScale = reduceMotion ? 0.25 : 1;
     const flowEase = "sine.inOut";
-    const toIndex = SECTION_INDEX[toId];
+    // Ripple origin: radiate outward from whichever panel is being opened,
+    // or — when closing — from whichever panel was open.
+    const rippleOrigin = SECTION_INDEX[toId ?? fromId];
 
     const tl = gsap.timeline({
       defaults: { ease: flowEase },
@@ -156,7 +162,7 @@
     });
     currentTimeline = tl;
 
-    // ---- 0.0–0.3s : active highlight ---------------------------------
+    // ---- 0–0.35s : active highlight -----------------------------------
     SECTIONS.forEach((id) => {
       const isActive = id === toId;
       panelEls[id].classList.toggle("is-active", isActive);
@@ -165,97 +171,106 @@
 
     tl.to(
       Object.values(panelEls),
-      { filter: "brightness(1)", duration: 0.3 * durScale },
+      { filter: "brightness(1)", duration: 0.35 * durScale },
       0
     );
 
-    // ---- 0.15–0.85s : panel expansion / collapse ----------------------
-    // Rebalanced for a bigger active panel (taller + a slight pop-out via
-    // x-translate) and a ripple stagger that radiates outward from the
-    // clicked panel instead of every row moving in lockstep.
+    // ---- 0.15–1.0s : panel expansion / collapse ------------------------
+    // Bigger active panel (taller + a slight pop-out via x-translate) when
+    // opening; every panel returns to its neutral size when closing. A
+    // ripple stagger radiates outward from the relevant panel instead of
+    // every row moving in lockstep.
     SECTIONS.forEach((id) => {
       const isActive = id === toId;
       tl.to(
         panelEls[id],
         {
-          flexGrow: isActive ? 4.4 : 0.7,
+          flexGrow: toId ? (isActive ? 4.4 : 0.7) : 1,
           x: isActive ? -14 : 0,
-          duration: 0.7 * durScale,
+          duration: 0.85 * durScale,
           ease: flowEase,
         },
-        0.15 * durScale + rippleDelay(id, toIndex, durScale)
+        0.15 * durScale + rippleDelay(id, rippleOrigin, durScale)
       );
     });
 
     // icon emphasis
-    tl.to(
-      `.section-panel[data-section="${toId}"] .icon`,
-      { scale: 1.16, duration: 0.5 * durScale, ease: "power2.out" },
-      0.22 * durScale
-    );
+    if (toId) {
+      tl.to(
+        `.section-panel[data-section="${toId}"] .icon`,
+        { scale: 1.16, duration: 0.55 * durScale, ease: "power2.out" },
+        0.22 * durScale
+      );
+    }
     if (fromId) {
       tl.to(
         `.section-panel[data-section="${fromId}"] .icon`,
-        { scale: 1, duration: 0.5 * durScale },
+        { scale: 1, duration: 0.55 * durScale },
         0.15 * durScale
       );
     }
 
-    // ---- 0.2–0.95s : beam animation ------------------------------------
+    // ---- 0.2–1.1s : beam animation --------------------------------------
     SECTIONS.forEach((id) => {
       beamEls[id].classList.toggle("is-active", id === toId);
       tl.to(
         beamEls[id],
         {
           opacity: id === toId ? 1 : 0.28,
-          duration: 0.75 * durScale,
+          duration: 0.9 * durScale,
         },
-        0.2 * durScale + rippleDelay(id, toIndex, durScale)
+        0.2 * durScale + rippleDelay(id, rippleOrigin, durScale)
       );
     });
     // gentle energy swell on the active beam
-    tl.fromTo(
-      beamEls[toId],
-      { scaleX: 0.97 },
-      { scaleX: 1, duration: 0.75 * durScale, ease: "sine.out", transformOrigin: "0% 50%" },
-      0.2 * durScale
-    );
+    if (toId) {
+      tl.fromTo(
+        beamEls[toId],
+        { scaleX: 0.97 },
+        { scaleX: 1, duration: 0.9 * durScale, ease: "sine.out", transformOrigin: "0% 50%" },
+        0.2 * durScale
+      );
+    }
 
-    // ---- 0.3–1.0s : map reaction ----------------------------------------
+    // ---- 0.3–1.15s : map reaction ----------------------------------------
     SECTIONS.forEach((id) => {
       tl.to(
         overlayEls[id],
-        { opacity: id === toId ? 0.42 : 0, duration: 0.7 * durScale },
+        { opacity: id === toId ? 0.42 : 0, duration: 0.85 * durScale },
         0.3 * durScale
       );
     });
-    tl.to(
-      mapGlow,
-      { scale: 1.1, opacity: 1, duration: 0.35 * durScale, ease: "sine.inOut", yoyo: true, repeat: 1 },
-      0.3 * durScale
-    );
-    tl.to(
-      mapCore,
-      { scale: 1.25, duration: 0.3 * durScale, yoyo: true, repeat: 1, ease: "sine.out" },
-      0.3 * durScale
-    );
+    if (toId) {
+      tl.to(
+        mapGlow,
+        { scale: 1.1, opacity: 1, duration: 0.4 * durScale, ease: "sine.inOut", yoyo: true, repeat: 1 },
+        0.3 * durScale
+      );
+      tl.to(
+        mapCore,
+        { scale: 1.25, duration: 0.35 * durScale, yoyo: true, repeat: 1, ease: "sine.out" },
+        0.3 * durScale
+      );
+    }
 
-    // ---- 0.55–1.1s : content fade/slide ----------------------------------
+    // ---- 0.55–1.25s : content fade/slide ----------------------------------
     if (fromId) {
       tl.to(
         contentEls[fromId],
-        { height: 0, opacity: 0, duration: 0.4 * durScale, ease: "sine.inOut" },
+        { height: 0, opacity: 0, duration: 0.45 * durScale, ease: "sine.inOut" },
         0.15 * durScale
       );
     }
-    const toContent = contentEls[toId];
-    const naturalHeight = measureContentHeight(toContent);
-    tl.fromTo(
-      toContent,
-      { height: 0, opacity: 0 },
-      { height: naturalHeight, opacity: 1, duration: 0.55 * durScale, ease: "sine.out" },
-      0.5 * durScale
-    );
+    if (toId) {
+      const toContent = contentEls[toId];
+      const naturalHeight = measureContentHeight(toContent);
+      tl.fromTo(
+        toContent,
+        { height: 0, opacity: 0 },
+        { height: naturalHeight, opacity: 1, duration: 0.65 * durScale, ease: "sine.out" },
+        0.55 * durScale
+      );
+    }
   }
 
   // ---------------------------------------------------
@@ -273,7 +288,9 @@
   // Enter/Space + focus-visible for free)
   // ---------------------------------------------------
   SECTIONS.forEach((id) => {
-    toggleEls[id].addEventListener("click", () => switchSection(id));
+    toggleEls[id].addEventListener("click", () => {
+      switchSection(activeSection === id ? null : id);
+    });
   });
 
   // ---------------------------------------------------
