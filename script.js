@@ -109,6 +109,13 @@
     });
   }
 
+  // Index of each section — used to build a ripple stagger that emanates
+  // outward from whichever panel was clicked, instead of every panel
+  // animating in lockstep (part of the "free flowing" motion pass).
+  const SECTION_INDEX = Object.fromEntries(SECTIONS.map((id, i) => [id, i]));
+  const rippleDelay = (id, fromIndex, durScale) =>
+    Math.min(Math.abs(SECTION_INDEX[id] - fromIndex), 3) * 0.05 * durScale;
+
   // ---------------------------------------------------
   // State
   // ---------------------------------------------------
@@ -137,10 +144,11 @@
     if (currentTimeline) currentTimeline.kill();
 
     const durScale = reduceMotion ? 0.25 : 1;
-    const ease = "power3.inOut";
+    const flowEase = "sine.inOut";
+    const toIndex = SECTION_INDEX[toId];
 
     const tl = gsap.timeline({
-      defaults: { ease },
+      defaults: { ease: flowEase },
       onComplete: () => {
         currentTimeline = null;
         if (toId === "trade") playFinalAnimation();
@@ -148,7 +156,7 @@
     });
     currentTimeline = tl;
 
-    // ---- 0.0–0.25s : active highlight -------------------------------
+    // ---- 0.0–0.3s : active highlight ---------------------------------
     SECTIONS.forEach((id) => {
       const isActive = id === toId;
       panelEls[id].classList.toggle("is-active", isActive);
@@ -157,81 +165,86 @@
 
     tl.to(
       Object.values(panelEls),
-      { filter: "brightness(1)", duration: 0.25 * durScale },
+      { filter: "brightness(1)", duration: 0.3 * durScale },
       0
     );
 
-    // ---- 0.15–0.7s : panel expansion / collapse (flex-grow) --------
+    // ---- 0.15–0.85s : panel expansion / collapse ----------------------
+    // Rebalanced for a bigger active panel (taller + a slight pop-out via
+    // x-translate) and a ripple stagger that radiates outward from the
+    // clicked panel instead of every row moving in lockstep.
     SECTIONS.forEach((id) => {
+      const isActive = id === toId;
       tl.to(
         panelEls[id],
         {
-          flexGrow: id === toId ? 3.1 : 0.85,
-          duration: 0.55 * durScale,
-          ease: "power4.out",
+          flexGrow: isActive ? 4.4 : 0.7,
+          x: isActive ? -14 : 0,
+          duration: 0.7 * durScale,
+          ease: flowEase,
         },
-        0.15 * durScale
+        0.15 * durScale + rippleDelay(id, toIndex, durScale)
       );
     });
 
     // icon emphasis
     tl.to(
       `.section-panel[data-section="${toId}"] .icon`,
-      { scale: 1.12, duration: 0.4 * durScale, ease: "back.out(1.7)" },
-      0.2 * durScale
+      { scale: 1.16, duration: 0.5 * durScale, ease: "power2.out" },
+      0.22 * durScale
     );
     if (fromId) {
       tl.to(
         `.section-panel[data-section="${fromId}"] .icon`,
-        { scale: 1, duration: 0.4 * durScale },
+        { scale: 1, duration: 0.5 * durScale },
         0.15 * durScale
       );
     }
 
-    // ---- 0.2–0.8s : beam animation -----------------------------------
+    // ---- 0.2–0.95s : beam animation ------------------------------------
     SECTIONS.forEach((id) => {
       beamEls[id].classList.toggle("is-active", id === toId);
       tl.to(
         beamEls[id],
         {
           opacity: id === toId ? 1 : 0.28,
-          duration: 0.6 * durScale,
+          duration: 0.75 * durScale,
         },
-        0.2 * durScale
+        0.2 * durScale + rippleDelay(id, toIndex, durScale)
       );
     });
-    // subtle energy pulse on the active beam
+    // gentle energy swell on the active beam
     tl.fromTo(
       beamEls[toId],
       { scaleX: 0.97 },
-      { scaleX: 1, duration: 0.6 * durScale, ease: "expo.out", transformOrigin: "0% 50%" },
+      { scaleX: 1, duration: 0.75 * durScale, ease: "sine.out", transformOrigin: "0% 50%" },
       0.2 * durScale
     );
 
-    // ---- 0.3–0.9s : map reaction --------------------------------------
+    // ---- 0.3–1.0s : map reaction ----------------------------------------
     SECTIONS.forEach((id) => {
       tl.to(
         overlayEls[id],
-        { opacity: id === toId ? 0.42 : 0, duration: 0.6 * durScale },
+        { opacity: id === toId ? 0.42 : 0, duration: 0.7 * durScale },
         0.3 * durScale
       );
     });
     tl.to(
       mapGlow,
-      { scale: 1.1, opacity: 1, duration: 0.3 * durScale, yoyo: true, repeat: 1 },
+      { scale: 1.1, opacity: 1, duration: 0.35 * durScale, ease: "sine.inOut", yoyo: true, repeat: 1 },
       0.3 * durScale
     );
     tl.to(
       mapCore,
-      { scale: 1.25, duration: 0.25 * durScale, yoyo: true, repeat: 1, ease: "power2.out" },
+      { scale: 1.25, duration: 0.3 * durScale, yoyo: true, repeat: 1, ease: "sine.out" },
       0.3 * durScale
     );
 
-    // ---- 0.5–1.0s : content fade/slide --------------------------------
+    // ---- 0.55–1.1s : content fade/slide ----------------------------------
     if (fromId) {
       tl.to(
         contentEls[fromId],
-        { height: 0, opacity: 0, duration: 0.35 * durScale, ease: "power3.inOut" },
+        { height: 0, opacity: 0, duration: 0.4 * durScale, ease: "sine.inOut" },
         0.15 * durScale
       );
     }
@@ -240,7 +253,7 @@
     tl.fromTo(
       toContent,
       { height: 0, opacity: 0 },
-      { height: naturalHeight, opacity: 1, duration: 0.45 * durScale, ease: "power3.out" },
+      { height: naturalHeight, opacity: 1, duration: 0.55 * durScale, ease: "sine.out" },
       0.5 * durScale
     );
   }
