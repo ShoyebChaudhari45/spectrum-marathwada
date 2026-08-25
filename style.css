@@ -8,6 +8,24 @@
    background art at any viewport size (desktop).
    ===================================================== */
 
+/* Vendored locally so the page works with no internet connection.
+   Both are variable fonts — one file per family covers every weight
+   used (300–800), the browser picks the exact weight from the axis. */
+@font-face{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('assets/fonts/montserrat-variable.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('assets/fonts/sora-variable.woff2') format('woff2');
+}
+
 :root{
   --bg: #04060c;
   --gold: #cdae5c;

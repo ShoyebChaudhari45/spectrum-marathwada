@@ -185,7 +185,7 @@
       tl.to(
         panelEls[id],
         {
-          flexGrow: toId ? (isActive ? 4.4 : 0.7) : 1,
+          flexGrow: toId ? (isActive ? 2.7 : 0.8) : 1,
           x: isActive ? -14 : 0,
           duration: 0.85 * durScale,
           ease: flowEase,
