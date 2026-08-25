@@ -247,6 +247,16 @@ html, body{
   filter: brightness(1.12) saturate(1.15);
 }
 
+/* When active, the toggle should only take the height its own content
+   (icon + title + subtitle) needs, not grow to fill the whole enlarged
+   panel — otherwise the content text below gets pushed toward the
+   bottom with a big gap under the subtitle instead of sitting close to it. */
+.section-panel.is-active .section-toggle{
+  flex: 0 0 auto;
+  padding-top: 3%;
+  padding-bottom: 1.5%;
+}
+
 .section-panel:not(.is-active):hover,
 .section-panel:not(.is-active):focus-within{
   opacity: .95;
@@ -355,6 +365,65 @@ html, body{
   color: rgba(255,255,255,.9);
   max-height: 3.6em; /* ~2 lines; copy is written short to fit within this, this is just a safety clip */
   overflow: hidden;
+}
+
+/* ===================================================== */
+/* PAGE NAV — bottom-left prev/next arrows.                */
+/* Visual only for now; not wired to any action yet.       */
+/* ===================================================== */
+
+.page-nav{
+  position: absolute;
+  left: 2.2%;
+  bottom: 2.4%;
+  display: flex;
+  gap: .6vw;
+  z-index: 5;
+}
+
+.page-nav-btn{
+  all: unset;
+  box-sizing: border-box;
+  width: 2.4vw;
+  height: 2.4vw;
+  min-width: 26px;
+  min-height: 26px;
+  max-width: 38px;
+  max-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(205,174,92,.5);
+  background: rgba(4,6,12,.45);
+  color: var(--gold-bright);
+  cursor: pointer;
+  transition: background .3s ease, border-color .3s ease, transform .3s ease;
+}
+
+.page-nav-btn svg{
+  width: 45%;
+  height: 45%;
+}
+
+.page-nav-btn:hover,
+.page-nav-btn:focus-visible{
+  background: rgba(205,174,92,.18);
+  border-color: var(--gold-bright);
+  transform: scale(1.08);
+}
+
+.page-nav-btn:focus-visible{
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 2px;
+}
+
+@media (max-width: 900px){
+  .page-nav{
+    position: static;
+    justify-content: center;
+    padding: 4vw 0 2vw;
+  }
 }
 
 /* ===================================================== */
@@ -622,6 +691,16 @@ html, body{
     </ul>
 
     <!-- Footer tagline (kept as part of background art) -->
+
+    <!-- Page nav — visual only for now, not wired to anything yet -->
+    <nav class="page-nav" aria-label="Page navigation">
+      <button class="page-nav-btn" type="button" aria-label="Previous page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6" /></svg>
+      </button>
+      <button class="page-nav-btn" type="button" aria-label="Next page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+      </button>
+    </nav>
   </div>
 </div>
 
