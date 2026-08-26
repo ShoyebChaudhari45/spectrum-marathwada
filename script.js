@@ -5,19 +5,20 @@
    The slide is a click-through sequence. Clicking anywhere
    on it advances one step:
 
-     on load  the artwork is already on screen, and the ray
-              draws itself in from the left
-     click 1  red      — Funding & Trade
-     click 2  orange   — Education & Skills
-     click 3  yellow   — Creativity
-     click 4  green    — Hospitality
-     click 5  blue     — Value Addition
-     click 6  violet   — Engineering
-     click 7  magenta  — Legacy
+     on load  the artwork is on screen, the ray draws itself in from
+              the left, and red — Funding & Trade — opens by itself
+     click 1  orange   — Education & Skills
+     click 2  yellow   — Creativity
+     click 3  green    — Hospitality
+     click 4  blue     — Value Addition
+     click 5  violet   — Engineering
+     click 6  magenta  — Legacy
+     click 7  Legacy closes, leaving all seven as ribbons
 
-   Once all seven are up the sequence stays there — further clicks do
-   nothing, so the full spectrum cannot be clicked away by accident.
-   Reload the slide to run it again.
+   That last click matters: without it Legacy would stay open forever,
+   since it is the final band and nothing follows to displace it. After
+   it, further clicks do nothing — the full spectrum cannot be clicked
+   away by accident. Reload the slide to run it again.
 
    Colours ACCUMULATE: each click adds the next band and
    leaves the previous ones in place, so the spectrum builds
@@ -61,8 +62,11 @@
   const ORIGIN = { x: VB_W * 0.342, y: VB_H * 0.49 };
 
   // ---- the step sequence ----
+  // Step 1..7 open a band each; step 8 closes the last one and leaves all
+  // seven sitting as ribbons.
   const FIRST_COLOR_STEP = 1;
-  const LAST_STEP = FIRST_COLOR_STEP + SECTIONS.length - 1; // 7
+  const ALL_OPEN_STEP = FIRST_COLOR_STEP + SECTIONS.length - 1; // 7
+  const LAST_STEP = ALL_OPEN_STEP + 1;                          // 8
 
   // ---- how far the newest card outgrows the rest -----------------------
   // It grows on both axes: GROW_* drive the height (flex-grow within the
@@ -195,7 +199,9 @@
   // ---------------------------------------------------
   // State
   // ---------------------------------------------------
-  let step = 0;
+  // Starts at the first band, not at nothing: Funding & Trade is already
+  // open when the slide arrives.
+  let step = FIRST_COLOR_STEP;
   let currentTimeline = null;
 
   function measureContentHeight(el) {
@@ -221,7 +227,9 @@
       0,
       Math.min(SECTIONS.length, n - FIRST_COLOR_STEP + 1)
     );
-    const activeIdx = revealed - 1;
+    // Past the last band nothing is expanded, so every revealed card
+    // settles back to an equal-height ribbon.
+    const activeIdx = n <= ALL_OPEN_STEP ? revealed - 1 : -1;
 
     if (currentTimeline) currentTimeline.kill();
 
@@ -278,7 +286,7 @@
       tl.to(
         beamEls[id],
         {
-          opacity: inSet ? (isActive ? 0.82 : 0.42) : 0,
+          opacity: inSet ? (isActive ? 0.82 : activeIdx < 0 ? 0.6 : 0.42) : 0,
           duration: 0.7 * durScale,
         },
         0.1 * durScale
@@ -352,7 +360,8 @@
       });
     });
 
-    renderStep(0);
+    // the first band opens by itself, so the slide never arrives empty
+    renderStep(step);
   }
 
   // ---------------------------------------------------
