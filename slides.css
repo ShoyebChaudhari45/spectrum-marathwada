@@ -396,10 +396,10 @@
    SLIDE 7 — the CSN RISE lockup
    ===================================================== */
 
-/* Sits in the empty right-hand half, level with the middle of the R-I-S-E
-   list (which measures y 399..721, so centre 560) rather than tucked up in
-   the corner. The list's longest heading ends around x=735, leaving this
-   whole area free, so the mark can be a good deal larger here.
+/* Sits in the empty right-hand half, level with the top of the R-I-S-E
+   list rather than its middle. The list's longest heading ends around
+   x=735, leaving this whole area free, so the mark can be a good deal
+   larger here.
 
    Navy-and-green artwork on white with no alpha, so on the dark page it
    keeps a light plate of its own — same treatment as the jubilee mark in
@@ -407,7 +407,7 @@
 .rise-logo{
   position: absolute;
   right: 160px;
-  top: 468px;
+  top: 230px;
   width: 360px;
   height: auto;
   z-index: 2;
@@ -733,21 +733,26 @@
   color: var(--ink-soft);
 }
 
+/* All seven chips have to fit on one line — at the previous padding/gap
+   (22px/8px) they came out to ~1428px, just past the 1420px content
+   width, which wrapped "and more…" onto its own row. Trimmed to comfortably
+   clear that in one line instead. */
 .anchor-companies{
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-wrap: nowrap;
+  gap: 6px;
   margin: 6px 0 0;
   padding: 0;
   list-style: none;
 }
 
 .anchor-companies li{
-  padding: 10px 22px;
+  padding: 10px 18px;
   border: 1px solid rgba(100,176,24,.35);
   border-radius: 999px;
   background: rgba(100,176,24,.08);
   font-size: 20px;
   font-weight: 500;
   color: var(--ink);
+  white-space: nowrap;
 }
