@@ -64,50 +64,7 @@
 }
 
 /* ===================================================== */
-/* SLIDE 4 — the seven spectrums table                    */
-/* ===================================================== */
-
-.spec-table{
-  width: 100%;
-  margin-top: 26px;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-.spec-table th,
-.spec-table td{
-  padding: 13px 22px;
-  text-align: left;
-  vertical-align: top;
-  border-bottom: 1px solid #e3e5e7;
-}
-
-.spec-table thead th{
-  font-size: 17px;
-  font-weight: 700;
-  color: #14181c;
-  border-bottom: 1px solid var(--rule);
-}
-
-.spec-table tbody td{
-  font-size: 16px;
-  line-height: 1.45;
-  color: var(--ink);
-}
-
-.spec-table tbody td:first-child{
-  font-weight: 700;
-  color: var(--green-deep);
-}
-
-.spec-table col.c-name{ width: 23%; }
-.spec-table col.c-anchor{ width: 20%; }
-.spec-table col.c-capability{ width: 57%; }
-
-.spec-table tbody tr:last-child td{ border-bottom: none; }
-
-/* ===================================================== */
-/* SLIDE 5 — industrial might, two columns                */
+/* SLIDE 3 — industrial might, two columns                */
 /* ===================================================== */
 
 .split{
@@ -208,7 +165,7 @@
 }
 
 /* ===================================================== */
-/* SLIDE 6 — apex voice, three cards plus a wide one      */
+/* SLIDE 4 — apex voice, three cards plus a wide one      */
 /* ===================================================== */
 
 .card.centered{ text-align: center; }
@@ -237,7 +194,7 @@
 }
 
 /* ===================================================== */
-/* SLIDE 7 — the RISE framework                           */
+/* SLIDE 5 — the RISE framework                           */
 /* ===================================================== */
 
 .rise-list{
@@ -307,7 +264,7 @@
 }
 
 /* ===================================================== */
-/* SLIDES 8 & 9 — icon card grids                         */
+/* SLIDES 6 & 7 — icon card grids                         */
 /* ===================================================== */
 
 .card-grid{
@@ -333,7 +290,7 @@
 .card-grid.cols-2 .card p{ font-size: 17px; }
 
 /* =====================================================
-   SLIDE 6 — the CSN RISE lockup
+   SLIDE 5 — the CSN RISE lockup
    ===================================================== */
 
 .rise-logo{
@@ -346,7 +303,7 @@
 }
 
 /* =====================================================
-   SLIDE 7 — strategic national demands
+   SLIDE 6 — strategic national demands
    -----------------------------------------------------
    Six cards; at full size the bottom-right one grazed the green band of
    the corner swoosh, so the grid is tightened to finish clear of it.
@@ -370,7 +327,7 @@
 }
 
 /* =====================================================
-   SLIDE 8 — bilateral commitments
+   SLIDE 7 — bilateral commitments
    -----------------------------------------------------
    Four cards plus a title is the densest slide in the deck, and at full
    size the second row ran under the navy corner swoosh. Everything here

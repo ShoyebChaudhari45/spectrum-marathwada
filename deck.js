@@ -24,12 +24,11 @@
   const PAGES = [
     "index.html",
     "02-spectrum.html",
-    "03-seven-spectrums.html",
-    "04-industrial-might.html",
-    "05-cmia-apex.html",
-    "06-rise-framework.html",
-    "07-national-demands.html",
-    "08-commitments.html",
+    "03-industrial-might.html",
+    "04-cmia-apex.html",
+    "05-rise-framework.html",
+    "06-national-demands.html",
+    "07-commitments.html",
   ];
 
   const slide = document.querySelector(".slide");

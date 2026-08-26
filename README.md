@@ -1,6 +1,6 @@
 # CMIA — Chhatrapati Sambhajinagar: Legacy to Global Powerhouse
 
-An eight-page HTML presentation for the Chamber of Marathwada Industries &
+A seven-page HTML presentation for the Chamber of Marathwada Industries &
 Agriculture, built from the *Project-CSNTech: India's Next IT and GCC
 Powerhouse* deck. Every page is wrapped in the official CMIA slide template
 (green spine, logo, 58-years jubilee mark, navy/green corner swoosh), and page
@@ -22,7 +22,7 @@ python -m http.server 8080
 
 ## Two crowded slides
 
-Slides 7 and 8 are the densest in the deck, and at full size their bottom-right
+Slides 6 and 7 are the densest in the deck, and at full size their bottom-right
 cards ran under the navy/green corner swoosh. Both are tightened by a modifier
 class — `.content.demands` and `.content.commitments` in `slides.css` — rather
 than by shrinking the swoosh, so the template chrome stays identical on every
@@ -47,12 +47,11 @@ pushing any other branch gets its own preview URL.
 |---|------|-------|
 | 1 | `index.html` | Chhatrapati Sambhajinagar — Legacy to Global Powerhouse (title) |
 | 2 | `02-spectrum.html` | **The Spectrum of Marathwada** (interactive) |
-| 3 | `03-seven-spectrums.html` | The 7 Spectrums of Chhatrapati Sambhajinagar |
-| 4 | `04-industrial-might.html` | Industrial Might: Scale & Ground Reality |
-| 5 | `05-cmia-apex.html` | CMIA — The Apex Industrial Voice |
-| 6 | `06-rise-framework.html` | The CSN RISE Framework |
-| 7 | `07-national-demands.html` | Strategic National Demands: What We Seek |
-| 8 | `08-commitments.html` | CMIA's Bilateral Commitments |
+| 3 | `03-industrial-might.html` | Industrial Might: Scale & Ground Reality |
+| 4 | `04-cmia-apex.html` | CMIA — The Apex Industrial Voice |
+| 5 | `05-rise-framework.html` | The CSN RISE Framework |
+| 6 | `06-national-demands.html` | Strategic National Demands: What We Seek |
+| 7 | `07-commitments.html` | CMIA's Bilateral Commitments |
 
 Each slide is a standalone page. Navigate with the small prev/next arrows at
 the bottom left, or with <kbd>←</kbd> / <kbd>→</kbd> (also <kbd>PageUp</kbd> /
@@ -96,7 +95,7 @@ swoosh, page number, nav arrows — so the branding lives in exactly one place.
 - `assets/cmia-58-years.png` — the 58-years jubilee lockup. The supplied
   artwork already carries the *niti se nirmiti* line, so the template draws no
   separate text for it.
-- `assets/csn-rise-logo.png` — the CSN RISE lockup, used on slide 6 only.
+- `assets/csn-rise-logo.png` — the CSN RISE lockup, used on slide 5 only.
 
 Both supplied marks were down-sampled to roughly 3x their display size; the
 originals were far larger than needed and made the deck slower to load from a
