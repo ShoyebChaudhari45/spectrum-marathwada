@@ -97,6 +97,7 @@
   const mapGlow = document.getElementById("mapGlow");
   const mapCore = document.getElementById("mapCore");
   const leftMask = document.querySelector(".left-content-mask");
+  const titleBlock = document.getElementById("stageTitleBlock");
 
   const panelEls = {};
   const toggleEls = {};

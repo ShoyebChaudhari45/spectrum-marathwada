@@ -168,10 +168,10 @@ html, body{
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 58px;
+  height: 80px;
   z-index: 1;
   pointer-events: none;
-  opacity: .5;   /* a quiet trim, not a feature */
+  opacity: .65;   /* slightly increased to show the details of the grid mesh */
 }
 
 .page-number{
@@ -188,6 +188,34 @@ html, body{
    artwork, so the template's copies outside the frame are suppressed. */
 .slide[data-chrome="minimal"] .brand,
 .slide[data-chrome="minimal"] .jubilee{ display: none; }
+
+/* ---- extreme opening slide: CMIA | 58 lockup, dead centre, nothing else.
+   No title, no tagline, no wave, no page number — just the pair of marks
+   in the middle of an otherwise empty frame. ---- */
+.slide[data-chrome="mark-centered"] .content{ display: none; }
+
+.slide[data-chrome="mark-centered"] .spectrum-wave,
+.slide[data-chrome="mark-centered"] .page-number{ display: none; }
+
+.slide[data-chrome="mark-centered"] .brand{
+  left: 50%;
+  top: 50%;
+  width: auto;
+  transform: translate(calc(-100% - 24px), -50%);
+  text-align: center;
+}
+
+.slide[data-chrome="mark-centered"] .brand img{ margin: 0 auto; width: 220px; }
+.slide[data-chrome="mark-centered"] .brand .wordmark{ display: none; }
+
+.slide[data-chrome="mark-centered"] .jubilee{
+  left: 50%;
+  top: 50%;
+  transform: translate(24px, -50%);
+}
+
+.slide[data-chrome="mark-centered"] .jubilee::before{ top: -50px; bottom: -50px; }
+.slide[data-chrome="mark-centered"] .jubilee-mark{ width: 206px; }
 
 /* ===================================================== */
 /* PAGE NAV — "very small arrows", bottom left            */

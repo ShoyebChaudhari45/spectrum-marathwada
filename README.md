@@ -70,16 +70,21 @@ pushing any other branch gets its own preview URL.
 
 | # | File | Slide |
 |---|------|-------|
-| 1 | `index.html` | Spectrum — The Industrial Story of Marathwada (title) |
+| 1 | `index.html` | CMIA \| 58 lockup, centred, no other content (extreme opener) |
 | 2 | `02-heritage-legacy.html` | A Heritage of Legacy (showcase artwork) |
 | 3 | `03-industrial-vision.html` | An Industrial Vision (showcase artwork) |
-| 4 | `04-spectrum.html` | **The Spectrum of Marathwada** (interactive) |
-| 5 | `05-industrial-might.html` | Industrial Might: Scale & Ground Reality |
-| 6 | `06-anchoring-investments.html` | Anchoring Investments in CSN |
-| 7 | `07-rise-framework.html` | The CSN RISE Framework |
-| 8 | `08-national-demands.html` | Strategic National Demands: What We Seek (click-reveal) |
-| 9 | `09-commitments.html` | What We Pledge to Deliver (click-reveal) |
-| 10 | `10-thank-you.html` | Thank You (closing) |
+| 4 | `04-title.html` | Spectrum — The Industrial Story of Marathwada (title) |
+| 5 | `04-spectrum.html` | **The Spectrum of Marathwada** (interactive) |
+| 6 | `05-industrial-might.html` | Industrial Might: Scale & Ground Reality |
+| 7 | `06-anchoring-investments.html` | Anchoring Investments in CSN |
+| 8 | `07-rise-framework.html` | The CSN RISE Framework |
+| 9 | `08-national-demands.html` | Strategic National Demands: What We Seek (click-reveal) |
+| 10 | `09-commitments.html` | What We Pledge to Deliver (click-reveal) |
+| 11 | `10-thank-you.html` | Thank You (closing) |
+
+Filenames keep their original numbering — only `04-spectrum.html`'s slot moved — so
+`04-title.html` is a new file rather than a rename. Ordering is still driven by the
+`PAGES` array in `deck.js`, not by filename.
 
 Each slide is a standalone page. Navigate with the small prev/next arrows at
 the bottom left, or with <kbd>←</kbd> / <kbd>→</kbd> (also <kbd>PageUp</kbd> /

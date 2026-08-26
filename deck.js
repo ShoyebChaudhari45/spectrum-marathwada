@@ -25,6 +25,7 @@
     "index.html",
     "02-heritage-legacy.html",
     "03-industrial-vision.html",
+    "04-title.html",
     "04-spectrum.html",
     "05-industrial-might.html",
     "06-anchoring-investments.html",
@@ -47,7 +48,11 @@
   const SLIDE_H = 900;
 
   function fit() {
-    const scale = Math.min(
+    // Math.max (cover) rather than Math.min (contain): the slide fills the
+    // whole window edge-to-edge with no letterbox bars, cropping whichever
+    // axis runs long. html/body has overflow:hidden (deck.css) so the
+    // cropped overflow never shows a scrollbar.
+    const scale = Math.max(
       window.innerWidth / SLIDE_W,
       window.innerHeight / SLIDE_H
     );
@@ -75,9 +80,8 @@
   // The gradient id is suffixed per page so several of these can never
   // collide if slides are ever composed into one document.
   const waveId = `specWave-${pageNo}`;
-  slide.prepend(
-    el(`
-    <svg class="spectrum-wave" viewBox="0 0 1600 58" preserveAspectRatio="none" aria-hidden="true">
+  const waveContainer = el(`
+    <svg class="spectrum-wave" viewBox="0 0 1600 80" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <linearGradient id="${waveId}" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%"   stop-color="#ff3b30" />
@@ -89,13 +93,98 @@
           <stop offset="100%" stop-color="#ff2d92" />
         </linearGradient>
       </defs>
-      <path d="M0 26 C 280 4, 520 44, 800 24 S 1340 2, 1600 20" fill="none"
-            stroke="url(#${waveId})" stroke-width="7" stroke-linecap="round" />
-      <path d="M0 46 C 320 22, 560 60, 880 40 S 1360 16, 1600 40" fill="none"
-            stroke="url(#${waveId})" stroke-width="4" stroke-linecap="round" opacity=".5" />
+      <g class="mesh-group"></g>
     </svg>
-  `)
-  );
+  `);
+  slide.prepend(waveContainer);
+
+  // Setup dynamic warped mesh grid inside .mesh-group
+  (() => {
+    const H = 5;      // 5 horizontal waves
+    const V = 38;      // 38 vertical grid lines
+    const width = 1600;
+    const height = 80;
+
+    // Define distinct configurations for each wave row to maximize crossover visual interest
+    const rows = [];
+    for (let i = 0; i < H; i++) {
+      const ratio = i / (H - 1);
+      rows.push({
+        baseline: 15 + ratio * 50,
+        amp1: 6 + Math.sin(i * 1.5) * 3,
+        amp2: 4 + Math.cos(i * 1.5) * 2,
+        freq1: 0.003 + (i * 0.0004),
+        freq2: 0.0075 - (i * 0.0004),
+        speed1: 0.8 + i * 0.1,
+        speed2: 1.1 - i * 0.15,
+        phase1: i * 0.7,
+        phase2: i * 1.1 + 1.5
+      });
+    }
+
+    const pathH = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathH.setAttribute("fill", "none");
+    pathH.setAttribute("stroke", `url(#${waveId})`);
+    pathH.setAttribute("stroke-width", "1.75");
+    pathH.setAttribute("stroke-linecap", "round");
+    pathH.setAttribute("stroke-linejoin", "round");
+
+    const pathV = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    pathV.setAttribute("fill", "none");
+    pathV.setAttribute("stroke", `url(#${waveId})`);
+    pathV.setAttribute("stroke-width", "0.75");
+    pathV.setAttribute("opacity", "0.4");
+    pathV.setAttribute("stroke-linecap", "round");
+    pathV.setAttribute("stroke-linejoin", "round");
+
+    const group = waveContainer.querySelector(".mesh-group");
+    group.appendChild(pathV);
+    group.appendChild(pathH);
+
+    function update() {
+      const t = performance.now() * 0.001; // time in seconds
+      const nodes = [];
+
+      // Calculate all point locations
+      for (let i = 0; i < H; i++) {
+        const rowNodes = [];
+        const r = rows[i];
+        for (let j = 0; j < V; j++) {
+          const x = (j / (V - 1)) * width;
+          const y = r.baseline 
+            + r.amp1 * Math.sin(x * r.freq1 + t * r.speed1 + r.phase1)
+            + r.amp2 * Math.sin(x * r.freq2 - t * r.speed2 + r.phase2);
+          rowNodes.push({ x, y });
+        }
+        nodes.push(rowNodes);
+      }
+
+      // Draw horizontal lines
+      let dH = "";
+      for (let i = 0; i < H; i++) {
+        const rowNodes = nodes[i];
+        dH += `M ${rowNodes[0].x.toFixed(1)} ${rowNodes[0].y.toFixed(1)}`;
+        for (let j = 1; j < V; j++) {
+          dH += ` L ${rowNodes[j].x.toFixed(1)} ${rowNodes[j].y.toFixed(1)}`;
+        }
+      }
+      pathH.setAttribute("d", dH);
+
+      // Draw vertical connecting lines
+      let dV = "";
+      for (let j = 0; j < V; j++) {
+        dV += `M ${nodes[0][j].x.toFixed(1)} ${nodes[0][j].y.toFixed(1)}`;
+        for (let i = 1; i < H; i++) {
+          dV += ` L ${nodes[i][j].x.toFixed(1)} ${nodes[i][j].y.toFixed(1)}`;
+        }
+      }
+      pathV.setAttribute("d", dV);
+
+      requestAnimationFrame(update);
+    }
+
+    update();
+  })();
 
   // ---- CMIA logo, top-left ----
   slide.appendChild(

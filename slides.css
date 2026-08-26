@@ -58,6 +58,16 @@
   font-weight: 300;
 }
 
+/* closing slide: the Hindi line runs longer than the title rule, so it
+   drops a size and wraps within the content width rather than the rule. */
+.title-meta .tagline.hindi-close{
+  max-width: 1100px;
+  margin: 0 auto;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
 /* the wordmark is re-tinted on click by title.js */
 .title-slide h1{ transition: color .35s ease; }
 
@@ -596,6 +606,25 @@
   color: var(--ink-strong);
 }
 
+/* ---- 7-colour variant: each card takes one band of the deck's own
+   spectrum wave, in order, so a 7-card grid reads as the full spectrum. ---- */
+.seek-grid--spectrum .seek-card:nth-child(1) .badge{ background: #ff3b30; }
+.seek-grid--spectrum .seek-card:nth-child(1)::before{ background: #ff3b30; }
+.seek-grid--spectrum .seek-card:nth-child(2) .badge{ background: #ff9500; }
+.seek-grid--spectrum .seek-card:nth-child(2)::before{ background: #ff9500; }
+.seek-grid--spectrum .seek-card:nth-child(3) .badge{ background: #ffd60a; }
+.seek-grid--spectrum .seek-card:nth-child(3)::before{ background: #ffd60a; }
+.seek-grid--spectrum .seek-card:nth-child(4) .badge{ background: #34c759; }
+.seek-grid--spectrum .seek-card:nth-child(4)::before{ background: #34c759; }
+.seek-grid--spectrum .seek-card:nth-child(5) .badge{ background: #0a84ff; }
+.seek-grid--spectrum .seek-card:nth-child(5)::before{ background: #0a84ff; }
+.seek-grid--spectrum .seek-card:nth-child(6) .badge{ background: #5e5ce6; }
+.seek-grid--spectrum .seek-card:nth-child(6)::before{ background: #5e5ce6; }
+.seek-grid--spectrum .seek-card:nth-child(7) .badge{ background: #ff2d92; }
+.seek-grid--spectrum .seek-card:nth-child(7)::before{ background: #ff2d92; }
+
+.seek-grid--spectrum .seek-card .badge{ color: #05070a; }
+
 /* =====================================================
    SLIDE 6 — anchoring investments
    ===================================================== */
@@ -665,7 +694,7 @@
   background: var(--green-deep);
 }
 
-/* ---- the four photographs along the bottom ---- */
+/* ---- photographs: bigger, and moved above the figures ---- */
 .anchor-photos{
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -680,4 +709,64 @@
   object-fit: cover;
   border-radius: 4px;
   border: 1px solid rgba(255,255,255,.09);
+}
+
+.anchor-photos--top{
+  margin-top: 22px;
+  margin-bottom: 28px;
+}
+
+.anchor-photos--top img{ height: 240px; border-radius: 6px; }
+
+/* the figures/facts row shrinks to make room for the photos above it */
+.anchor-split--compact{ margin-top: 0; gap: 32px; }
+
+.anchor-split--compact .anchor-co h3{ font-size: 17px; margin-bottom: 10px; }
+.anchor-split--compact .anchor-figure{ margin-bottom: 10px; }
+.anchor-split--compact .anchor-figure .num{ font-size: 30px; }
+.anchor-split--compact .anchor-figure .label{ font-size: 13px; }
+.anchor-split--compact .anchor-facts{ gap: 8px 16px; }
+.anchor-split--compact .anchor-facts li{ font-size: 13.5px; padding-left: 16px; }
+.anchor-split--compact .anchor-facts li::before{ width: 7px; height: 7px; }
+
+/* ---- total investment banner + the roster of investor names ---- */
+.anchor-total{
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+
+.anchor-total .num{
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -.01em;
+  color: var(--green-heading);
+}
+
+.anchor-total .label{
+  font-size: 14.5px;
+  color: var(--ink-soft);
+}
+
+.anchor-companies{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.anchor-companies li{
+  padding: 6px 14px;
+  border: 1px solid rgba(53,201,154,.35);
+  border-radius: 999px;
+  background: rgba(53,201,154,.08);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
 }

@@ -12,7 +12,7 @@
 <body>
 
 <div class="deck">
-  <section class="slide" data-page="4" data-chrome="minimal">
+  <section class="slide" data-page="5" data-chrome="minimal">
 
     <!-- ============================================= -->
     <!-- THE INSET PANEL — the 3:2 cinematic artwork    -->
@@ -37,19 +37,19 @@
              so only our independent interactive layers are visible there. -->
         <div class="panel-scrim" aria-hidden="true"></div>
 
-        <!-- Fades the baked "THE SPECTRUM OF MARATHWADA..." title block once
-             the light reaches the prism — script.js's playRayEntrance(). -->
-        <div class="left-content-mask" aria-hidden="true"></div>
-
         <!-- The CMIA logo is baked into the artwork; this sits beside it,
              matching the "CMIA | 58" lockup on the brief. -->
         <img class="stage-58" src="assets/cmia-58-years.png"
              alt="58 years of CMIA" />
 
-        <div class="sr-only">
-          <p>Chamber of Marathwada Industries &amp; Agriculture</p>
-          <h1>The Spectrum of Marathwada &amp; Chhatrapati Sambhajinagar</h1>
-          <p>A legacy of strength. A spectrum of possibilities.</p>
+        <div class="stage-title-block" id="stageTitleBlock">
+          <div class="title-pre">THE</div>
+          <h1 class="title-main">SPECTRUM</h1>
+          <div class="title-of">OF</div>
+          <div class="title-city">MARATHWADA</div>
+          <div class="title-subcity">&amp; CHHATRAPATI SAMBHAJINAGAR</div>
+          <div class="title-divider"></div>
+          <p class="title-tagline">A legacy of strength.<br />A spectrum of possibilities.</p>
         </div>
 
         <!-- ============================================= -->
