@@ -41,14 +41,25 @@
 
 .title-meta{ margin-top: 42px; }
 
-.title-meta .credit{
+.title-meta .tagline{
   margin: 0;
-  font-size: 25px;
-  line-height: 1.45;
-  color: var(--ink);
+  font-family: 'Sora', sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: .01em;
+  color: var(--ink-strong);
 }
 
-.title-meta .credit strong{ font-weight: 700; color: var(--ink-strong); }
+/* the separators sit back so the three phrases read as the content */
+.title-meta .tagline span{
+  color: var(--ink-soft);
+  margin: 0 14px;
+  font-weight: 300;
+}
+
+/* the wordmark is re-tinted on click by title.js */
+.title-slide h1{ transition: color .35s ease; }
 
 /* ---- title slide: the CMIA | 58 pair is centred above the wordmark
    rather than parked in the top-left corner. Each half is pushed off the
