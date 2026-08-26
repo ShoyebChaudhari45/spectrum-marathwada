@@ -8,14 +8,18 @@
 /* SLIDE 1 — title                                        */
 /* ===================================================== */
 
+.title-slide .content{ text-align: center; }
+
 /* The word itself carries the spectrum, which is what the deck is about.
-   The plain colour underneath is the fallback if background-clip: text
-   is unavailable. */
+   width: max-content keeps the element hugging the word, so the gradient
+   spans the letters rather than the full content box — and the auto side
+   margins then centre it. The plain colour underneath is the fallback if
+   background-clip: text is unavailable. */
 .title-slide h1{
-  margin: 0;
+  margin: 0 auto;
   font-family: 'Sora', sans-serif;
   font-weight: 700;
-  font-size: 96px;
+  font-size: 140px;
   line-height: 1;
   letter-spacing: -.03em;
   color: var(--ink-strong);
@@ -30,22 +34,25 @@
 }
 
 .title-slide .title-lede{
-  margin: 18px 0 0;
+  margin: 24px 0 0;
   font-family: 'Sora', sans-serif;
   font-weight: 500;
-  font-size: 38px;
+  font-size: 50px;
   line-height: 1.2;
-  letter-spacing: -.012em;
+  letter-spacing: -.014em;
   color: var(--ink-strong);
 }
 
-.title-slide .rule{ margin-top: 38px; }
+.title-slide .rule{
+  width: 680px;
+  margin: 46px auto 0;
+}
 
-.title-meta{ margin-top: 36px; }
+.title-meta{ margin-top: 42px; }
 
 .title-meta .credit{
-  margin: 0 0 12px;
-  font-size: 20px;
+  margin: 0;
+  font-size: 25px;
   line-height: 1.45;
   color: var(--ink);
 }
