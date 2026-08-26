@@ -21,8 +21,13 @@
   // Deck order. Renaming or reordering the deck is a one-line
   // change here — the arrows, page numbers and keyboard nav all
   // read from this array.
+  //
+  // Page 1 is 01-opener.html, not index.html — index.html is the
+  // persistent presentation shell (see the "inFrame" branch below),
+  // which holds this whole array's worth of slides inside its iframe
+  // and is never itself one of them.
   const PAGES = [
-    "index.html",
+    "01-opener.html",
     "02-heritage-legacy.html",
     "03-industrial-vision.html",
     "04-title.html",
@@ -220,19 +225,20 @@
   // was itself a click — there's no scripting around that, it's the spec's
   // user-gesture rule. So a *real* fullscreen that survives the arrows
   // moving between slide files needs fullscreen requested on a document
-  // that never navigates. present.html is that document: it holds the deck
-  // in an <iframe> and is the one actually put into fullscreen, while the
-  // iframe's src (and therefore this slide) changes freely underneath it.
+  // that never navigates. index.html is that document: it's the
+  // presentation shell, holding the deck in an <iframe> and is the one
+  // actually put into fullscreen, while the iframe's src (and therefore
+  // this slide) changes freely underneath it.
   //
   // Running inside that iframe, this code can't call requestFullscreen()
   // on itself (nested browsing contexts can't fullscreen past their parent
   // without leaving IT fullscreen), so the button instead asks the parent
   // via postMessage and mirrors back whatever state the parent reports —
-  // see present.html for the other half of this handshake.
+  // see index.html for the other half of this handshake.
   //
-  // Opened directly (no present.html parent — a single slide file, or the
-  // whole deck the old way), it falls back to plain per-document
-  // fullscreen: works for that one slide, resets on the next navigation.
+  // Opened directly (no shell parent — this file on its own, outside the
+  // iframe), it falls back to plain per-document fullscreen: works for
+  // that one slide, resets on the next navigation.
   const inFrame = window.self !== window.top;
 
   const fsBtn = el(`

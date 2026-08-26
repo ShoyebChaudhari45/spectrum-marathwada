@@ -5,19 +5,88 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Spectrum — The Industrial Story of Marathwada | CMIA</title>
 <meta name="description" content="The industrial story of Marathwada — presented by the Chamber of Marathwada Industries &amp; Agriculture." />
-<link rel="stylesheet" href="deck.css" />
-<link rel="stylesheet" href="slides.css" />
+<style>
+  /* ============================================================
+     PRESENTATION SHELL
+     ------------------------------------------------------------
+     A single persistent document holding the whole deck in one
+     full-viewport iframe. It exists for exactly one reason: the
+     Fullscreen API is tied to a Document, and every slide is its
+     own file — so requesting fullscreen inside a slide can't
+     survive the arrows navigating to the next one (browsers
+     refuse to re-grant it on a freshly-loaded document, even
+     though that navigation was itself a click). This document
+     never navigates — only the iframe's src does — so fullscreen
+     requested HERE survives every slide change underneath it.
+
+     Each slide's own fullscreen button (deck.js) detects it's
+     running inside this frame and hands control here via
+     postMessage instead of calling requestFullscreen() on
+     itself; this page grants it and reports the resulting state
+     back so the button's icon/letterboxing stay in sync. See the
+     "inFrame" branch in deck.js.
+
+     The actual first slide lives in 01-opener.html — this file
+     used to BE that slide, but the shell has to be a document
+     that never navigates, so the slide moved out into its own
+     file and this became the permanent wrapper around it.
+     ============================================================ */
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #06080c;
+    overflow: hidden;
+  }
+  iframe {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+  }
+</style>
 </head>
 <body>
 
-<div class="deck">
-  <section class="slide title-slide" data-page="1" data-chrome="mark-centered">
+<iframe id="deckFrame" src="01-opener.html" allow="fullscreen" title="The Spectrum of Marathwada — CMIA presentation"></iframe>
 
-    <div class="content"></div>
+<script>
+(() => {
+  "use strict";
 
-  </section>
-</div>
+  const frame = document.getElementById("deckFrame");
 
-<script src="deck.js"></script>
+  function isFs() {
+    return Boolean(document.fullscreenElement);
+  }
+
+  function reportState() {
+    frame.contentWindow.postMessage(
+      { source: "cmia-deck", type: "fullscreen-state", isFullscreen: isFs() },
+      "*"
+    );
+  }
+
+  window.addEventListener("message", (e) => {
+    const data = e.data;
+    if (!data || data.source !== "cmia-deck") return;
+
+    if (data.type === "fullscreen-toggle") {
+      if (data.want && !isFs()) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else if (!data.want && isFs()) {
+        document.exitFullscreen().catch(() => {});
+      }
+      return;
+    }
+
+    if (data.type === "fullscreen-query") {
+      reportState();
+    }
+  });
+
+  document.addEventListener("fullscreenchange", reportState);
+})();
+</script>
+
 </body>
 </html>
