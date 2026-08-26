@@ -132,65 +132,22 @@
 /* the title block drops to make room for the pair above it */
 .title-slide .content{ top: 336px; height: 400px; }
 
-/* ---- slides 2 & 3: the pair moves to the top-right corner and shrinks,
-   freeing the whole centre of the frame for the artwork. Sizes are picked
-   so both blocks stay the same height (98/1.85 + wordmark = ~83px; the
-   jubilee's 1.165 aspect gives ~83px at 97px wide) — a touch bigger than
-   the first pass at this (90px/92px, 79px tall), which read as cramped
-   now that the artwork has grown to fill more of the frame around it.
-
-   jubilee's right offset (88px, not the 58px you'd expect symmetric with
-   .brand's spacing) leaves clear space for .fs-btn, which sits fixed at
-   right:30px/width:30px on every slide. brand's right offset (210px)
-   keeps a matching ~25px gap between the two blocks. Both sit further
-   from the corner than a first pass at this (78px/200px), which read as
-   too tight against the edges. */
-.slide[data-chrome="corner-right"] .brand{
-  left: auto;
-  right: 210px;
-  top: 26px;
-  width: auto;
-  transform: none;
-  text-align: right;
-}
-
-.slide[data-chrome="corner-right"] .brand img{
-  width: 98px;
-  margin-left: auto;
-  margin-right: 0;
-}
-
-.slide[data-chrome="corner-right"] .jubilee{
-  left: auto;
-  right: 88px;
-  top: 26px;
-  transform: none;
-}
-
-.slide[data-chrome="corner-right"] .jubilee-mark{ width: 97px; }
-
 /* ===================================================== */
 /* SLIDES 2 & 3 — full-bleed showcase artwork             */
-/* The CMIA | 58 lockup sits small in the top-right corner */
-/* (data-chrome="corner-right") so the artwork can claim   */
-/* the centre of the frame.                                */
+/* The CMIA | 58 lockup sits at its usual top-left spot,   */
+/* same as every other slide (no data-chrome override).   */
 /* The artwork is already a white plate, so it needs no    */
 /* extra card/background behind it.                        */
 /* ===================================================== */
 
 .showcase-slide .content{
   align-items: center;
-  /* With the lockup out of the way in the top-right corner, nothing
-     competes for the centre, so the artwork takes almost the whole frame.
-     At 750px tall its 3:2 ratio makes it 1125px wide — comfortably inside
-     the 1420px content width, so height is what bounds it. The 120px drop
-     keeps a 11px gap under the corner lockup (top:26px, ~83px tall); the
-     wave and page-nav/page-number don't need their own clearance here —
-     they sit in the black margin either side of the artwork horizontally,
-     not underneath it, so the artwork can run right down near the bottom
-     edge. */
-  top: 120px;
-  height: 750px;
+  /* At 670px tall its 3:2 ratio makes it 1005px wide — comfortably inside
+     the 1420px content width, so height is what bounds it. The 135px drop
+     keeps a clear gap under the default top-left lockup (top:24px, ~94px
+     tall), which the image would otherwise sit right beneath. */
+  top: 135px;
+  height: 670px;
 }
 
 .showcase-image{
@@ -640,6 +597,81 @@
 /* =====================================================
    SLIDE 6 — anchoring investments
    ===================================================== */
+
+/* ---- anchor investor cards: same green-left-rule card language as the
+   stat-card grid on slide 5, sized to fit under the photo strip. ---- */
+.anchor-cards{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.05fr;
+  gap: 20px;
+}
+
+.anchor-card{
+  padding: 14px 18px 16px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-left: 6px solid var(--green-deep);
+  background: var(--surface);
+}
+
+.anchor-card h3{
+  margin: 0 0 10px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.25;
+  color: var(--ink-strong);
+}
+
+.anchor-figure{ margin: 0 0 8px; }
+.anchor-figure:last-child{ margin-bottom: 0; }
+
+.anchor-figure .num{
+  display: block;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  color: var(--ink-strong);
+}
+
+.anchor-figure .label{
+  display: block;
+  margin-top: 1px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+/* the facts card: same shell as the two investor cards, so all three
+   read as one row */
+.anchor-card--facts{ display: flex; align-items: center; }
+
+.anchor-facts{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.anchor-facts li{
+  position: relative;
+  padding-left: 16px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.anchor-facts li + li{ margin-top: 6px; }
+
+.anchor-facts li::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .4em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green-deep);
+}
 
 /* ---- photographs: bigger, and moved above the figures ---- */
 .anchor-photos{

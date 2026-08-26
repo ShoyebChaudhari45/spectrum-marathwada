@@ -60,63 +60,43 @@
   box-shadow: 0 0 0 1px rgba(255,255,255,.07);
 }
 
-/* "7 Colours | 1 City | Infinity Possibilities" — set as a dotted
-   timeline (same look as the slide-5 timeline) in the empty ground to
-   the left of the crystal, inside .stage so it moves/hides with the
-   panel in presenting mode. */
+/* "7 Colours | 1 City | Infinity Possibilities" — set in the empty
+   ground to the left of the crystal, inside .stage so it moves/hides
+   with the panel in presenting mode. Styled after the original poster
+   artwork (assets/background_original.jpg): serif, uppercase, wide
+   tracking, with the closing line picked out in the poster's gold. No
+   serif font is loaded in this deck, so a web-safe serif stack stands
+   in for the display face the poster uses. */
 .spectrum-kicker{
   position: absolute;
-  left: 40px;
+  left: 8px;
   top: 260px;
-  width: 230px;
+  width: 220px;
   z-index: 4;
   margin: 0;
-  padding: 4px 0 4px 34px;
+  padding: 0;
   list-style: none;
 }
 
-.spectrum-kicker::before{
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: 10px;
-  bottom: 10px;
-  width: 1px;
-  background: rgba(255,255,255,.16);
-}
-
 .spectrum-kicker li{
-  position: relative;
-  margin-bottom: 24px;
-  font-family: 'Sora', sans-serif;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: .01em;
-  line-height: 1.3;
+  margin-bottom: 20px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
   color: var(--ink-strong);
 }
 
-.spectrum-kicker li:last-child{ margin-bottom: 0; }
-
-.spectrum-kicker li::before{
-  content: "";
-  position: absolute;
-  left: -34px;
-  top: 6px;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: var(--green-deep);
-}
-
-.spectrum-kicker li::after{
-  content: "";
-  position: absolute;
-  left: -20px;
-  top: 12px;
-  width: 14px;
-  height: 1px;
-  background: rgba(255,255,255,.16);
+.spectrum-kicker li:last-child{
+  margin-bottom: 0;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  line-height: 1.35;
+  white-space: normal;
+  color: #d8a94c;
 }
 
 /* Presenting mode — the panel breaks out of the template and
