@@ -43,12 +43,16 @@
 /* THE INSET PANEL                                        */
 /* ===================================================== */
 
+/* Sized/positioned to clear the CMIA | 58-years lockup and the kicker line
+   under it (both at their default slide-chrome spot, top-left) — this slide
+   no longer overrides that chrome to sit closer, so the panel starts lower
+   than it used to. 960/640 keeps 3:2, centred in the 1600px slide. */
 .spectrum-panel{
   position: absolute;
-  left: 245px;
-  top: 60px;
-  width: 1110px;
-  height: 740px;          /* 1110 / 740 = 3:2 */
+  left: 320px;
+  top: 160px;
+  width: 960px;
+  height: 640px;          /* 960 / 640 = 3:2 */
   z-index: 2;
   border-radius: 10px;
   overflow: hidden;
@@ -56,8 +60,32 @@
   box-shadow: 0 0 0 1px rgba(255,255,255,.07);
 }
 
+/* The line under the logo lockup — "7 Colours | 1 City | Infinity
+   Possibilities" — lives at the slide level (not inside .stage) so it lines
+   up with the lockup rather than with the inset panel below it. */
+.spectrum-kicker{
+  position: absolute;
+  left: 58px;
+  top: 132px;
+  z-index: 4;
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--ink-strong);
+}
+
+.spectrum-kicker span{
+  margin: 0 8px;
+  font-weight: 300;
+  color: var(--ink-soft);
+}
+
 /* Presenting mode — the panel breaks out of the template and
-   fills the whole slide, for when the spectrum needs the room. */
+   fills the whole slide, for when the spectrum needs the room. The logo
+   lockup and kicker line go with the rest of the chrome here — the panel
+   is filling the space they'd otherwise sit in. */
 .slide.spectrum-full .spectrum-panel{
   left: 125px;            /* (1600 - 1350) / 2 */
   top: 0;
@@ -67,12 +95,15 @@
 }
 
 .slide.spectrum-full .spectrum-wave,
-.slide.spectrum-full .page-number{
+.slide.spectrum-full .page-number,
+.slide.spectrum-full .brand,
+.slide.spectrum-full .jubilee,
+.slide.spectrum-full .spectrum-kicker{
   opacity: 0;
   pointer-events: none;
 }
 
-.spectrum-wave, .page-number{
+.spectrum-wave, .page-number, .brand, .jubilee, .spectrum-kicker{
   transition: opacity .45s ease;
 }
 

@@ -691,7 +691,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--green-deep);
+  background: var(--green-heading);
 }
 
 /* ---- photographs: bigger, and moved above the figures ---- */
@@ -766,9 +766,9 @@
 
 .anchor-companies li{
   padding: 7px 16px;
-  border: 1px solid rgba(53,201,154,.35);
+  border: 1px solid rgba(100,176,24,.35);
   border-radius: 999px;
-  background: rgba(53,201,154,.08);
+  background: rgba(100,176,24,.08);
   font-size: 15px;
   font-weight: 500;
   color: var(--ink);
