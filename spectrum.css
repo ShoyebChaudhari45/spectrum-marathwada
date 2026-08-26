@@ -60,60 +60,6 @@
   box-shadow: 0 0 0 1px rgba(255,255,255,.07);
 }
 
-/* "7 Colours | 1 City | Infinity Possibilities" — set in the empty
-   ground to the left of the crystal, inside .stage so it moves/hides
-   with the panel in presenting mode. Reproduces the three-tier
-   treatment from the original poster artwork (assets/background_original.jpg,
-   "THE SPECTRUM / OF / MARATHWADA"): a big bold serif line, a small
-   line flanked by hairline rules, and a second big bold serif line
-   picked out in the poster's gold. No serif font is loaded in this
-   deck, so a web-safe serif stack stands in for the poster's display
-   face. Sized to the ~200px of black ground actually available before
-   the crystal starts (--map-left, 22.3% of the panel) — the poster's
-   own type was scaled for a full half-slide, which this column isn't. */
-.spectrum-kicker{
-  position: absolute;
-  left: 8px;
-  top: 250px;
-  width: 200px;
-  z-index: 4;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.spectrum-kicker .kicker-big{
-  font-family: Georgia, 'Times New Roman', serif;
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 1.12;
-  letter-spacing: .005em;
-  text-transform: uppercase;
-  color: var(--ink-strong);
-}
-
-.spectrum-kicker .kicker-gold{ color: #d8a94c; margin-top: 14px; }
-
-.spectrum-kicker .kicker-flanked{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 14px 0;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--ink-strong);
-}
-
-.spectrum-kicker .kicker-flanked .fl{
-  flex: 1 1 auto;
-  height: 1px;
-  min-width: 8px;
-  background: rgba(255,255,255,.32);
-}
-
 /* Presenting mode — the panel breaks out of the template and
    fills the whole slide, for when the spectrum needs the room. The logo
    lockup and kicker line go with the rest of the chrome here — the panel
@@ -129,13 +75,12 @@
 .slide.spectrum-full .spectrum-wave,
 .slide.spectrum-full .page-number,
 .slide.spectrum-full .brand,
-.slide.spectrum-full .jubilee,
-.slide.spectrum-full .spectrum-kicker{
+.slide.spectrum-full .jubilee{
   opacity: 0;
   pointer-events: none;
 }
 
-.spectrum-wave, .page-number, .brand, .jubilee, .spectrum-kicker{
+.spectrum-wave, .page-number, .brand, .jubilee{
   transition: opacity .45s ease;
 }
 

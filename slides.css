@@ -58,14 +58,16 @@
   font-weight: 300;
 }
 
-/* closing slide: the Hindi line runs longer than the title rule, so it
-   drops a size and wraps within the content width rather than the rule. */
-.title-meta .tagline.hindi-close{
-  max-width: 1100px;
+/* closing slide: now the only line on the slide (Thank You / CMIA credit
+   removed), so it runs large and centred — .content's own flex centring
+   (deck.css) handles both axes, this just sets the size/width. */
+.tagline.hindi-close.hindi-solo{
+  max-width: 1300px;
   margin: 0 auto;
-  font-size: 26px;
-  font-weight: 500;
-  line-height: 1.5;
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1.55;
+  text-align: center;
 }
 
 /* the wordmark is re-tinted on click by title.js */
@@ -406,7 +408,7 @@
 .rise-logo{
   position: absolute;
   right: 160px;
-  top: 150px;
+  top: 120px;
   width: 360px;
   height: auto;
   z-index: 2;
@@ -419,11 +421,13 @@
 /* three delegation photos, sitting below the logo in the same empty
    right-hand column — widened past the logo card's width to fill the
    rest of that free space (right-hand column runs from x~735 to the
-   160px right margin, i.e. ~705px available). */
+   160px right margin, i.e. ~705px available). Pulled up close under the
+   logo card (which is ~194px tall at this width) rather than the ~125px
+   gap a lower top left before. */
 .rise-photos{
   position: absolute;
   right: 160px;
-  top: 468px;
+  top: 338px;
   width: 620px;
   display: flex;
   gap: 16px;
@@ -666,13 +670,13 @@
 .anchor-total .num{
   font-family: 'Sora', sans-serif;
   font-weight: 700;
-  font-size: 22px;
+  font-size: 38px;
   letter-spacing: -.01em;
   color: var(--green-heading);
 }
 
 .anchor-total .label{
-  font-size: 13px;
+  font-size: 15px;
   color: var(--ink-soft);
 }
 
@@ -684,7 +688,7 @@
   display: flex;
   flex-wrap: nowrap;
   gap: 6px;
-  margin: 6px 0 0;
+  margin: 28px 0 0;
   padding: 0;
   list-style: none;
 }
