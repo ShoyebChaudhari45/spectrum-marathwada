@@ -48,11 +48,12 @@
   const SLIDE_H = 900;
 
   function fit() {
-    // Math.max (cover) rather than Math.min (contain): the slide fills the
-    // whole window edge-to-edge with no letterbox bars, cropping whichever
-    // axis runs long. html/body has overflow:hidden (deck.css) so the
-    // cropped overflow never shows a scrollbar.
-    const scale = Math.max(
+    // Contain, not cover: the whole 1600x900 slide always stays fully
+    // visible. The page and the letterbox around the slide are the same
+    // near-black (deck.css), so at any window shape the deck already reads
+    // edge-to-edge with no visible frame — cover cropped the top and
+    // bottom (logo, nav arrows) whenever the window was wider than 16:9.
+    const scale = Math.min(
       window.innerWidth / SLIDE_W,
       window.innerHeight / SLIDE_H
     );
