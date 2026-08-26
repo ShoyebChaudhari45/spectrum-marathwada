@@ -139,47 +139,49 @@ html, body{
 }
 
 /* ---- 58-years jubilee lockup, bottom-left --------------------------
-   Unlike the CMIA mark, this artwork is navy-on-white with no alpha, so
-   on a dark page it keeps its own light plate. The PNG is trimmed to its
-   content, which lets the plate hug the artwork instead of the file's
-   original white margin. */
+   The dark version of the artwork: white-and-green on transparent, so it
+   sits straight onto the page with no plate behind it. */
 .jubilee{
   position: absolute;
   left: 58px;
-  bottom: 26px;
+  bottom: 62px;
   z-index: 4;
-  padding: 9px 12px;
-  border-radius: 10px;
-  background: #fff;
-  box-shadow: 0 2px 16px rgba(0,0,0,.55);
 }
 
 .jubilee-mark{
   display: block;
-  width: 104px;
+  width: 96px;
   height: auto;
 }
 
-/* ---- bottom-right swoosh ---- */
-.swoosh{
+/* ---- bottom spectrum wave ------------------------------------------
+   Replaces the navy/green corner swoosh: a full-width ribbon carrying the
+   seven spectrum colours left to right, which is the deck's whole idea. */
+.spectrum-wave{
   position: absolute;
+  left: 0;
   right: 0;
   bottom: 0;
-  width: 470px;
-  height: 250px;
+  width: 100%;
+  height: 58px;
   z-index: 1;
   pointer-events: none;
 }
 
 .page-number{
   position: absolute;
-  right: 40px;
-  bottom: 24px;
+  right: 44px;
+  bottom: 74px;
   z-index: 4;
   font-size: 15px;
   font-weight: 500;
-  color: rgba(255,255,255,.92);
+  color: rgba(255,255,255,.45);
 }
+
+/* The spectrum slide carries the CMIA and 58-years marks inside its own
+   artwork, so the template's copies outside the frame are suppressed. */
+.slide[data-chrome="minimal"] .brand,
+.slide[data-chrome="minimal"] .jubilee{ display: none; }
 
 /* ===================================================== */
 /* PAGE NAV — "very small arrows", bottom left            */
@@ -187,8 +189,8 @@ html, body{
 
 .page-nav{
   position: absolute;
-  left: 205px;
-  bottom: 40px;
+  left: 176px;
+  bottom: 76px;
   display: flex;
   gap: 10px;
   z-index: 6;
@@ -280,9 +282,9 @@ body.is-fullscreen .fs-btn .icon-enter{ display: none; }
 .content{
   position: absolute;
   left: 92px;
-  top: 148px;
+  top: 144px;
   width: 1420px;
-  height: 616px;
+  height: 600px;
   z-index: 2;
   display: flex;
   flex-direction: column;

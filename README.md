@@ -1,9 +1,9 @@
-# CMIA — Chhatrapati Sambhajinagar: Legacy to Global Powerhouse
+# CMIA — Spectrum: The Industrial Story of Marathwada
 
 A seven-page HTML presentation for the Chamber of Marathwada Industries &
 Agriculture, built from the *Project-CSNTech: India's Next IT and GCC
 Powerhouse* deck. Every page is wrapped in the official CMIA slide template
-(green spine, logo, 58-years jubilee mark, navy/green corner swoosh) on a dark
+(green spine, logo, 58-years jubilee mark, bottom spectrum wave) on a dark
 theme, and page 2 carries the interactive "Spectrum of Marathwada" artwork
 inset inside that frame.
 
@@ -26,20 +26,30 @@ Tokens live in `:root` in `deck.css`. Two brand colours are lifted from their
 print values so they hold up on near-black: the heading green (`--green-deep`,
 `#35c99a`) and the CMIA wordmark orange (`--orange`, `#ff7a4d`).
 
-Two supplied marks are navy-on-white with no alpha, so they cannot sit directly
-on the dark page — they keep a small white plate instead (`.jubilee` in
-`deck.css`, `.rise-logo` in `slides.css`). Both PNGs are trimmed to their
-content so the plate hugs the artwork. The CMIA mark itself needs no plate: it
-is a transparent PNG in gold/orange/blue and reads well straight onto black.
+The navy/green corner swoosh is gone. In its place is a full-width **spectrum
+wave** along the bottom of every slide (`.spectrum-wave`, drawn in `deck.js`),
+carrying the seven spectrum colours left to right — the deck's whole idea, and
+what the brief asked for.
+
+Marks needing no plate: the **CMIA logo** (transparent, gold/orange/blue) and
+the **58-years jubilee mark**, for which the supplied dark artwork is
+white-and-green on transparent. Both sit straight onto the page.
+
+Still on a white plate: the **CSN RISE lockup** (`.rise-logo` in `slides.css`),
+which is navy-on-white with no alpha and would otherwise disappear. Its PNG is
+trimmed to its content so the plate hugs the artwork.
+
+On the title slide the 58-years mark moves up beside the CMIA logo as the
+`CMIA | 58` lockup from the brief — `data-chrome="lockup"` on the slide.
 
 ## Two crowded slides
 
-Slides 6 and 7 are the densest in the deck, and at full size their bottom-right
-cards ran under the navy/green corner swoosh. Both are tightened by a modifier
-class — `.content.demands` and `.content.commitments` in `slides.css` — rather
-than by shrinking the swoosh, so the template chrome stays identical on every
-page. If you add copy to either slide, re-check that the last row still
-finishes above roughly y=670 in slide coordinates.
+Slide 6 is the densest in the deck — six cards plus a title. At full size its
+bottom row overran the content box (and, back when the corner swoosh was still
+there, ran under it). It is tightened by a modifier class,
+`.content.demands` in `slides.css`, rather than by shrinking the template
+chrome, so the frame stays identical on every page. If you add copy to that
+slide, re-check that the last row still finishes inside the 600px content box.
 
 ## Deploying
 
@@ -57,7 +67,7 @@ pushing any other branch gets its own preview URL.
 
 | # | File | Slide |
 |---|------|-------|
-| 1 | `index.html` | Chhatrapati Sambhajinagar — Legacy to Global Powerhouse (title) |
+| 1 | `index.html` | Spectrum — The Industrial Story of Marathwada (title) |
 | 2 | `02-spectrum.html` | **The Spectrum of Marathwada** (interactive) |
 | 3 | `03-industrial-might.html` | Industrial Might: Scale & Ground Reality |
 | 4 | `04-cmia-apex.html` | CMIA — The Apex Industrial Voice |
@@ -104,7 +114,8 @@ A slide's markup is only its content:
 ```
 
 `deck.js` injects the template chrome — green spine, CMIA logo, jubilee mark,
-swoosh, page number, nav arrows — so the branding lives in exactly one place.
+bottom spectrum wave, page number, nav arrows — so the branding lives in
+exactly one place.
 `data-page` is the only thing a slide has to declare.
 
 - `deck.css` — the template chrome and shared typography/cards
@@ -140,33 +151,69 @@ pixel-aligned because `.spectrum-panel` is locked to the same 3:2 ratio.
 - **A scrim** (`.panel-scrim`) hides the flattened rainbow baked into the right
   third of the original photo
 
-### Interaction — one ribbon at a time
+### Interaction — a click-through sequence
 
-Nothing is on the right-hand side when the slide loads: `.section-panel` and
-`.beam` both start at `opacity: 0` in `spectrum.css`. The stepper button in the
-caption column brings them in one at a time.
+The slide has no visible controls. **Clicking anywhere on it advances one
+step**, and the artwork is what the presenter talks over:
 
-- First click reveals ribbon 1. The next click takes it out and brings in
-  ribbon 2, and so on. Never more than one on screen.
-- After the seventh, the next click clears the artwork back to neutral, so the
-  cycle can run again from the top. The button reads *Reveal first strength* →
-  *Next strength* → *Start over*, with a `n of 7 shown` readout beneath.
-- Clicking the ribbon that is currently on screen also advances — the card is
-  already a button and moving on is the only thing left to do with it.
-- Rapid clicks are safe: `switchSection()` kills the in-flight GSAP timeline
-  and rebuilds from wherever the DOM currently is.
-- The visible card grows on **both** axes: taller via `flex-grow`, and ~30%
+| Step | What happens |
+|------|--------------|
+| 0 | the prism fades in — on load, no click needed |
+| 1 | the ray travels in from the left, through the prism |
+| 2 | red — Funding & Trade |
+| 3 | orange — Education & Skills |
+| 4 | yellow — Creativity |
+| 5 | green — Hospitality |
+| 6 | blue — Value Addition |
+| 7 | violet — Engineering |
+| 8 | magenta — Legacy |
+| 9 | back to step 0, so the sequence can run again |
+
+Colours **accumulate**: each click adds the next band and leaves the earlier
+ones in place, so the spectrum builds to the full seven and ends on the
+complete artwork. The newest band is the one expanded with its body copy; the
+earlier ones sit back as ribbons, and their beams drop to 55% so the newest
+still reads as the one being discussed.
+
+- Nothing is on the right-hand side at step 0: `.section-panel` and `.beam`
+  both start at `opacity: 0` in `spectrum.css`.
+- The ray is a single SVG path drawn on with `stroke-dashoffset`, so it reads
+  as travelling in from the left edge rather than just fading up.
+- Rapid clicks are safe: `renderStep()` kills the in-flight GSAP timeline and
+  rebuilds from wherever the DOM currently is.
+- The newest card grows on **both** axes: taller via `flex-grow`, and ~30%
   wider via a negative left margin that reaches back out over the beam feeding
   it. Its left edge fades to transparent so the beam reads as flowing into the
   card. Tune with `GROW_ACTIVE`, `GROW_RESTING` and `ACTIVE_BLEED` at the top
   of `script.js`.
+- Clicks on the deck's own controls (`.page-nav`, `.fs-btn`,
+  `.spectrum-expand`) keep their own jobs and do not advance the sequence.
 - The **expand button** at the artwork's top-right corner breaks the spectrum
   out of the template to fill the whole slide; <kbd>Esc</kbd> or a second click
   restores it.
 
-Card visibility is CSS's job, driven by the `.is-active` class, so GSAP never
-writes an inline `opacity` that would then outrank the stylesheet for the rest
-of the session. GSAP owns the sizing, the beams and the map reaction.
+Card visibility is CSS's job, driven by the `.is-revealed` and `.is-active`
+classes, so GSAP never writes an inline `opacity` that would then outrank the
+stylesheet for the rest of the session. GSAP owns the sizing, the ray, the
+beams and the map reaction.
+
+### What the artwork carries, and what is masked
+
+This slide sets `data-chrome="minimal"`, which hides the template's outside
+CMIA and 58-years marks: the photo has the CMIA logo baked into its top-left,
+and `.stage-58` places the jubilee mark beside it inside the frame.
+
+Two things flattened into the photo are covered rather than cropped:
+
+- `.panel-scrim` — the baked rainbow, which would otherwise read as all seven
+  ribbons being visible at once. Falloff starts at 60% of the panel, just past
+  the widest point of the map outline (measured at 60.7%), and reaches full
+  black by 66%. A soft ramp, not a hard edge: the light has to die out rather
+  than get sliced off by a seam.
+- `.stage-foot-mask` — the "ONE REGION. SEVEN STRENGTHS. LIMITLESS POTENTIAL."
+  line along the bottom. Opaque from ~94.6% of the panel: past the bottom of
+  the landscape strip but above the text, so the text goes and the artwork
+  stays.
 
 #### The scrim, and why its falloff is where it is
 

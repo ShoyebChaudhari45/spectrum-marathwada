@@ -12,7 +12,7 @@
 <body>
 
 <div class="deck">
-  <section class="slide" data-page="2">
+  <section class="slide" data-page="2" data-chrome="minimal">
 
     <!-- ============================================= -->
     <!-- THE INSET PANEL — the 3:2 cinematic artwork    -->
@@ -29,9 +29,18 @@
         <!-- Subtle vignette / cinematic grade -->
         <div class="grade-layer" aria-hidden="true"></div>
 
+        <!-- Covers the "ONE REGION. SEVEN STRENGTHS. LIMITLESS POTENTIAL."
+             line flattened into the bottom of the photo. -->
+        <div class="stage-foot-mask" aria-hidden="true"></div>
+
         <!-- Scrim that hides the flattened rainbow+panels baked into the photo,
              so only our independent interactive layers are visible there. -->
         <div class="panel-scrim" aria-hidden="true"></div>
+
+        <!-- The CMIA logo is baked into the artwork; this sits beside it,
+             matching the "CMIA | 58" lockup on the brief. -->
+        <img class="stage-58" src="assets/cmia-58-years.png"
+             alt="58 years of CMIA" />
 
         <div class="sr-only">
           <p>Chamber of Marathwada Industries &amp; Agriculture</p>
@@ -71,7 +80,17 @@
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+            <linearGradient id="rayGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#fff6dd" stop-opacity="0" />
+              <stop offset="30%" stop-color="#fff6dd" stop-opacity=".7" />
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="1" />
+            </linearGradient>
           </defs>
+
+          <!-- The incoming ray: drawn from the left edge into the prism's
+               light point on the first click. -->
+          <path class="light-ray" id="lightRay" d="M 0 706 Q 250 626, 525 502"
+                fill="none" stroke="url(#rayGrad)" stroke-width="5" stroke-linecap="round" />
           <!-- paths injected/positioned by script.js data, one per section -->
           <path class="beam" data-section="industry" />
           <path class="beam" data-section="agriculture" />
@@ -202,26 +221,6 @@
         <svg class="icon-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" /></svg>
         <svg class="icon-restore" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h6V3M21 9h-6V3M3 15h6v6M21 15h-6v6" /></svg>
       </button>
-    </div>
-
-    <!-- ============================================= -->
-    <!-- CAPTION COLUMN — sits in the template's white  -->
-    <!-- margin, to the right of the artwork.           -->
-    <!-- ============================================= -->
-    <div class="spectrum-aside">
-      <p class="aside-kicker">One Region</p>
-      <h2>Seven Strengths</h2>
-      <p>Each band traces a modern industrial capability back to the heritage that formed it.</p>
-
-      <!-- Only one ribbon is on screen at a time; this steps through them. -->
-      <div class="spectrum-step">
-        <button class="step-btn" id="stepBtn" type="button" aria-controls="sections">
-          <span id="stepLabel">Reveal first strength</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg>
-        </button>
-        <p class="step-readout"><span class="now" id="stepNow">0</span> of 7 shown</p>
-      </div>
     </div>
 
   </section>

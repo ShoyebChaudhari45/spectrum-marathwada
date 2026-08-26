@@ -71,12 +71,28 @@
   // ---- green spine down the left edge ----
   slide.prepend(el(`<div class="spine" aria-hidden="true"></div>`));
 
-  // ---- bottom-right swoosh (sits behind the content) ----
+  // ---- bottom spectrum wave (sits behind the content) ----
+  // The gradient id is suffixed per page so several of these can never
+  // collide if slides are ever composed into one document.
+  const waveId = `specWave-${pageNo}`;
   slide.prepend(
     el(`
-    <svg class="swoosh" viewBox="0 0 470 250" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M470 44 C 358 62, 248 132, 150 250 L 470 250 Z" fill="#1f3864" />
-      <path d="M470 2 C 350 22, 236 98, 128 250" fill="none" stroke="#6cb33f" stroke-width="17" />
+    <svg class="spectrum-wave" viewBox="0 0 1600 58" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="${waveId}" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#ff3b30" />
+          <stop offset="16%"  stop-color="#ff9500" />
+          <stop offset="33%"  stop-color="#ffd60a" />
+          <stop offset="50%"  stop-color="#34c759" />
+          <stop offset="67%"  stop-color="#0a84ff" />
+          <stop offset="84%"  stop-color="#5e5ce6" />
+          <stop offset="100%" stop-color="#ff2d92" />
+        </linearGradient>
+      </defs>
+      <path d="M0 26 C 280 4, 520 44, 800 24 S 1340 2, 1600 20" fill="none"
+            stroke="url(#${waveId})" stroke-width="7" stroke-linecap="round" />
+      <path d="M0 46 C 320 22, 560 60, 880 40 S 1360 16, 1600 40" fill="none"
+            stroke="url(#${waveId})" stroke-width="4" stroke-linecap="round" opacity=".5" />
     </svg>
   `)
   );
