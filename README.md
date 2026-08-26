@@ -1,23 +1,33 @@
 # CMIA — Chhatrapati Sambhajinagar: Legacy to Global Powerhouse
 
-A nine-page HTML presentation for the Chamber of Marathwada Industries &
+An eight-page HTML presentation for the Chamber of Marathwada Industries &
 Agriculture, built from the *Project-CSNTech: India's Next IT and GCC
 Powerhouse* deck. Every page is wrapped in the official CMIA slide template
-(green spine, logo, golden-jubilee mark, navy/green corner swoosh), and page 3
-carries the interactive "Spectrum of Marathwada" artwork inset inside that
+(green spine, logo, 58-years jubilee mark, navy/green corner swoosh), and page
+2 carries the interactive "Spectrum of Marathwada" artwork inset inside that
 frame.
 
-## Running it
+## Running it — works with no internet
 
-No build step, no backend, no internet connection required — GSAP and both
-fonts are vendored into `assets/`. Open `index.html` in a browser, or serve
-the folder:
+Nothing is fetched from the network. GSAP, both fonts and every image are
+vendored into `assets/`, and there is no build step and no backend, so the
+deck runs from a folder on a USB stick in a hall with no wifi. Open
+`index.html` in a browser, or serve the folder:
 
 ```bash
 npx serve .
 # or
 python -m http.server 8080
 ```
+
+## Two crowded slides
+
+Slides 7 and 8 are the densest in the deck, and at full size their bottom-right
+cards ran under the navy/green corner swoosh. Both are tightened by a modifier
+class — `.content.demands` and `.content.commitments` in `slides.css` — rather
+than by shrinking the swoosh, so the template chrome stays identical on every
+page. If you add copy to either slide, re-check that the last row still
+finishes above roughly y=670 in slide coordinates.
 
 ## Deploying
 
@@ -36,14 +46,13 @@ pushing any other branch gets its own preview URL.
 | # | File | Slide |
 |---|------|-------|
 | 1 | `index.html` | Chhatrapati Sambhajinagar — Legacy to Global Powerhouse (title) |
-| 2 | `02-strategic-context.html` | Strategic Context: From Khadki to CSN |
-| 3 | `03-spectrum.html` | **The Spectrum of Marathwada** (interactive) |
-| 4 | `04-seven-spectrums.html` | The 7 Spectrums of Chhatrapati Sambhajinagar |
-| 5 | `05-industrial-might.html` | Industrial Might: Scale & Ground Reality |
-| 6 | `06-cmia-apex.html` | CMIA — The Apex Industrial Voice |
-| 7 | `07-rise-framework.html` | The CSN RISE Framework |
-| 8 | `08-national-demands.html` | Strategic National Demands: What We Seek |
-| 9 | `09-commitments.html` | CMIA's Bilateral Commitments |
+| 2 | `02-spectrum.html` | **The Spectrum of Marathwada** (interactive) |
+| 3 | `03-seven-spectrums.html` | The 7 Spectrums of Chhatrapati Sambhajinagar |
+| 4 | `04-industrial-might.html` | Industrial Might: Scale & Ground Reality |
+| 5 | `05-cmia-apex.html` | CMIA — The Apex Industrial Voice |
+| 6 | `06-rise-framework.html` | The CSN RISE Framework |
+| 7 | `07-national-demands.html` | Strategic National Demands: What We Seek |
+| 8 | `08-commitments.html` | CMIA's Bilateral Commitments |
 
 Each slide is a standalone page. Navigate with the small prev/next arrows at
 the bottom left, or with <kbd>←</kbd> / <kbd>→</kbd> (also <kbd>PageUp</kbd> /
@@ -78,27 +87,22 @@ swoosh, page number, nav arrows — so the branding lives in exactly one place.
 
 - `deck.css` — the template chrome and shared typography/cards
 - `slides.css` — per-slide layout blocks (title slide, table, timelines, grids)
-- `spectrum.css` + `script.js` — page 3 only
-
-Add `data-tagline="off"` to a `.slide` to suppress the footer's Marathi motto
-(used on the title slide, which already carries it in the body copy).
+- `spectrum.css` + `script.js` — page 2 only
 
 ## Brand assets
 
-`assets/cmia-logo.png` is the CMIA mark, matted out of the dark plate in
-`assets/background.jpg` and up-sampled, so it composites cleanly on white.
+- `assets/cmia-logo.png` — the CMIA mark, matted out of the dark plate in
+  `assets/background.jpg` and up-sampled, so it composites cleanly on white.
+- `assets/cmia-58-years.png` — the 58-years jubilee lockup. The supplied
+  artwork already carries the *niti se nirmiti* line, so the template draws no
+  separate text for it.
+- `assets/csn-rise-logo.png` — the CSN RISE lockup, used on slide 6 only.
 
-The golden-jubilee "50 YEARS" mark is currently a **vector stand-in** drawn in
-`deck.js`. To use the real artwork, drop it in as:
+Both supplied marks were down-sampled to roughly 3x their display size; the
+originals were far larger than needed and made the deck slower to load from a
+stick.
 
-```
-assets/cmia-50-years.png
-```
-
-`deck.js` loads that path first and only falls back to the vector lockup if the
-file is missing — no code change needed.
-
-## Page 3 — the interactive spectrum
+## Page 2 — the interactive spectrum
 
 The source artwork (`assets/background.jpg`, 1536×1024, exactly 3:2) is a
 flattened photo composite. The prism collage, the left-hand typography block
@@ -189,8 +193,6 @@ whichever band was clicked so the rows don't move in lockstep.
 - **Copy is not verified.** Slide text was transcribed from the supplied PDF.
   Any figure, partnership or claim should be checked against current data
   before this is presented.
-- **The jubilee mark is a stand-in** until the real artwork is dropped in at
-  `assets/cmia-50-years.png` (see *Brand assets*).
 - **Desktop/tablet target.** The fixed-size slide scales to fit any window, so
   the deck stays legible down to laptop and tablet sizes, but it does not
   reflow into a phone-friendly layout — a 16:9 slide on a narrow phone is

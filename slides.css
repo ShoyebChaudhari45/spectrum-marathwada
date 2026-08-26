@@ -331,3 +331,76 @@
 
 .card-grid.cols-2 .card h3{ font-size: 22px; }
 .card-grid.cols-2 .card p{ font-size: 17px; }
+
+/* =====================================================
+   SLIDE 6 — the CSN RISE lockup
+   ===================================================== */
+
+.rise-logo{
+  position: absolute;
+  right: 96px;
+  top: 150px;
+  width: 208px;
+  height: auto;
+  z-index: 2;
+}
+
+/* =====================================================
+   SLIDE 7 — strategic national demands
+   -----------------------------------------------------
+   Six cards; at full size the bottom-right one grazed the green band of
+   the corner swoosh, so the grid is tightened to finish clear of it.
+   ===================================================== */
+
+.content.demands .card-grid{
+  gap: 34px 26px;
+  margin-top: 40px;
+}
+
+.content.demands .card{ padding: 32px 22px 20px; }
+
+.content.demands .card h3{
+  font-size: 19.5px;
+  margin-bottom: 8px;
+}
+
+.content.demands .card p{
+  font-size: 15.5px;
+  line-height: 1.45;
+}
+
+/* =====================================================
+   SLIDE 8 — bilateral commitments
+   -----------------------------------------------------
+   Four cards plus a title is the densest slide in the deck, and at full
+   size the second row ran under the navy corner swoosh. Everything here
+   is pulled in so the grid finishes above it.
+   ===================================================== */
+
+.content.commitments h1.slide-title{ font-size: 40px; }
+.content.commitments .rule{ margin-top: 20px; }
+
+.content.commitments .card-grid{
+  gap: 28px 26px;
+  margin-top: 26px;
+}
+
+.content.commitments .card{ padding: 20px 22px 18px; }
+
+.content.commitments .badge{
+  width: 40px;
+  height: 40px;
+  margin-bottom: 12px;
+}
+
+.content.commitments .badge svg{ width: 20px; height: 20px; }
+
+.content.commitments .card h3{
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.content.commitments .card p{
+  font-size: 15.5px;
+  line-height: 1.45;
+}

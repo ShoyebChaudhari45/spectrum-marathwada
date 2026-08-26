@@ -23,14 +23,13 @@
   // read from this array.
   const PAGES = [
     "index.html",
-    "02-strategic-context.html",
-    "03-spectrum.html",
-    "04-seven-spectrums.html",
-    "05-industrial-might.html",
-    "06-cmia-apex.html",
-    "07-rise-framework.html",
-    "08-national-demands.html",
-    "09-commitments.html",
+    "02-spectrum.html",
+    "03-seven-spectrums.html",
+    "04-industrial-might.html",
+    "05-cmia-apex.html",
+    "06-rise-framework.html",
+    "07-national-demands.html",
+    "08-commitments.html",
   ];
 
   const slide = document.querySelector(".slide");
@@ -93,36 +92,17 @@
   `)
   );
 
-  // ---- golden-jubilee mark + Marathi tagline, bottom-left ----
-  const jubilee = el(`
+  // ---- 58-years jubilee mark, bottom-left. The supplied artwork already
+  // carries the "niti se nirmiti" line, so there is no separate text
+  // element for it. ----
+  slide.appendChild(
+    el(`
     <div class="jubilee">
-      <div class="jubilee-slot"></div>
-      <div class="jubilee-tagline">&#2344;&#2368;&#2340;&#2367; &#2360;&#2375; &#2344;&#2367;&#2352;&#2381;&#2350;&#2367;&#2340;&#2368; !</div>
+      <img class="jubilee-mark" src="assets/cmia-58-years.png"
+           alt="58 years of CMIA &mdash; &#2344;&#2368;&#2340;&#2367; &#2360;&#2375; &#2344;&#2367;&#2352;&#2381;&#2350;&#2367;&#2340;&#2368;" />
     </div>
-  `);
-  slide.appendChild(jubilee);
-
-  // Drop-in point for the real artwork: if assets/cmia-50-years.png
-  // exists it is used as-is, otherwise we fall back to the vector
-  // lockup below so the deck never renders a broken image.
-  const jubileeSlot = jubilee.querySelector(".jubilee-slot");
-  const jubileeImg = new Image();
-  jubileeImg.className = "jubilee-mark";
-  jubileeImg.alt = "50 years of CMIA";
-  jubileeImg.onload = () => jubileeSlot.appendChild(jubileeImg);
-  jubileeImg.onerror = () => {
-    jubileeSlot.appendChild(
-      el(`
-      <svg class="jubilee-mark" viewBox="0 0 118 62" aria-label="50 years of CMIA" role="img">
-        <path d="M12 22 C 30 4, 88 4, 108 20" fill="none" stroke="#6cb33f" stroke-width="4" stroke-linecap="round" />
-        <path d="M108 20 L 99 10 M108 20 L 96 22" fill="none" stroke="#6cb33f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-        <text x="59" y="52" text-anchor="middle" font-family="Sora, sans-serif" font-size="38" font-weight="700" fill="#1f3864">50</text>
-        <text x="59" y="61" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="9" font-weight="600" letter-spacing="3" fill="#6cb33f">YEARS</text>
-      </svg>
-    `)
-    );
-  };
-  jubileeImg.src = "assets/cmia-50-years.png";
+  `)
+  );
 
   // ---- page number, sitting on the navy swoosh ----
   slide.appendChild(

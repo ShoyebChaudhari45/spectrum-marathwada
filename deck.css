@@ -126,33 +126,20 @@ html, body{
   text-transform: uppercase;
 }
 
-/* ---- golden-jubilee lockup, bottom-left ---- */
+/* ---- 58-years jubilee lockup, bottom-left. The artwork carries the
+   Marathi motto itself, so this is a single image. ---- */
 .jubilee{
   position: absolute;
   left: 58px;
-  bottom: 32px;
+  bottom: 24px;
   z-index: 4;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
 }
 
 .jubilee-mark{
   display: block;
-  width: 116px;
+  width: 124px;
   height: auto;
 }
-
-.jubilee-tagline{
-  font-family: 'Montserrat', 'Nirmala UI', 'Noto Sans Devanagari', sans-serif;
-  font-weight: 700;
-  font-size: 21px;
-  line-height: 1;
-  color: var(--navy);
-  white-space: nowrap;
-}
-
-.slide[data-tagline="off"] .jubilee-tagline{ display: none; }
 
 /* ---- bottom-right swoosh ---- */
 .swoosh{
@@ -181,7 +168,7 @@ html, body{
 
 .page-nav{
   position: absolute;
-  left: 240px;
+  left: 190px;
   bottom: 40px;
   display: flex;
   gap: 10px;
