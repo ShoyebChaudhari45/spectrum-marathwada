@@ -127,19 +127,30 @@ html, body{
   text-transform: uppercase;
 }
 
-/* ---- 58-years jubilee lockup, bottom-left --------------------------
+/* ---- 58-years jubilee mark, beside the CMIA logo at the top --------
    The dark version of the artwork: white-and-green on transparent, so it
-   sits straight onto the page with no plate behind it. */
+   sits straight onto the page with no plate behind it. Deliberately
+   smaller than the CMIA mark it pairs with. */
 .jubilee{
   position: absolute;
-  left: 58px;
-  bottom: 62px;
+  left: 252px;
+  top: 22px;
   z-index: 4;
+}
+
+.jubilee::before{
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: 4px;
+  bottom: 8px;
+  width: 1px;
+  background: rgba(255,255,255,.22);
 }
 
 .jubilee-mark{
   display: block;
-  width: 96px;
+  width: 84px;
   height: auto;
 }
 
@@ -178,8 +189,8 @@ html, body{
 
 .page-nav{
   position: absolute;
-  left: 176px;
-  bottom: 76px;
+  left: 58px;
+  bottom: 62px;
   display: flex;
   gap: 10px;
   z-index: 6;
@@ -271,9 +282,9 @@ body.is-fullscreen .fs-btn .icon-enter{ display: none; }
 .content{
   position: absolute;
   left: 92px;
-  top: 144px;
+  top: 150px;
   width: 1420px;
-  height: 600px;
+  height: 620px;
   z-index: 2;
   display: flex;
   flex-direction: column;

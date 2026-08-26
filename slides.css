@@ -50,26 +50,28 @@
 
 .title-meta .credit strong{ font-weight: 700; color: var(--ink-strong); }
 
-/* ---- header lockup: on the title slide the 58-years mark sits beside the
-   CMIA logo, as "CMIA | 58" on the brief, rather than bottom-left ---- */
-.slide[data-chrome="lockup"] .jubilee{
-  left: 252px;
-  top: 22px;
-  bottom: auto;
+/* ---- title slide: the CMIA | 58 pair is centred above the wordmark
+   rather than parked in the top-left corner. Each half is pushed off the
+   50% line by half the gap, which centres the pair without needing a
+   wrapper element around the two injected marks. ---- */
+.slide[data-chrome="centred"] .brand{
+  left: 50%;
+  top: 168px;
+  width: auto;
+  transform: translateX(calc(-100% - 24px));
+  text-align: center;
 }
 
-.slide[data-chrome="lockup"] .jubilee::before{
-  content: "";
-  position: absolute;
-  left: -26px;
-  top: 4px;
-  bottom: 6px;
-  width: 1px;
-  background: rgba(255,255,255,.22);
+.slide[data-chrome="centred"] .brand img{ margin: 0 auto; }
+
+.slide[data-chrome="centred"] .jubilee{
+  left: 50%;
+  top: 206px;
+  transform: translateX(24px);
 }
 
-/* smaller than the 118px CMIA mark it sits beside */
-.slide[data-chrome="lockup"] .jubilee-mark{ width: 84px; }
+/* the title block drops to make room for the pair above it */
+.title-slide .content{ top: 336px; height: 400px; }
 
 /* ===================================================== */
 /* SLIDE 3 — industrial might, two columns                */

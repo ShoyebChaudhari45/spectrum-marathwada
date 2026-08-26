@@ -11,8 +11,8 @@
    is plain px, authored against the 1110px-wide panel, and
    scales with everything else.
 
-   Cards and beams both start at opacity 0: the stepper in
-   script.js brings exactly one ribbon on screen at a time.
+   Cards and beams start at opacity 0; the click sequence in
+   script.js brings them in one colour at a time.
    ===================================================== */
 
 :root{
@@ -117,28 +117,6 @@
     rgba(4,6,12,.8) 9%,
     var(--spec-bg) 15%,
     var(--spec-bg) 100%);
-}
-
-/* The slide opens black, and the first click pops the artwork in.
-   -----------------------------------------------------------------
-   Worth knowing why this covers the WHOLE artwork rather than just the
-   prism. background.jpg is flattened: the prism, the rainbow inside it,
-   the title lettering and the incoming ray are all one JPEG. The prism's
-   left vertex lands exactly where the title text ends, so any cover big
-   enough to hide the prism either clips the lettering or, shaped to the
-   prism, reads as a black blob over the photo. Covering everything and
-   fading it out is the only version with no artefact.
-
-   Consequence: the rainbow baked inside the prism arrives with the
-   artwork on click 1. Removing that needs a rainbow-free export of the
-   image from whoever authored it — see the README. */
-.map-reveal{
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-  background: var(--spec-bg);
-  will-change: opacity;
 }
 
 /* The 58-years lockup, sitting beside the CMIA logo that is baked into the

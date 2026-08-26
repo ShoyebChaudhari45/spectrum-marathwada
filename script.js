@@ -5,17 +5,19 @@
    The slide is a click-through sequence. Clicking anywhere
    on it advances one step:
 
-     step 0  nothing — no map, no ray, no colour
-     step 1  the Marathwada map pops up
-     step 2  a single ray travels in from the left, through the prism
-     step 3  red      — Funding & Trade
-     step 4  orange   — Education & Skills
-     step 5  yellow   — Creativity
-     step 6  green    — Hospitality
-     step 7  blue     — Value Addition
-     step 8  violet   — Engineering
-     step 9  magenta  — Legacy
-     step 10 back to step 0, so the sequence can run again
+     on load  the artwork is already on screen, and the ray
+              draws itself in from the left
+     click 1  red      — Funding & Trade
+     click 2  orange   — Education & Skills
+     click 3  yellow   — Creativity
+     click 4  green    — Hospitality
+     click 5  blue     — Value Addition
+     click 6  violet   — Engineering
+     click 7  magenta  — Legacy
+
+   Once all seven are up the sequence stays there — further clicks do
+   nothing, so the full spectrum cannot be clicked away by accident.
+   Reload the slide to run it again.
 
    Colours ACCUMULATE: each click adds the next band and
    leaves the previous ones in place, so the spectrum builds
@@ -59,10 +61,8 @@
   const ORIGIN = { x: VB_W * 0.342, y: VB_H * 0.49 };
 
   // ---- the step sequence ----
-  const MAP_STEP = 1;
-  const RAY_STEP = 2;
-  const FIRST_COLOR_STEP = 3;
-  const LAST_STEP = FIRST_COLOR_STEP + SECTIONS.length - 1; // 9
+  const FIRST_COLOR_STEP = 1;
+  const LAST_STEP = FIRST_COLOR_STEP + SECTIONS.length - 1; // 7
 
   // ---- how far the newest card outgrows the rest -----------------------
   // It grows on both axes: GROW_* drive the height (flex-grow within the
@@ -88,7 +88,6 @@
 
   const stage = document.getElementById("stage");
   const ray = document.getElementById("lightRay");
-  const mapReveal = document.getElementById("mapReveal");
   const mapGlow = document.getElementById("mapGlow");
   const mapCore = document.getElementById("mapCore");
 
@@ -177,12 +176,20 @@
 
   // The ray is drawn on with stroke-dashoffset, so it needs its own length
   // as the dash pattern before it can be animated.
-  let rayLength = 0;
   function prepareRay() {
     if (!ray) return;
-    rayLength = ray.getTotalLength();
+    const rayLength = ray.getTotalLength();
     ray.style.strokeDasharray = String(rayLength);
     ray.style.strokeDashoffset = String(rayLength);
+    // Draws in from the left edge on load — the slide is already visible,
+    // so this is an entrance rather than a step the presenter clicks for.
+    gsap.to(ray, {
+      opacity: 1,
+      strokeDashoffset: 0,
+      duration: reduceMotion ? 0.3 : 1.1,
+      ease: "power2.inOut",
+      delay: reduceMotion ? 0 : 0.25,
+    });
   }
 
   // ---------------------------------------------------
@@ -215,8 +222,6 @@
       Math.min(SECTIONS.length, n - FIRST_COLOR_STEP + 1)
     );
     const activeIdx = revealed - 1;
-    const rayOn = n >= RAY_STEP;
-    const mapOn = n >= MAP_STEP;
 
     if (currentTimeline) currentTimeline.kill();
 
@@ -234,57 +239,17 @@
     });
     currentTimeline = tl;
 
-    // ---- the artwork pops in on the first click ----
-    if (mapReveal) {
-      tl.to(
-        mapReveal,
-        {
-          opacity: mapOn ? 0 : 1,
-          duration: (mapOn ? 0.7 : 0.35) * durScale,
-          ease: mapOn ? "power2.out" : "sine.inOut",
-        },
-        0
-      );
-      tl.fromTo(
-        stage,
-        { scale: mapOn ? 0.975 : 1 },
-        {
-          scale: 1,
-          duration: (mapOn ? 0.85 : 0.35) * durScale,
-          ease: "power2.out",
-          transformOrigin: "46% 45%",
-        },
-        0
-      );
-    }
-
-    // ---- the ray -------------------------------------------------------
-    if (ray) {
-      if (rayOn) {
-        tl.to(ray, { opacity: 1, duration: 0.25 * durScale }, 0);
-        tl.to(
-          ray,
-          { strokeDashoffset: 0, duration: 0.85 * durScale, ease: "power2.inOut" },
-          0
-        );
-      } else {
-        tl.to(ray, { opacity: 0, duration: 0.35 * durScale }, 0);
-        tl.set(ray, { strokeDashoffset: rayLength }, 0.35 * durScale);
-      }
-    }
-
-    // the prism flares as the map arrives, as the ray lands, and each
-    // time a band opens
-    if (n === MAP_STEP || n === RAY_STEP || revealed > 0) {
+    // the prism flares each time a band opens
+    if (revealed > 0) {
       tl.to(
         mapGlow,
         { scale: 1.12, opacity: 1, duration: 0.4 * durScale, yoyo: true, repeat: 1 },
-        n === RAY_STEP ? 0.7 * durScale : 0.25 * durScale
+        0.25 * durScale
       );
       tl.to(
         mapCore,
         { scale: 1.3, duration: 0.35 * durScale, yoyo: true, repeat: 1, ease: "sine.out" },
-        n === RAY_STEP ? 0.7 * durScale : 0.25 * durScale
+        0.25 * durScale
       );
     }
 
@@ -363,7 +328,10 @@
     if (!slide) return;
 
     function advance() {
-      step = step >= LAST_STEP ? 0 : step + 1;
+      // Clamped, not wrapped: once the full spectrum is up, clicking again
+      // must not clear it.
+      if (step >= LAST_STEP) return;
+      step += 1;
       renderStep(step);
     }
 
