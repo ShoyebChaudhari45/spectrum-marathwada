@@ -19,7 +19,7 @@ npx serve .
 # or
 python -m http.server 8080
 ```
-
+............
 ## Two crowded slides
 
 Slides 6 and 7 are the densest in the deck, and at full size their bottom-right
