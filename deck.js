@@ -104,87 +104,37 @@
   `);
   slide.prepend(waveContainer);
 
-  // Setup dynamic warped mesh grid inside .mesh-group
+  // Single flowing gradient line, not a grid — the busier wireframe mesh
+  // this replaced drew 5 warped rows crossed with 38 verticals, which read
+  // as a dense technical grid. One thick line with a gentle drift reads
+  // as calmer, plain "spectrum" band instead.
   (() => {
-    const H = 5;      // 5 horizontal waves
-    const V = 38;      // 38 vertical grid lines
     const width = 1600;
-    const height = 80;
+    const baseline = 20; // sits near the top of the 80px-tall strip
+    const amp = 5;
+    const freq = 0.0032;
+    const speed = 0.35;
+    const segments = 48; // points sampled along the line, not a grid dimension
 
-    // Define distinct configurations for each wave row to maximize crossover visual interest
-    const rows = [];
-    for (let i = 0; i < H; i++) {
-      const ratio = i / (H - 1);
-      rows.push({
-        baseline: 15 + ratio * 50,
-        amp1: 6 + Math.sin(i * 1.5) * 3,
-        amp2: 4 + Math.cos(i * 1.5) * 2,
-        freq1: 0.003 + (i * 0.0004),
-        freq2: 0.0075 - (i * 0.0004),
-        speed1: 0.8 + i * 0.1,
-        speed2: 1.1 - i * 0.15,
-        phase1: i * 0.7,
-        phase2: i * 1.1 + 1.5
-      });
-    }
-
-    const pathH = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    pathH.setAttribute("fill", "none");
-    pathH.setAttribute("stroke", `url(#${waveId})`);
-    pathH.setAttribute("stroke-width", "1.75");
-    pathH.setAttribute("stroke-linecap", "round");
-    pathH.setAttribute("stroke-linejoin", "round");
-
-    const pathV = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    pathV.setAttribute("fill", "none");
-    pathV.setAttribute("stroke", `url(#${waveId})`);
-    pathV.setAttribute("stroke-width", "0.75");
-    pathV.setAttribute("opacity", "0.4");
-    pathV.setAttribute("stroke-linecap", "round");
-    pathV.setAttribute("stroke-linejoin", "round");
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    line.setAttribute("fill", "none");
+    line.setAttribute("stroke", `url(#${waveId})`);
+    line.setAttribute("stroke-width", "5");
+    line.setAttribute("stroke-linecap", "round");
+    line.setAttribute("stroke-linejoin", "round");
 
     const group = waveContainer.querySelector(".mesh-group");
-    group.appendChild(pathV);
-    group.appendChild(pathH);
+    group.appendChild(line);
 
     function update() {
       const t = performance.now() * 0.001; // time in seconds
-      const nodes = [];
-
-      // Calculate all point locations
-      for (let i = 0; i < H; i++) {
-        const rowNodes = [];
-        const r = rows[i];
-        for (let j = 0; j < V; j++) {
-          const x = (j / (V - 1)) * width;
-          const y = r.baseline 
-            + r.amp1 * Math.sin(x * r.freq1 + t * r.speed1 + r.phase1)
-            + r.amp2 * Math.sin(x * r.freq2 - t * r.speed2 + r.phase2);
-          rowNodes.push({ x, y });
-        }
-        nodes.push(rowNodes);
+      let d = "";
+      for (let j = 0; j <= segments; j++) {
+        const x = (j / segments) * width;
+        const y = baseline + amp * Math.sin(x * freq + t * speed);
+        d += j === 0 ? `M ${x.toFixed(1)} ${y.toFixed(1)}` : ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
       }
-
-      // Draw horizontal lines
-      let dH = "";
-      for (let i = 0; i < H; i++) {
-        const rowNodes = nodes[i];
-        dH += `M ${rowNodes[0].x.toFixed(1)} ${rowNodes[0].y.toFixed(1)}`;
-        for (let j = 1; j < V; j++) {
-          dH += ` L ${rowNodes[j].x.toFixed(1)} ${rowNodes[j].y.toFixed(1)}`;
-        }
-      }
-      pathH.setAttribute("d", dH);
-
-      // Draw vertical connecting lines
-      let dV = "";
-      for (let j = 0; j < V; j++) {
-        dV += `M ${nodes[0][j].x.toFixed(1)} ${nodes[0][j].y.toFixed(1)}`;
-        for (let i = 1; i < H; i++) {
-          dV += ` L ${nodes[i][j].x.toFixed(1)} ${nodes[i][j].y.toFixed(1)}`;
-        }
-      }
-      pathV.setAttribute("d", dV);
+      line.setAttribute("d", d);
 
       requestAnimationFrame(update);
     }
