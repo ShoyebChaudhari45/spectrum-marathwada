@@ -298,20 +298,25 @@
    SLIDE 5 — the CSN RISE lockup
    ===================================================== */
 
-/* Navy-and-green artwork on white with no alpha, so on the dark page it
+/* Sits in the empty right-hand half, level with the middle of the R-I-S-E
+   list (which measures y 399..721, so centre 560) rather than tucked up in
+   the corner. The list's longest heading ends around x=735, leaving this
+   whole area free, so the mark can be a good deal larger here.
+
+   Navy-and-green artwork on white with no alpha, so on the dark page it
    keeps a light plate of its own — same treatment as the jubilee mark in
    deck.css. The PNG is trimmed to its content so the plate hugs it. */
 .rise-logo{
   position: absolute;
-  right: 92px;
-  top: 150px;
-  width: 196px;
+  right: 160px;
+  top: 468px;
+  width: 360px;
   height: auto;
   z-index: 2;
-  padding: 11px 15px;
-  border-radius: 10px;
+  padding: 18px 24px;
+  border-radius: 14px;
   background: #fff;
-  box-shadow: 0 2px 16px rgba(0,0,0,.55);
+  box-shadow: 0 4px 24px rgba(0,0,0,.55);
 }
 
 /* =====================================================
