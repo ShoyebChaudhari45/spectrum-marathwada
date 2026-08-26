@@ -135,17 +135,28 @@
 /* ===================================================== */
 /* SLIDES 2 & 3 — full-bleed showcase artwork             */
 /* The CMIA | 58 lockup sits at its usual top-left spot,   */
-/* same as every other slide (no data-chrome override).   */
+/* same as every other slide (no data-chrome override),   */
+/* just dropped down to sit flush against the artwork's    */
+/* top edge instead of floating above it with a gap.       */
 /* The artwork is already a white plate, so it needs no    */
 /* extra card/background behind it.                        */
 /* ===================================================== */
+
+/* Default top:24px leaves the lockup's bottom (~94px tall) well above
+   where the artwork starts. Dropped to 41px so its bottom lands right on
+   the artwork's top edge (.content's top:135px below) instead of
+   floating with a gap above it. */
+.showcase-slide .brand,
+.showcase-slide .jubilee{
+  top: 41px;
+}
 
 .showcase-slide .content{
   align-items: center;
   /* At 670px tall its 3:2 ratio makes it 1005px wide — comfortably inside
      the 1420px content width, so height is what bounds it. The 135px drop
-     keeps a clear gap under the default top-left lockup (top:24px, ~94px
-     tall), which the image would otherwise sit right beneath. */
+     keeps the lockup (top:41px, ~94px tall) flush against the artwork's
+     top edge, no gap. */
   top: 135px;
   height: 670px;
 }
