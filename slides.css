@@ -712,61 +712,64 @@
 }
 
 .anchor-photos--top{
-  margin-top: 22px;
-  margin-bottom: 28px;
+  margin-top: 14px;
+  margin-bottom: 16px;
 }
 
-.anchor-photos--top img{ height: 240px; border-radius: 6px; }
+/* Noticeably bigger than the base 150px — the photos are the lead visual
+   on this slide now, with the stats row below shrunk to make room. */
+.anchor-photos--top img{ height: 210px; border-radius: 6px; }
 
-/* the figures/facts row shrinks to make room for the photos above it */
-.anchor-split--compact{ margin-top: 0; gap: 32px; }
+/* the figures/facts row shrinks further to make room for the bigger photos
+   above it, while still fitting the fixed 620px content box. */
+.anchor-split--compact{ margin-top: 0; gap: 28px; }
 
-.anchor-split--compact .anchor-co h3{ font-size: 17px; margin-bottom: 10px; }
-.anchor-split--compact .anchor-figure{ margin-bottom: 10px; }
-.anchor-split--compact .anchor-figure .num{ font-size: 30px; }
-.anchor-split--compact .anchor-figure .label{ font-size: 13px; }
-.anchor-split--compact .anchor-facts{ gap: 8px 16px; }
-.anchor-split--compact .anchor-facts li{ font-size: 13.5px; padding-left: 16px; }
-.anchor-split--compact .anchor-facts li::before{ width: 7px; height: 7px; }
+.anchor-split--compact .anchor-co h3{ font-size: 15px; margin-bottom: 6px; }
+.anchor-split--compact .anchor-figure{ margin-bottom: 6px; }
+.anchor-split--compact .anchor-figure .num{ font-size: 24px; }
+.anchor-split--compact .anchor-figure .label{ font-size: 12px; }
+.anchor-split--compact .anchor-facts{ gap: 5px 16px; }
+.anchor-split--compact .anchor-facts li{ font-size: 12px; padding-left: 14px; line-height: 1.25; }
+.anchor-split--compact .anchor-facts li::before{ width: 6px; height: 6px; }
 
 /* ---- total investment banner + the roster of investor names ---- */
 .anchor-total{
   display: flex;
   align-items: baseline;
   gap: 16px;
-  margin-top: 20px;
-  padding-top: 16px;
+  margin-top: 10px;
+  padding-top: 10px;
   border-top: 1px solid var(--rule);
 }
 
 .anchor-total .num{
   font-family: 'Sora', sans-serif;
   font-weight: 700;
-  font-size: 28px;
+  font-size: 22px;
   letter-spacing: -.01em;
   color: var(--green-heading);
 }
 
 .anchor-total .label{
-  font-size: 14.5px;
+  font-size: 13px;
   color: var(--ink-soft);
 }
 
 .anchor-companies{
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 12px 0 0;
+  gap: 8px;
+  margin: 6px 0 0;
   padding: 0;
   list-style: none;
 }
 
 .anchor-companies li{
-  padding: 6px 14px;
+  padding: 5px 12px;
   border: 1px solid rgba(53,201,154,.35);
   border-radius: 999px;
   background: rgba(53,201,154,.08);
-  font-size: 13.5px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--ink);
 }
