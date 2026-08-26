@@ -1,7 +1,17 @@
 /* =====================================================
    THE SPECTRUM OF MARATHWADA — interaction layer
-   State machine + GSAP timelines for the 7 sections.
-   Runs on slide 3 only.
+   Runs on the spectrum slide only.
+   -----------------------------------------------------
+   The seven ribbons are revealed ONE AT A TIME by the
+   stepper button in the caption column: the first click
+   brings ribbon 1 in, the next takes it out and brings
+   ribbon 2 in, and so on. After the seventh, the next
+   click clears the artwork back to neutral so the cycle
+   can start again.
+
+   Nothing on the right-hand side is visible until the
+   first click — .section-panel and .beam both start at
+   opacity 0 in spectrum.css.
    ===================================================== */
 
 (() => {
@@ -18,7 +28,7 @@
   ];
 
   // Beam / accent colors per section (mirrors the --c1/--c2/--c3 vars set
-  // inline on each .section-panel in 03-spectrum.html).
+  // inline on each .section-panel in 02-spectrum.html).
   const COLORS = {
     industry:     ["#7a1414", "#c0392b", "#ff5a3c"],
     agriculture:  ["#7a3c10", "#c1440e", "#ff9d3c"],
@@ -44,11 +54,10 @@
   const BAND_H = (PANELS_BOTTOM - PANELS_TOP) / SECTIONS.length;
   const WEDGE_HALF_H = BAND_H * 0.46;
 
-  // ---- how far the chosen card outgrows its neighbours ----------------
-  // Client note: "ye itna bada ho sakta hai kya?" — so the open card now
-  // grows on both axes. GROW_* drive the height (flex-grow within the
-  // stack) and ACTIVE_BLEED pulls the card's left edge back out over the
-  // beam feeding it, widening it by ~30%.
+  // ---- how far the visible card outgrows its hidden neighbours ---------
+  // The open card grows on both axes: GROW_* drive the height (flex-grow
+  // within the stack) and ACTIVE_BLEED pulls its left edge back out over
+  // the beam feeding it, widening it by ~30%.
   const GROW_ACTIVE = 3.2;
   const GROW_RESTING = 0.7;
   const ACTIVE_BLEED = "-30%";
@@ -63,7 +72,6 @@
   const svg = document.getElementById("beamsSvg");
   if (!svg) return;
 
-  const sectionsEl = document.getElementById("sections");
   const mapGlow = document.getElementById("mapGlow");
   const mapCore = document.getElementById("mapCore");
 
@@ -124,13 +132,6 @@
     });
   }
 
-  // Index of each section — used to build a ripple stagger that emanates
-  // outward from whichever panel was clicked, instead of every panel
-  // animating in lockstep (part of the "free flowing" motion pass).
-  const SECTION_INDEX = Object.fromEntries(SECTIONS.map((id, i) => [id, i]));
-  const rippleDelay = (id, fromIndex, durScale) =>
-    Math.min(Math.abs(SECTION_INDEX[id] - fromIndex), 3) * 0.05 * durScale;
-
   // ---------------------------------------------------
   // State
   // ---------------------------------------------------
@@ -150,14 +151,13 @@
   // so rapid re-clicks interrupt gracefully (kill + rebuild
   // from whatever the current rendered values are).
   //
-  // toId may be null, meaning "close whatever is open and return to the
-  // neutral, nothing-active state" — this is what clicking the already-
-  // active panel triggers (toggle-to-close).
+  // toId may be null, meaning "clear the artwork back to neutral" — no
+  // ribbon on screen at all.
   //
-  // Note on brightness: the resting / active / dimmed treatment of each
-  // card lives in spectrum.css and is driven purely by the .is-active and
-  // .has-active classes, so GSAP never writes an inline `filter` that
-  // would then outrank the stylesheet for the rest of the session.
+  // Visibility of the cards themselves is CSS's job, driven by the
+  // .is-active class, so GSAP never writes an inline opacity that would
+  // then outrank the stylesheet for the rest of the session. GSAP owns
+  // the size (flex-grow / margin), the beams and the map reaction.
   // ---------------------------------------------------
   function switchSection(toId) {
     if (toId === activeSection) return;
@@ -169,9 +169,6 @@
 
     const durScale = reduceMotion ? 0.25 : 1;
     const flowEase = "sine.inOut";
-    // Ripple origin: radiate outward from whichever panel is being opened,
-    // or — when closing — from whichever panel was open.
-    const rippleOrigin = SECTION_INDEX[toId ?? fromId];
 
     const tl = gsap.timeline({
       defaults: { ease: flowEase },
@@ -182,19 +179,14 @@
     });
     currentTimeline = tl;
 
-    // ---- 0s : hand the highlight/dim state over to CSS -----------------
-    sectionsEl.classList.toggle("has-active", Boolean(toId));
+    // ---- 0s : hand card visibility over to CSS -------------------------
     SECTIONS.forEach((id) => {
       const isActive = id === toId;
       panelEls[id].classList.toggle("is-active", isActive);
       toggleEls[id].setAttribute("aria-expanded", String(isActive));
     });
 
-    // ---- 0.15–1.0s : panel expansion / collapse ------------------------
-    // The open card grows taller (flex-grow) and wider (negative left
-    // margin, so it reaches back over its own beam). A ripple stagger
-    // radiates outward from the relevant panel instead of every row
-    // moving in lockstep.
+    // ---- 0.15–1.0s : the visible card takes its space ------------------
     SECTIONS.forEach((id) => {
       const isActive = id === toId;
       tl.to(
@@ -205,31 +197,30 @@
           duration: 0.85 * durScale,
           ease: flowEase,
         },
-        0.15 * durScale + rippleDelay(id, rippleOrigin, durScale)
+        0.15 * durScale
       );
     });
 
-    // ---- 0.2–1.1s : beam animation --------------------------------------
+    // ---- 0.1–1.0s : beams. Only the current one is on screen. ----------
     SECTIONS.forEach((id) => {
       const isActive = id === toId;
       beamEls[id].classList.toggle("is-active", isActive);
-      beamEls[id].classList.toggle("is-dimmed", Boolean(toId) && !isActive);
       tl.to(
         beamEls[id],
         {
-          opacity: toId ? (isActive ? 1 : 0.12) : 0.38,
-          duration: 0.9 * durScale,
+          opacity: isActive ? 1 : 0,
+          duration: (isActive ? 0.9 : 0.5) * durScale,
         },
-        0.2 * durScale + rippleDelay(id, rippleOrigin, durScale)
+        0.1 * durScale
       );
     });
-    // gentle energy swell on the active beam
+    // gentle energy swell as the beam arrives
     if (toId) {
       tl.fromTo(
         beamEls[toId],
         { scaleX: 0.97 },
         { scaleX: 1, duration: 0.9 * durScale, ease: "sine.out", transformOrigin: "0% 50%" },
-        0.2 * durScale
+        0.1 * durScale
       );
     }
 
@@ -254,12 +245,12 @@
       );
     }
 
-    // ---- 0.55–1.25s : content fade/slide ----------------------------------
+    // ---- 0.55–1.25s : body copy inside the card --------------------------
     if (fromId) {
       tl.to(
         contentEls[fromId],
         { height: 0, opacity: 0, duration: 0.45 * durScale, ease: "sine.inOut" },
-        0.15 * durScale
+        0.1 * durScale
       );
     }
     if (toId) {
@@ -269,7 +260,7 @@
         toContent,
         { height: 0, opacity: 0 },
         { height: naturalHeight, opacity: 1, duration: 0.65 * durScale, ease: "sine.out" },
-        0.55 * durScale
+        0.45 * durScale
       );
     }
   }
@@ -285,14 +276,47 @@
   }
 
   // ---------------------------------------------------
-  // Wire up clicks / keyboard (native <button> gives us
-  // Enter/Space + focus-visible for free)
+  // The stepper — the only way ribbons come and go
   // ---------------------------------------------------
-  SECTIONS.forEach((id) => {
-    toggleEls[id].addEventListener("click", () => {
-      switchSection(activeSection === id ? null : id);
+  function initStepper() {
+    const btn = document.getElementById("stepBtn");
+    const label = document.getElementById("stepLabel");
+    const now = document.getElementById("stepNow");
+    if (!btn) return;
+
+    // -1 means "nothing on screen"; 0..6 index into SECTIONS.
+    let step = -1;
+
+    function render() {
+      const shown = step + 1;
+      now.textContent = String(shown);
+      label.textContent =
+        step < 0
+          ? "Reveal first strength"
+          : step === SECTIONS.length - 1
+          ? "Start over"
+          : "Next strength";
+    }
+
+    function advance() {
+      // ... 6 -> -1 -> 0 ... so the seventh click clears the artwork and
+      // the cycle can run again from the top.
+      step = step >= SECTIONS.length - 1 ? -1 : step + 1;
+      switchSection(step < 0 ? null : SECTIONS[step]);
+      render();
+    }
+
+    btn.addEventListener("click", advance);
+
+    // Clicking the ribbon that is currently on screen advances too — the
+    // whole card is already a button, and moving on is the only thing left
+    // to do with it.
+    SECTIONS.forEach((id) => {
+      toggleEls[id].addEventListener("click", advance);
     });
-  });
+
+    render();
+  }
 
   // ---------------------------------------------------
   // Expand / restore — lets the artwork step out of the
@@ -358,6 +382,7 @@
   // Init
   // ---------------------------------------------------
   buildBeams();
+  initStepper();
   initExpand();
   initParallax();
 })();

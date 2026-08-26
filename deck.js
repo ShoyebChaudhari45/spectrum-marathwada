@@ -108,6 +108,40 @@
     el(`<div class="page-number">${pageNo}</div>`)
   );
 
+  // ---- fullscreen toggle, top-right --------------------------------------
+  // Worth knowing: the Fullscreen API is per-document, so this drops as soon
+  // as the arrows navigate to the next slide's file. For actually presenting
+  // the deck, F11 (the browser's own fullscreen) survives navigation — see
+  // the README. This button is here for a single slide, and because the page
+  // is the same near-black as the letterbox either way.
+  const fsBtn = el(`
+    <button class="fs-btn" type="button" aria-label="Toggle fullscreen" title="Fullscreen (F)">
+      <svg class="icon-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" /></svg>
+      <svg class="icon-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h6V3M21 9h-6V3M3 15h6v6M21 15h-6v6" /></svg>
+    </button>
+  `);
+  slide.appendChild(fsBtn);
+
+  function toggleFullscreen() {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    } else {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
+  }
+
+  fsBtn.addEventListener("click", toggleFullscreen);
+
+  document.addEventListener("fullscreenchange", () => {
+    document.body.classList.toggle(
+      "is-fullscreen",
+      Boolean(document.fullscreenElement)
+    );
+    fit(); // the viewport just changed size
+  });
+
   // ---------------------------------------------------
   // 3. Prev / next arrows — small, bottom-left
   // ---------------------------------------------------
@@ -156,6 +190,10 @@
         break;
       case "End":
         go(PAGES[PAGES.length - 1]);
+        break;
+      case "f":
+      case "F":
+        toggleFullscreen();
         break;
     }
   });

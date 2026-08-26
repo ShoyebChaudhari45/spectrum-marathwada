@@ -51,7 +51,7 @@
   color: var(--ink);
 }
 
-.title-meta .credit strong{ font-weight: 700; color: #24282c; }
+.title-meta .credit strong{ font-weight: 700; color: var(--ink-strong); }
 
 .title-meta .motto{
   padding-left: 26px;
@@ -81,7 +81,7 @@
   font-size: 31px;
   line-height: 1.2;
   letter-spacing: -.01em;
-  color: #14181c;
+  color: var(--ink-strong);
 }
 
 /* ---- dotted vertical timeline ---- */
@@ -108,7 +108,7 @@
   font-size: 20px;
   font-weight: 600;
   line-height: 1.35;
-  color: #24282c;
+  color: var(--ink-strong);
 }
 
 .timeline li:last-child{ margin-bottom: 0; }
@@ -143,9 +143,9 @@
 
 .stat-card{
   padding: 20px 20px 22px;
-  border: 1px solid #e6e8ea;
+  border: 1px solid rgba(255,255,255,.08);
   border-left: 6px solid var(--green-deep);
-  background: #fff;
+  background: var(--surface);
 }
 
 .stat-card h4{
@@ -154,7 +154,7 @@
   font-weight: 600;
   font-size: 19px;
   line-height: 1.22;
-  color: #14181c;
+  color: var(--ink-strong);
 }
 
 .stat-card p{
@@ -173,8 +173,8 @@
 .card-wide{
   margin-top: 26px;
   padding: 22px 30px 24px;
-  background: var(--card);
-  box-shadow: 0 2px 14px rgba(20,30,50,.10);
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,.07);
   text-align: center;
 }
 
@@ -183,7 +183,7 @@
   font-family: 'Sora', sans-serif;
   font-weight: 600;
   font-size: 24px;
-  color: #14181c;
+  color: var(--ink-strong);
 }
 
 .card-wide p{
@@ -248,7 +248,7 @@
   font-weight: 600;
   font-size: 25px;
   line-height: 1.2;
-  color: #14181c;
+  color: var(--ink-strong);
 }
 
 .rise-list h3 .letter{
@@ -293,13 +293,20 @@
    SLIDE 5 — the CSN RISE lockup
    ===================================================== */
 
+/* Navy-and-green artwork on white with no alpha, so on the dark page it
+   keeps a light plate of its own — same treatment as the jubilee mark in
+   deck.css. The PNG is trimmed to its content so the plate hugs it. */
 .rise-logo{
   position: absolute;
-  right: 96px;
+  right: 92px;
   top: 150px;
-  width: 208px;
+  width: 196px;
   height: auto;
   z-index: 2;
+  padding: 11px 15px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 16px rgba(0,0,0,.55);
 }
 
 /* =====================================================
@@ -327,37 +334,57 @@
 }
 
 /* =====================================================
-   SLIDE 7 — bilateral commitments
+   SLIDE 7 — CMIA Commitments
    -----------------------------------------------------
-   Four cards plus a title is the densest slide in the deck, and at full
-   size the second row ran under the navy corner swoosh. Everything here
-   is pulled in so the grid finishes above it.
+   The closing slide: seven short pledges. Deliberately large and
+   left-aligned so it reads as a statement rather than a data slide.
    ===================================================== */
 
-.content.commitments h1.slide-title{ font-size: 40px; }
-.content.commitments .rule{ margin-top: 20px; }
-
-.content.commitments .card-grid{
-  gap: 28px 26px;
-  margin-top: 26px;
+.commit-list{
+  margin: 34px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 16px;
 }
 
-.content.commitments .card{ padding: 20px 22px 18px; }
-
-.content.commitments .badge{
-  width: 40px;
-  height: 40px;
-  margin-bottom: 12px;
+.commit-list li{
+  position: relative;
+  padding-left: 46px;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1.32;
+  color: var(--ink-strong);
 }
 
-.content.commitments .badge svg{ width: 20px; height: 20px; }
-
-.content.commitments .card h3{
-  font-size: 20px;
-  margin-bottom: 8px;
+/* ring */
+.commit-list li::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .26em;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(53,201,154,.16);
+  border: 1px solid var(--green-deep);
 }
 
-.content.commitments .card p{
-  font-size: 15.5px;
-  line-height: 1.45;
+/* tick inside the ring */
+.commit-list li::after{
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: .52em;
+  width: 9px;
+  height: 5px;
+  border-left: 2px solid var(--green-deep);
+  border-bottom: 2px solid var(--green-deep);
+  transform: rotate(-45deg);
+}
+
+.commit-list li.final{
+  margin-top: 4px;
+  color: var(--green-glow);
+  font-weight: 600;
 }

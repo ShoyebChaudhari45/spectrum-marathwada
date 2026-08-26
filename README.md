@@ -3,9 +3,9 @@
 A seven-page HTML presentation for the Chamber of Marathwada Industries &
 Agriculture, built from the *Project-CSNTech: India's Next IT and GCC
 Powerhouse* deck. Every page is wrapped in the official CMIA slide template
-(green spine, logo, 58-years jubilee mark, navy/green corner swoosh), and page
-2 carries the interactive "Spectrum of Marathwada" artwork inset inside that
-frame.
+(green spine, logo, 58-years jubilee mark, navy/green corner swoosh) on a dark
+theme, and page 2 carries the interactive "Spectrum of Marathwada" artwork
+inset inside that frame.
 
 ## Running it — works with no internet
 
@@ -19,7 +19,19 @@ npx serve .
 # or
 python -m http.server 8080
 ```
-............
+
+## Dark theme
+
+Tokens live in `:root` in `deck.css`. Two brand colours are lifted from their
+print values so they hold up on near-black: the heading green (`--green-deep`,
+`#35c99a`) and the CMIA wordmark orange (`--orange`, `#ff7a4d`).
+
+Two supplied marks are navy-on-white with no alpha, so they cannot sit directly
+on the dark page — they keep a small white plate instead (`.jubilee` in
+`deck.css`, `.rise-logo` in `slides.css`). Both PNGs are trimmed to their
+content so the plate hugs the artwork. The CMIA mark itself needs no plate: it
+is a transparent PNG in gold/orange/blue and reads well straight onto black.
+
 ## Two crowded slides
 
 Slides 6 and 7 are the densest in the deck, and at full size their bottom-right
@@ -51,7 +63,7 @@ pushing any other branch gets its own preview URL.
 | 4 | `04-cmia-apex.html` | CMIA — The Apex Industrial Voice |
 | 5 | `05-rise-framework.html` | The CSN RISE Framework |
 | 6 | `06-national-demands.html` | Strategic National Demands: What We Seek |
-| 7 | `07-commitments.html` | CMIA's Bilateral Commitments |
+| 7 | `07-commitments.html` | CMIA Commitments |
 
 Each slide is a standalone page. Navigate with the small prev/next arrows at
 the bottom left, or with <kbd>←</kbd> / <kbd>→</kbd> (also <kbd>PageUp</kbd> /
@@ -61,6 +73,17 @@ of the deck stays visible but greys out.
 **Reordering or renaming slides** is a one-line change: edit the `PAGES` array
 at the top of `deck.js`. The arrows, the page numbers and the keyboard
 shortcuts all read from it.
+
+### Presenting full-screen
+
+**Use F11.** The slide and the letterbox around it are the same near-black, so
+at any window shape the deck already reads edge-to-edge with no visible frame —
+and the browser's own fullscreen survives navigating between slides.
+
+There is also a fullscreen button top-right, and <kbd>F</kbd> does the same
+thing. Both use the Fullscreen API, which is per-document: it drops the moment
+the arrows load the next slide's file. Fine for one slide, not for presenting
+the deck — hence F11.
 
 ## How a slide is built
 
@@ -117,23 +140,42 @@ pixel-aligned because `.spectrum-panel` is locked to the same 3:2 ratio.
 - **A scrim** (`.panel-scrim`) hides the flattened rainbow baked into the right
   third of the original photo
 
-### Interaction
+### Interaction — one ribbon at a time
 
-- Click (or Tab + Enter/Space) any band to open it. Exactly one is ever open.
-- Clicking the open band closes it and returns the spectrum to neutral.
-- Rapid clicks are safe — `switchSection()` kills the in-flight GSAP timeline
+Nothing is on the right-hand side when the slide loads: `.section-panel` and
+`.beam` both start at `opacity: 0` in `spectrum.css`. The stepper button in the
+caption column brings them in one at a time.
+
+- First click reveals ribbon 1. The next click takes it out and brings in
+  ribbon 2, and so on. Never more than one on screen.
+- After the seventh, the next click clears the artwork back to neutral, so the
+  cycle can run again from the top. The button reads *Reveal first strength* →
+  *Next strength* → *Start over*, with a `n of 7 shown` readout beneath.
+- Clicking the ribbon that is currently on screen also advances — the card is
+  already a button and moving on is the only thing left to do with it.
+- Rapid clicks are safe: `switchSection()` kills the in-flight GSAP timeline
   and rebuilds from wherever the DOM currently is.
-- The chosen band grows on **both** axes: taller via `flex-grow`, and ~30%
+- The visible card grows on **both** axes: taller via `flex-grow`, and ~30%
   wider via a negative left margin that reaches back out over the beam feeding
   it. Its left edge fades to transparent so the beam reads as flowing into the
   card. Tune with `GROW_ACTIVE`, `GROW_RESTING` and `ACTIVE_BLEED` at the top
   of `script.js`.
-- While a band is open the other six drop well back (opacity and saturation),
-  and their beams dim with them. Tune in the `.sections.has-active` and
-  `.beam.is-dimmed` rules in `spectrum.css`.
 - The **expand button** at the artwork's top-right corner breaks the spectrum
-  out of the template to fill the whole slide for presenting; <kbd>Esc</kbd> or
-  a second click restores it.
+  out of the template to fill the whole slide; <kbd>Esc</kbd> or a second click
+  restores it.
+
+Card visibility is CSS's job, driven by the `.is-active` class, so GSAP never
+writes an inline `opacity` that would then outrank the stylesheet for the rest
+of the session. GSAP owns the sizing, the beams and the map reaction.
+
+#### The scrim, and why its falloff is where it is
+
+The source photo has a rainbow flattened into it, which would otherwise read as
+all seven ribbons being visible at once. `.panel-scrim` covers it. The falloff
+starts at 60% of the panel — just past the widest point of the map outline,
+which measures at 60.7% — and reaches full black by 66%. It is a soft ramp
+rather than a hard edge on purpose: the baked rainbow has to die out as though
+the light were fading, not get sliced off by a visible seam.
 
 ### Upgrading the map reaction with real cropped assets
 

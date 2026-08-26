@@ -1,15 +1,18 @@
 /* =====================================================
-   THE SPECTRUM OF MARATHWADA — slide 3 only
+   THE SPECTRUM OF MARATHWADA — the spectrum slide only
    -----------------------------------------------------
    The artwork (assets/background.jpg) is 1536x1024, i.e.
    exactly 3:2, and every overlay below is positioned as a
    percentage of it. .spectrum-panel is therefore locked to
    3:2 too, so the overlays stay pixel-aligned with the art.
 
-   The panel is inset inside the white CMIA slide, and the
-   whole slide is transform-scaled by deck.js — so all type
-   here is plain px, authored against the 1044px-wide panel,
-   and scales with everything else.
+   The panel is inset inside the CMIA slide, and the whole
+   slide is transform-scaled by deck.js — so all type here
+   is plain px, authored against the 1032px-wide panel, and
+   scales with everything else.
+
+   Cards and beams both start at opacity 0: the stepper in
+   script.js brings exactly one ribbon on screen at a time.
    ===================================================== */
 
 :root{
@@ -42,9 +45,7 @@
   border-radius: 10px;
   overflow: hidden;
   background: var(--spec-bg);
-  box-shadow:
-    0 0 0 1px rgba(31,56,100,.16),
-    0 20px 48px rgba(15,25,45,.30);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.07);
 }
 
 /* Presenting mode — the panel breaks out of the template and
@@ -69,21 +70,6 @@
 
 .brand, .jubilee, .spine, .swoosh, .page-number, .spectrum-aside{
   transition: opacity .45s ease;
-}
-
-/* The deck arrows stay available while presenting, but the navy-on-white
-   treatment is invisible against the artwork — flip them to light. */
-.slide.spectrum-full .page-nav-btn{
-  border-color: rgba(255,255,255,.42);
-  background: rgba(4,6,12,.5);
-  color: rgba(255,255,255,.9);
-}
-
-.slide.spectrum-full .page-nav-btn:hover,
-.slide.spectrum-full .page-nav-btn:focus-visible{
-  background: #fff;
-  border-color: #fff;
-  color: var(--navy);
 }
 
 .stage{
@@ -112,19 +98,25 @@
     linear-gradient(180deg, rgba(0,0,0,.15), transparent 15%, transparent 80%, rgba(0,0,0,.35));
 }
 
-/* hides the flattened rainbow+panels baked into the source photo so our
-   independent DOM/SVG layers are the only visible interactive rainbow */
+/* Hides the rainbow and panels flattened into the source photo, so the only
+   ribbon on screen is the one the stepper has revealed.
+
+   The falloff starts at 60% — just past the widest point of the map outline,
+   which measures at 60.7% — and reaches full black by 66%, well before the cards
+   begin. A soft ramp rather than a hard edge: the baked rainbow has to die
+   out as if the light were simply fading, not get sliced off by a seam. */
 .panel-scrim{
   position: absolute;
-  left: 66%;
-  top: 9%;
-  width: 34%;
-  height: 68%;
+  left: 60%;
+  top: 4%;
+  width: 40%;
+  height: 73%;   /* stops short of the landscape strip along the bottom */
   pointer-events: none;
-  background: radial-gradient(ellipse at 0% 50%, transparent 0%, var(--spec-bg) 42%);
-  background-color: var(--spec-bg);
-  -webkit-mask-image: linear-gradient(90deg, transparent, black 18%);
-  mask-image: linear-gradient(90deg, transparent, black 18%);
+  background: linear-gradient(90deg,
+    rgba(4,6,12,0) 0%,
+    rgba(4,6,12,.8) 9%,
+    var(--spec-bg) 15%,
+    var(--spec-bg) 100%);
 }
 
 /* ===================================================== */
@@ -198,20 +190,16 @@
 }
 
 .beam{
-  opacity: .38;
+  opacity: 0;
   filter: url(#beamGlow) brightness(1) saturate(1);
   transition: filter .6s ease;
   will-change: opacity, filter;
 }
 
-/* When one band is chosen its beam burns brighter and the other six
-   are pulled right down — the "dusre colours thode aur light" note. */
+/* The one beam on screen burns bright; the rest are animated to
+   opacity 0 by the stepper, so they need no treatment of their own. */
 .beam.is-active{
   filter: url(#beamGlow) brightness(1.45) saturate(1.3);
-}
-
-.beam.is-dimmed{
-  filter: url(#beamGlow) brightness(.55) saturate(.3);
 }
 
 /* ===================================================== */
@@ -241,9 +229,9 @@
   overflow: hidden;
   background: linear-gradient(90deg, color-mix(in srgb, var(--c1) 70%, transparent), var(--c2) 55%, var(--c3) 100%);
   box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset;
-  opacity: .82;
+  opacity: 0;
   filter: brightness(.85) saturate(.85);
-  transition: opacity .5s ease, filter .5s ease;
+  transition: opacity .55s ease, filter .5s ease;
 }
 
 /* ---- the chosen band ------------------------------------------------
@@ -264,20 +252,6 @@
     0 8px 30px rgba(0,0,0,.35);
 }
 
-/* ---- everything that is NOT the chosen band -------------------------
-   Client note: "highlight ke time pe dusre colours thode aur light ho
-   sakte hai" — so the other six drop well back while one is open. */
-.sections.has-active .section-panel:not(.is-active){
-  opacity: .34;
-  filter: brightness(.62) saturate(.32);
-}
-
-.sections.has-active .section-panel:not(.is-active):hover,
-.sections.has-active .section-panel:not(.is-active):focus-within{
-  opacity: .62;
-  filter: brightness(.85) saturate(.7);
-}
-
 /* When active, the toggle takes only the height its own content needs,
    so the body copy sits directly under the subtitle instead of being
    pushed to the bottom of the enlarged card. */
@@ -285,12 +259,6 @@
   flex: 0 0 auto;
   padding-top: 4%;
   padding-bottom: 1.2%;
-}
-
-.section-panel:not(.is-active):hover,
-.section-panel:not(.is-active):focus-within{
-  opacity: .95;
-  filter: brightness(1) saturate(1);
 }
 
 .section-toggle{
@@ -413,8 +381,8 @@
   display: inline-block;
   margin-bottom: 14px;
   padding: 6px 12px;
-  background: var(--green-pale);
-  color: #2c3b36;
+  background: rgba(53,201,154,.14);
+  color: var(--green-glow);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: .1em;
@@ -438,24 +406,62 @@
   color: var(--ink);
 }
 
-.spectrum-aside .aside-hint{
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  padding-top: 16px;
+/* ---- the reveal stepper ------------------------------------------
+   Only one ribbon is on screen at a time; this button brings the next
+   one in and takes the previous one out. */
+.spectrum-step{
+  padding-top: 20px;
   border-top: 1px solid var(--rule);
-  font-size: 13.5px;
-  line-height: 1.45;
-  color: var(--ink-soft);
 }
 
-.spectrum-aside .aside-hint svg{
-  flex: 0 0 auto;
-  width: 16px;
-  height: 16px;
-  margin-top: 2px;
-  color: var(--green-deep);
+.step-btn{
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--green-deep);
+  background: rgba(53,201,154,.12);
+  color: var(--green-glow);
+  font-family: 'Sora', sans-serif;
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  cursor: pointer;
+  transition: background .25s ease, color .25s ease, transform .2s ease;
 }
+
+.step-btn:hover{
+  background: var(--green-deep);
+  color: #05231b;
+  transform: translateY(-1px);
+}
+
+.step-btn:focus-visible{
+  outline: 2px solid var(--green-glow);
+  outline-offset: 2px;
+}
+
+.step-btn svg{
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
+}
+
+.step-readout{
+  margin: 12px 0 0;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
+.step-readout .now{ color: var(--green-glow); font-weight: 700; }
 
 /* ---- expand / restore control, top-right of the dark panel ---- */
 .spectrum-expand{
