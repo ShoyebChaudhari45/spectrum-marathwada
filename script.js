@@ -78,13 +78,9 @@
   // It grows on both axes: GROW_* drive the height (flex-grow within the
   // stack) and ACTIVE_BLEED pulls its left edge back out over the beam
   // feeding it, widening it by ~30%.
-  // Retuned for 26px type. At that size the longest body copy wraps to
-  // three lines, so the open card needs a lot more height than the resting
-  // ones - hence the wide ratio. The cards are also wider now, so a smaller
-  // bleed already reaches back over the beam feeding them.
-  const GROW_ACTIVE = 5.2;
-  const GROW_RESTING = 0.8;
-  const ACTIVE_BLEED = "-15%";
+  const GROW_ACTIVE = 3.2;
+  const GROW_RESTING = 0.7;
+  const ACTIVE_BLEED = "-30%";
 
   const reduceMotion =
     window.matchMedia &&
