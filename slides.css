@@ -143,7 +143,7 @@
   background: var(--rule);
 }
 
-/* ---- stat cards with a green spine ---- */
+/* ---- stat cards with a green left rule ---- */
 .stat-row{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -225,7 +225,7 @@
 
 .rise-list li{
   position: relative;
-  margin-bottom: 26px;
+  margin-bottom: 46px;
 }
 
 .rise-list li:last-child{ margin-bottom: 0; }
@@ -252,11 +252,12 @@
 }
 
 .rise-list h3{
-  margin: 0 0 7px;
+  margin: 0;
   font-family: 'Sora', sans-serif;
   font-weight: 600;
-  font-size: 25px;
+  font-size: 36px;
   line-height: 1.2;
+  letter-spacing: -.012em;
   color: var(--ink-strong);
 }
 
@@ -265,12 +266,6 @@
   font-weight: 700;
 }
 
-.rise-list p{
-  margin: 0;
-  font-size: 18px;
-  line-height: 1.45;
-  color: var(--ink);
-}
 
 /* ===================================================== */
 /* SLIDES 6 & 7 — icon card grids                         */

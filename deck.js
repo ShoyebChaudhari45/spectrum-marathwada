@@ -7,7 +7,7 @@
 
      1. scales the fixed 1600x900 .slide box to the window
      2. injects the CMIA template chrome, so the logo /
-        jubilee mark / swoosh live in exactly one place
+        jubilee mark / wave live in exactly one place
      3. wires the small bottom-left prev/next arrows and
         the matching keyboard shortcuts
 
@@ -67,9 +67,6 @@
     t.innerHTML = html.trim();
     return t.content.firstElementChild;
   }
-
-  // ---- green spine down the left edge ----
-  slide.prepend(el(`<div class="spine" aria-hidden="true"></div>`));
 
   // ---- bottom spectrum wave (sits behind the content) ----
   // The gradient id is suffixed per page so several of these can never

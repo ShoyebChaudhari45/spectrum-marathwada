@@ -58,14 +58,13 @@
   border-radius: 0;
 }
 
-.slide.spectrum-full .spine,
 .slide.spectrum-full .spectrum-wave,
 .slide.spectrum-full .page-number{
   opacity: 0;
   pointer-events: none;
 }
 
-.spine, .spectrum-wave, .page-number{
+.spectrum-wave, .page-number{
   transition: opacity .45s ease;
 }
 

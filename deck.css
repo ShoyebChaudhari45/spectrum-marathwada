@@ -40,7 +40,6 @@
   --ink-soft:   #868f9c;
 
   /* ---- CMIA brand, lifted for legibility on near-black ---- */
-  --green:      #7dc94a;    /* the spine */
   --green-deep: #35c99a;    /* headings, badges */
   --green-glow: #6fe0b6;    /* kicker text */
   --navy:       #22406e;    /* the swoosh */
@@ -97,19 +96,9 @@ html, body{
 }
 
 /* ===================================================== */
-/* TEMPLATE CHROME — green spine, logo, jubilee mark,     */
-/* corner swoosh, page number. Present on every slide.    */
+/* TEMPLATE CHROME — logo, jubilee mark, bottom spectrum  */
+/* wave, page number. Present on every slide.             */
 /* ===================================================== */
-
-.spine{
-  position: absolute;
-  left: 22px;
-  top: 0;
-  width: 9px;
-  height: 100%;
-  background: var(--green);
-  z-index: 3;
-}
 
 .brand{
   position: absolute;

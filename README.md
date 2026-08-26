@@ -3,7 +3,7 @@
 A seven-page HTML presentation for the Chamber of Marathwada Industries &
 Agriculture, built from the *Project-CSNTech: India's Next IT and GCC
 Powerhouse* deck. Every page is wrapped in the official CMIA slide template
-(green spine, logo, 58-years jubilee mark, bottom spectrum wave) on a dark
+(logo, 58-years jubilee mark, bottom spectrum wave) on a dark
 theme, and page 2 carries the interactive "Spectrum of Marathwada" artwork
 inset inside that frame.
 
@@ -26,10 +26,11 @@ Tokens live in `:root` in `deck.css`. Two brand colours are lifted from their
 print values so they hold up on near-black: the heading green (`--green-deep`,
 `#35c99a`) and the CMIA wordmark orange (`--orange`, `#ff7a4d`).
 
-The navy/green corner swoosh is gone. In its place is a full-width **spectrum
-wave** along the bottom of every slide (`.spectrum-wave`, drawn in `deck.js`),
-carrying the seven spectrum colours left to right — the deck's whole idea, and
-what the brief asked for.
+The navy/green corner swoosh is gone, and so is the green vertical spine that
+ran down the left edge. In their place is a full-width **spectrum wave** along
+the bottom of every slide (`.spectrum-wave`, drawn in `deck.js`), carrying the
+seven spectrum colours left to right — the deck's whole idea, and what the
+brief asked for.
 
 Marks needing no plate: the **CMIA logo** (transparent, gold/orange/blue) and
 the **58-years jubilee mark**, for which the supplied dark artwork is
@@ -113,9 +114,9 @@ A slide's markup is only its content:
 </div>
 ```
 
-`deck.js` injects the template chrome — green spine, CMIA logo, jubilee mark,
-bottom spectrum wave, page number, nav arrows — so the branding lives in
-exactly one place.
+`deck.js` injects the template chrome — CMIA logo, jubilee mark, bottom
+spectrum wave, page number, nav arrows — so the branding lives in exactly one
+place.
 `data-page` is the only thing a slide has to declare.
 
 - `deck.css` — the template chrome and shared typography/cards
