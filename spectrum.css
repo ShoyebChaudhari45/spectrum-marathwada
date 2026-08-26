@@ -62,41 +62,56 @@
 
 /* "7 Colours | 1 City | Infinity Possibilities" — set in the empty
    ground to the left of the crystal, inside .stage so it moves/hides
-   with the panel in presenting mode. Styled after the original poster
-   artwork (assets/background_original.jpg): serif, uppercase, wide
-   tracking, with the closing line picked out in the poster's gold. No
-   serif font is loaded in this deck, so a web-safe serif stack stands
-   in for the display face the poster uses. */
+   with the panel in presenting mode. Reproduces the three-tier
+   treatment from the original poster artwork (assets/background_original.jpg,
+   "THE SPECTRUM / OF / MARATHWADA"): a big bold serif line, a small
+   line flanked by hairline rules, and a second big bold serif line
+   picked out in the poster's gold. No serif font is loaded in this
+   deck, so a web-safe serif stack stands in for the poster's display
+   face. Sized to the ~200px of black ground actually available before
+   the crystal starts (--map-left, 22.3% of the panel) — the poster's
+   own type was scaled for a full half-slide, which this column isn't. */
 .spectrum-kicker{
   position: absolute;
   left: 8px;
-  top: 260px;
-  width: 220px;
+  top: 250px;
+  width: 200px;
   z-index: 4;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.spectrum-kicker li{
-  margin-bottom: 20px;
+.spectrum-kicker .kicker-big{
   font-family: Georgia, 'Times New Roman', serif;
-  font-size: 19px;
-  font-weight: 500;
-  letter-spacing: .14em;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.12;
+  letter-spacing: .005em;
   text-transform: uppercase;
-  white-space: nowrap;
   color: var(--ink-strong);
 }
 
-.spectrum-kicker li:last-child{
-  margin-bottom: 0;
-  font-size: 21px;
-  font-weight: 700;
-  letter-spacing: .06em;
-  line-height: 1.35;
-  white-space: normal;
-  color: #d8a94c;
+.spectrum-kicker .kicker-gold{ color: #d8a94c; margin-top: 14px; }
+
+.spectrum-kicker .kicker-flanked{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink-strong);
+}
+
+.spectrum-kicker .kicker-flanked .fl{
+  flex: 1 1 auto;
+  height: 1px;
+  min-width: 8px;
+  background: rgba(255,255,255,.32);
 }
 
 /* Presenting mode — the panel breaks out of the template and
