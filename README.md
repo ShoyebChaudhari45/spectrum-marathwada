@@ -19,6 +19,18 @@ npx serve .
 python -m http.server 8080
 ```
 
+## Deploying
+
+The deck is plain static files with no build step, so Vercel needs no
+configuration beyond `vercel.json`, which pins `cleanUrls: false`. That matters:
+`deck.js` navigates to explicit `.html` filenames, and with clean URLs enabled
+Vercel would 308-redirect every one of them to its extensionless form — an
+extra round trip on every arrow click, and a URL that no longer matches the
+filenames in this repo.
+
+Vercel's production deploy follows `master`. Pushing to `master` redeploys;
+pushing any other branch gets its own preview URL.
+
 ## The deck
 
 | # | File | Slide |
