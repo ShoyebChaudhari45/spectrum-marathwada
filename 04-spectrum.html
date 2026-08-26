@@ -21,42 +21,13 @@
     <div class="spectrum-panel" id="spectrumPanel">
       <div class="stage" id="stage">
 
-        <!-- Base cinematic art: logo art, prism/map imagery, bottom landscape.
-             The right-side panel/beam artwork baked into this image is covered
-             by .panel-scrim and replaced with fully independent DOM/SVG layers. -->
-        <img class="bg-image" src="assets/background.jpg" alt="" aria-hidden="true" />
+        <!-- The whole slide is this one image — the crystal/map artwork
+             alone, no baked logo, title or landscape. The interactive
+             layers below (beams, panels) are positioned to its geometry. -->
+        <img class="bg-image" src="assets/prism-crystal.jpg" alt="" aria-hidden="true" />
 
         <!-- Subtle vignette / cinematic grade -->
         <div class="grade-layer" aria-hidden="true"></div>
-
-        <!-- Covers the "ONE REGION. SEVEN STRENGTHS. LIMITLESS POTENTIAL."
-             line flattened into the bottom of the photo. -->
-        <div class="stage-foot-mask" aria-hidden="true"></div>
-
-        <!-- Scrim that hides the flattened rainbow+panels baked into the photo,
-             so only our independent interactive layers are visible there. -->
-        <div class="panel-scrim" aria-hidden="true"></div>
-
-        <!-- Covers the "THE SPECTRUM OF MARATHWADA..." title block baked into
-             the photo, so only the crisp real .stage-title-block below reads —
-             without this, the baked pixels and the live DOM text render on
-             top of each other as a doubled/ghosted title. -->
-        <div class="left-content-mask" aria-hidden="true"></div>
-
-        <!-- The CMIA logo is baked into the artwork; this sits beside it,
-             matching the "CMIA | 58" lockup on the brief. -->
-        <img class="stage-58" src="assets/cmia-58-years.png"
-             alt="58 years of CMIA" />
-
-        <div class="stage-title-block" id="stageTitleBlock">
-          <div class="title-pre">THE</div>
-          <h1 class="title-main">SPECTRUM</h1>
-          <div class="title-of">OF</div>
-          <div class="title-city">MARATHWADA</div>
-          <div class="title-subcity">&amp; CHHATRAPATI SAMBHAJINAGAR</div>
-          <div class="title-divider"></div>
-          <p class="title-tagline">A legacy of strength.<br />A spectrum of possibilities.</p>
-        </div>
 
         <!-- ============================================= -->
         <!-- CENTRAL MAP / PRISM REACTION LAYER             -->
@@ -99,7 +70,7 @@
 
           <!-- The incoming ray: drawn from the left edge into the prism's
                light point on the first click. -->
-          <path class="light-ray" id="lightRay" d="M 0 706 Q 250 626, 525 502"
+          <path class="light-ray" id="lightRay" d="M 0 982 Q 206 902, 433 778"
                 fill="none" stroke="url(#rayGrad)" stroke-width="5" stroke-linecap="round" />
           <!-- paths injected/positioned by script.js data, one per section -->
           <path class="beam" data-section="industry" />

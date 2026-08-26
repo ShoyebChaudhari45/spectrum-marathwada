@@ -63,7 +63,10 @@
 
   // The prism's light point — where every beam starts. The only hand-placed
   // coordinate left; the far end of each beam is measured off its card.
-  const ORIGIN = { x: VB_W * 0.342, y: VB_H * 0.49 };
+  // Matches the crystal's own left vertex in assets/prism-crystal.jpg
+  // (measured off its bright-pixel bounding box — see spectrum.css's
+  // --map-* comment), not an arbitrary spot in the frame.
+  const ORIGIN = { x: VB_W * 0.282, y: VB_H * 0.76 };
 
   // ---- the step sequence ----
   // Step 1 is the ray/title-fade entrance (see playRayEntrance()); steps
@@ -96,8 +99,6 @@
   const ray = document.getElementById("lightRay");
   const mapGlow = document.getElementById("mapGlow");
   const mapCore = document.getElementById("mapCore");
-  const leftMask = document.querySelector(".left-content-mask");
-  const titleBlock = document.getElementById("stageTitleBlock");
 
   const panelEls = {};
   const toggleEls = {};
@@ -208,9 +209,9 @@
       });
     }
 
-    // leftMask stays permanently opaque (spectrum.css) — it hides the baked
-    // title so the real .stage-title-block reads on its own, so there is
-    // nothing to animate here on the ray's arrival.
+    // .left-content-mask stays permanently opaque (spectrum.css) — it hides
+    // the baked title, so there is nothing to animate here on the ray's
+    // arrival.
 
     // the light point at the prism switches on — both start at opacity 0
     // (see spectrum.css), so this is a reveal, not a flare. Settles at the

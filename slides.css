@@ -765,11 +765,11 @@
 }
 
 .anchor-companies li{
-  padding: 5px 12px;
+  padding: 7px 16px;
   border: 1px solid rgba(53,201,154,.35);
   border-radius: 999px;
   background: rgba(53,201,154,.08);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--ink);
 }

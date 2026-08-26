@@ -1,10 +1,13 @@
 /* =====================================================
    THE SPECTRUM OF MARATHWADA — the spectrum slide only
    -----------------------------------------------------
-   The artwork (assets/background.jpg) is 1536x1024, i.e.
+   The artwork (assets/prism-crystal.jpg) is 1280x853, i.e.
    exactly 3:2, and every overlay below is positioned as a
    percentage of it. .spectrum-panel is therefore locked to
    3:2 too, so the overlays stay pixel-aligned with the art.
+   It's just the crystal on black — no logo, title or
+   landscape baked in, so nothing here needs to mask any of
+   that out.
 
    The panel is inset inside the CMIA slide, and the whole
    slide is transform-scaled by deck.js — so all type here
@@ -27,10 +30,13 @@
   --panels-top: 12.2%;
   --panels-bottom: 73.2%;
 
-  --map-left: 27%;
-  --map-top: 7%;
-  --map-width: 37%;
-  --map-height: 73%;
+  /* Sized to assets/prism-crystal.jpg's own crystal — measured off its
+     bright-pixel bounding box (22.3%–69.8% wide, 5.6%–88% tall of the
+     1280x853, exactly-3:2 source). */
+  --map-left: 22.3%;
+  --map-top: 5.6%;
+  --map-width: 47.5%;
+  --map-height: 82.4%;
 }
 
 /* ===================================================== */
@@ -96,82 +102,6 @@
     linear-gradient(180deg, rgba(0,0,0,.15), transparent 15%, transparent 80%, rgba(0,0,0,.35));
 }
 
-/* Hides the rainbow and panels flattened into the source photo, so the only
-   ribbon on screen is the one the stepper has revealed.
-
-   Starts at 42% — just past the crystal's left vertex, where the baked
-   rainbow first bleeds out above and below the collage photos — and reaches
-   full black by 58%, just before the crystal's widest point (60.7%). A soft
-   ramp rather than a hard edge: the baked rainbow has to die out as if the
-   light were simply fading, not get sliced off by a seam. Pushed left of
-   the previous 60% cut because that left the whole fan of colour between
-   the prism and the crystal visible. */
-.panel-scrim{
-  position: absolute;
-  left: 42%;
-  top: 4%;
-  width: 58%;
-  height: 73%;   /* stops short of the landscape strip along the bottom */
-  pointer-events: none;
-  background: linear-gradient(90deg,
-    rgba(4,6,12,0) 0%,
-    rgba(4,6,12,.8) 18%,
-    var(--spec-bg) 28%,
-    var(--spec-bg) 100%);
-}
-
-/* The "THE SPECTRUM OF MARATHWADA..." block is baked into the photo below
-   the logo. .stage-title-block (real DOM text) is what actually reads now,
-   so this stays permanently opaque to hide the baked-in copy underneath —
-   without it, the baked pixels and the live text double up. var(--spec-bg)
-   matches the panel's own background, so the covered area dissolves into
-   it rather than reading as a visible box; the diagonal fade on the
-   right/bottom keeps the edge soft. */
-.left-content-mask{
-  position: absolute;
-  left: 0;
-  top: 14%;
-  width: 46%;
-  height: 48%;
-  z-index: 3;
-  pointer-events: none;
-  opacity: 1;
-  background: linear-gradient(115deg,
-    var(--spec-bg) 0%,
-    var(--spec-bg) 70%,
-    rgba(4,6,12,.7) 85%,
-    transparent 100%);
-}
-
-/* The 58-years lockup, sitting beside the CMIA logo that is baked into the
-   top-left of the artwork. Percentages of the 3:2 panel, like everything
-   else here, so it stays put at any scale. */
-.stage-58{
-  position: absolute;
-  left: 21%;
-  top: 5.2%;
-  width: 8.4%;   /* deliberately smaller than the CMIA mark beside it */
-  height: auto;
-  z-index: 3;
-  pointer-events: none;
-}
-
-/* Hides the "ONE REGION. SEVEN STRENGTHS. LIMITLESS POTENTIAL." line
-   flattened into the bottom of the photo, fading in so it reads as a
-   vignette rather than a band. */
-.stage-foot-mask{
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 7.5%;
-  z-index: 2;
-  pointer-events: none;
-  /* Opaque from ~94.6% of the panel: past the bottom of the landscape strip
-     but above the baked tagline, so the text goes and the artwork stays. */
-  background: linear-gradient(180deg, rgba(4,6,12,0) 0%, var(--spec-bg) 28%);
-}
-
 /* ===================================================== */
 /* CENTRAL MAP / PRISM REACTION LAYER                     */
 /* ===================================================== */
@@ -191,8 +121,8 @@
    later step then flares brighter and back down to that resting value. */
 .map-glow{
   position: absolute;
-  left: 20.5%;
-  top: 58%;
+  left: 12.4%;
+  top: 84.8%;
   width: 46%;
   height: 46%;
   transform: translate(-50%,-50%);
@@ -206,8 +136,8 @@
 
 .map-core{
   position: absolute;
-  left: 20.5%;
-  top: 58%;
+  left: 12.4%;
+  top: 84.8%;
   width: 3.2%;
   height: 4.8%;
   transform: translate(-50%,-50%);
@@ -479,82 +409,4 @@
   .section-panel .title, .section-panel .subtitle{
     transition-duration: .01ms !important;
   }
-}
-
-/* ===================================================== */
-/* STAGE TITLE BLOCK (HTML version)                      */
-/* ===================================================== */
-
-.stage-title-block {
-  position: absolute;
-  left: 4.8%;
-  top: 21%;
-  width: 25%;
-  z-index: 4;
-  text-align: left;
-  pointer-events: none;
-}
-
-.stage-title-block .title-pre {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.35em;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 2px;
-}
-
-.stage-title-block .title-main {
-  font-family: 'Sora', sans-serif;
-  font-size: 42px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #ffffff;
-  margin: 0 0 4px 0;
-  line-height: 1.1;
-}
-
-.stage-title-block .title-of {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.35em;
-  color: #ff7a4d; /* Theme accent orange */
-  margin-bottom: 4px;
-}
-
-.stage-title-block .title-city {
-  font-family: 'Sora', sans-serif;
-  font-size: 34px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: #e6a75c; /* Soft theme gold */
-  margin: 0 0 2px 0;
-  line-height: 1.1;
-}
-
-.stage-title-block .title-subcity {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  color: #e6a75c;
-  margin-bottom: 12px;
-  opacity: 0.85;
-}
-
-.stage-title-block .title-divider {
-  width: 60px;
-  height: 1px;
-  background: #ff7a4d;
-  margin: 15px 0;
-}
-
-.stage-title-block .title-tagline {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 15px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.75);
-  margin: 0;
 }
