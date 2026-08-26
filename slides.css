@@ -406,7 +406,7 @@
 .rise-logo{
   position: absolute;
   right: 160px;
-  top: 230px;
+  top: 150px;
   width: 360px;
   height: auto;
   z-index: 2;
@@ -414,6 +414,30 @@
   border-radius: 14px;
   background: #fff;
   box-shadow: 0 4px 24px rgba(0,0,0,.55);
+}
+
+/* three delegation photos, sitting below the logo in the same empty
+   right-hand column — widened past the logo card's width to fill the
+   rest of that free space (right-hand column runs from x~735 to the
+   160px right margin, i.e. ~705px available). */
+.rise-photos{
+  position: absolute;
+  right: 160px;
+  top: 468px;
+  width: 620px;
+  display: flex;
+  gap: 16px;
+  z-index: 2;
+}
+
+.rise-photos img{
+  flex: 1 1 0;
+  min-width: 0;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 4px 20px rgba(0,0,0,.45);
 }
 
 /* =====================================================
