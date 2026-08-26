@@ -37,6 +37,12 @@
              so only our independent interactive layers are visible there. -->
         <div class="panel-scrim" aria-hidden="true"></div>
 
+        <!-- Covers the "THE SPECTRUM OF MARATHWADA..." title block baked into
+             the photo, so only the crisp real .stage-title-block below reads —
+             without this, the baked pixels and the live DOM text render on
+             top of each other as a doubled/ghosted title. -->
+        <div class="left-content-mask" aria-hidden="true"></div>
+
         <!-- The CMIA logo is baked into the artwork; this sits beside it,
              matching the "CMIA | 58" lockup on the brief. -->
         <img class="stage-58" src="assets/cmia-58-years.png"

@@ -99,35 +99,34 @@
 /* Hides the rainbow and panels flattened into the source photo, so the only
    ribbon on screen is the one the stepper has revealed.
 
-   The falloff starts at 60% — just past the widest point of the map outline,
-   which measures at 60.7% — and reaches full black by 66%, well before the cards
-   begin. A soft ramp rather than a hard edge: the baked rainbow has to die
-   out as if the light were simply fading, not get sliced off by a seam.
-
-   Deliberately NOT pushed further left to also hide the rainbow bleed
-   between the crystal and this point — that bleed and the map's own jagged
-   outline occupy the same pixels, and the map has to stay untouched. */
+   Starts at 42% — just past the crystal's left vertex, where the baked
+   rainbow first bleeds out above and below the collage photos — and reaches
+   full black by 58%, just before the crystal's widest point (60.7%). A soft
+   ramp rather than a hard edge: the baked rainbow has to die out as if the
+   light were simply fading, not get sliced off by a seam. Pushed left of
+   the previous 60% cut because that left the whole fan of colour between
+   the prism and the crystal visible. */
 .panel-scrim{
   position: absolute;
-  left: 60%;
+  left: 42%;
   top: 4%;
-  width: 40%;
+  width: 58%;
   height: 73%;   /* stops short of the landscape strip along the bottom */
   pointer-events: none;
   background: linear-gradient(90deg,
     rgba(4,6,12,0) 0%,
-    rgba(4,6,12,.8) 9%,
-    var(--spec-bg) 15%,
+    rgba(4,6,12,.8) 18%,
+    var(--spec-bg) 28%,
     var(--spec-bg) 100%);
 }
 
 /* The "THE SPECTRUM OF MARATHWADA..." block is baked into the photo below
-   the logo (which stays put — only the title text fades). Hidden at load
-   (opacity 0, script.js's playRayEntrance() brings it in on the first
-   click) so the reveal reads as the light arriving and pulling focus
-   toward the prism, not a hard cut. var(--spec-bg) matches the panel's own
-   background, so the text dissolves into it rather than behind a visible
-   box; the diagonal fade on the right/bottom keeps the edge soft. */
+   the logo. .stage-title-block (real DOM text) is what actually reads now,
+   so this stays permanently opaque to hide the baked-in copy underneath —
+   without it, the baked pixels and the live text double up. var(--spec-bg)
+   matches the panel's own background, so the covered area dissolves into
+   it rather than reading as a visible box; the diagonal fade on the
+   right/bottom keeps the edge soft. */
 .left-content-mask{
   position: absolute;
   left: 0;
@@ -136,11 +135,11 @@
   height: 48%;
   z-index: 3;
   pointer-events: none;
-  opacity: 0;
+  opacity: 1;
   background: linear-gradient(115deg,
     var(--spec-bg) 0%,
-    var(--spec-bg) 55%,
-    rgba(4,6,12,.7) 75%,
+    var(--spec-bg) 70%,
+    rgba(4,6,12,.7) 85%,
     transparent 100%);
 }
 

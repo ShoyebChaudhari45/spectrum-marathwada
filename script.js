@@ -208,16 +208,9 @@
       });
     }
 
-    if (leftMask) {
-      // A dim, not a hide: the title has done its job once the light
-      // reaches the prism, but this is a fade, not a disappearance.
-      gsap.to(leftMask, {
-        opacity: 0.45,
-        duration: 0.9 * durScale,
-        ease: "sine.inOut",
-        delay: 0.3 * durScale,
-      });
-    }
+    // leftMask stays permanently opaque (spectrum.css) — it hides the baked
+    // title so the real .stage-title-block reads on its own, so there is
+    // nothing to animate here on the ray's arrival.
 
     // the light point at the prism switches on — both start at opacity 0
     // (see spectrum.css), so this is a reveal, not a flare. Settles at the
