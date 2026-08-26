@@ -134,7 +134,7 @@ html, body{
 .jubilee{
   position: absolute;
   left: 252px;
-  top: 22px;
+  top: 24px;      /* same as .brand, so the pair shares a baseline */
   z-index: 4;
 }
 
@@ -148,9 +148,11 @@ html, body{
   background: rgba(255,255,255,.22);
 }
 
+/* 110px makes this block 94px tall — the same height as the CMIA lockup
+   beside it, so the two marks read as one pair rather than two sizes. */
 .jubilee-mark{
   display: block;
-  width: 84px;
+  width: 110px;
   height: auto;
 }
 
@@ -166,6 +168,7 @@ html, body{
   height: 58px;
   z-index: 1;
   pointer-events: none;
+  opacity: .5;   /* a quiet trim, not a feature */
 }
 
 .page-number{

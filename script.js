@@ -5,15 +5,16 @@
    The slide is a click-through sequence. Clicking anywhere
    on it advances one step:
 
-     on load  the artwork is on screen, the ray draws itself in from
-              the left, and red — Funding & Trade — opens by itself
-     click 1  orange   — Education & Skills
-     click 2  yellow   — Creativity
-     click 3  green    — Hospitality
-     click 4  blue     — Value Addition
-     click 5  violet   — Engineering
-     click 6  magenta  — Legacy
-     click 7  Legacy closes, leaving all seven as ribbons
+     on load  the artwork is on screen and the ray draws itself in
+              from the left; no band is open yet
+     click 1  red      — Funding & Trade
+     click 2  orange   — Education & Skills
+     click 3  yellow   — Creativity
+     click 4  green    — Hospitality
+     click 5  blue     — Value Addition
+     click 6  violet   — Engineering
+     click 7  magenta  — Legacy
+     click 8  Legacy closes, leaving all seven as ribbons
 
    That last click matters: without it Legacy would stay open forever,
    since it is the final band and nothing follows to displace it. After
@@ -199,9 +200,8 @@
   // ---------------------------------------------------
   // State
   // ---------------------------------------------------
-  // Starts at the first band, not at nothing: Funding & Trade is already
-  // open when the slide arrives.
-  let step = FIRST_COLOR_STEP;
+  // No band is open when the slide arrives; the first click opens one.
+  let step = 0;
   let currentTimeline = null;
 
   function measureContentHeight(el) {
@@ -360,7 +360,6 @@
       });
     });
 
-    // the first band opens by itself, so the slide never arrives empty
     renderStep(step);
   }
 
