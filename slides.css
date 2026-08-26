@@ -1,0 +1,333 @@
+/* =====================================================
+   CMIA PRESENTATION DECK — per-slide layout blocks
+   Everything here is authored against the 1600x900 slide
+   and scaled to the window by deck.js.
+   ===================================================== */
+
+/* ===================================================== */
+/* SLIDE 1 — title                                        */
+/* ===================================================== */
+
+.title-slide h1{
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 66px;
+  line-height: 1.08;
+  letter-spacing: -.022em;
+  color: var(--green-deep);
+}
+
+.title-slide h2{
+  margin: 10px 0 0;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 42px;
+  line-height: 1.15;
+  letter-spacing: -.012em;
+  color: var(--green-deep);
+}
+
+.title-slide .rule{ margin-top: 34px; }
+
+.title-meta{
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 70px;
+  margin-top: 40px;
+}
+
+.title-meta .blueprint{
+  margin: 0 0 26px;
+  font-size: 25px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.title-meta .credit{
+  margin: 0 0 12px;
+  font-size: 19px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.title-meta .credit strong{ font-weight: 700; color: #24282c; }
+
+.title-meta .motto{
+  padding-left: 26px;
+  border-left: 3px solid var(--green-deep);
+  font-family: 'Montserrat', 'Nirmala UI', 'Noto Sans Devanagari', sans-serif;
+  font-size: 21px;
+  line-height: 1.5;
+  color: var(--ink);
+  align-self: start;
+}
+
+/* ===================================================== */
+/* SLIDE 4 — the seven spectrums table                    */
+/* ===================================================== */
+
+.spec-table{
+  width: 100%;
+  margin-top: 26px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.spec-table th,
+.spec-table td{
+  padding: 13px 22px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #e3e5e7;
+}
+
+.spec-table thead th{
+  font-size: 17px;
+  font-weight: 700;
+  color: #14181c;
+  border-bottom: 1px solid var(--rule);
+}
+
+.spec-table tbody td{
+  font-size: 16px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.spec-table tbody td:first-child{
+  font-weight: 700;
+  color: var(--green-deep);
+}
+
+.spec-table col.c-name{ width: 23%; }
+.spec-table col.c-anchor{ width: 20%; }
+.spec-table col.c-capability{ width: 57%; }
+
+.spec-table tbody tr:last-child td{ border-bottom: none; }
+
+/* ===================================================== */
+/* SLIDE 5 — industrial might, two columns                */
+/* ===================================================== */
+
+.split{
+  display: grid;
+  grid-template-columns: 38% 1fr;
+  gap: 56px;
+  margin-top: 34px;
+}
+
+.col-head{
+  margin: 0 0 28px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 31px;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  color: #14181c;
+}
+
+/* ---- dotted vertical timeline ---- */
+.timeline{
+  position: relative;
+  margin: 0;
+  padding: 4px 0 4px 44px;
+  list-style: none;
+}
+
+.timeline::before{
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 12px;
+  bottom: 12px;
+  width: 1px;
+  background: var(--rule);
+}
+
+.timeline li{
+  position: relative;
+  margin-bottom: 30px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #24282c;
+}
+
+.timeline li:last-child{ margin-bottom: 0; }
+
+.timeline li::before{
+  content: "";
+  position: absolute;
+  left: -44px;
+  top: 8px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--green-deep);
+}
+
+.timeline li::after{
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: 15px;
+  width: 18px;
+  height: 1px;
+  background: var(--rule);
+}
+
+/* ---- stat cards with a green spine ---- */
+.stat-row{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.stat-card{
+  padding: 20px 20px 22px;
+  border: 1px solid #e6e8ea;
+  border-left: 6px solid var(--green-deep);
+  background: #fff;
+}
+
+.stat-card h4{
+  margin: 0 0 12px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.22;
+  color: #14181c;
+}
+
+.stat-card p{
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* ===================================================== */
+/* SLIDE 6 — apex voice, three cards plus a wide one      */
+/* ===================================================== */
+
+.card.centered{ text-align: center; }
+
+.card-wide{
+  margin-top: 26px;
+  padding: 22px 30px 24px;
+  background: var(--card);
+  box-shadow: 0 2px 14px rgba(20,30,50,.10);
+  text-align: center;
+}
+
+.card-wide h3{
+  margin: 0 0 8px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: #14181c;
+}
+
+.card-wide p{
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+/* ===================================================== */
+/* SLIDE 7 — the RISE framework                           */
+/* ===================================================== */
+
+.rise-list{
+  position: relative;
+  margin: 30px 0 0;
+  padding: 6px 0 6px 46px;
+  list-style: none;
+}
+
+.rise-list::before{
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background: var(--rule);
+}
+
+.rise-list li{
+  position: relative;
+  margin-bottom: 26px;
+}
+
+.rise-list li:last-child{ margin-bottom: 0; }
+
+.rise-list li::before{
+  content: "";
+  position: absolute;
+  left: -46px;
+  top: 9px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--green-deep);
+}
+
+.rise-list li::after{
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 16px;
+  width: 20px;
+  height: 1px;
+  background: var(--rule);
+}
+
+.rise-list h3{
+  margin: 0 0 7px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 25px;
+  line-height: 1.2;
+  color: #14181c;
+}
+
+.rise-list h3 .letter{
+  color: var(--green-deep);
+  font-weight: 700;
+}
+
+.rise-list p{
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+/* ===================================================== */
+/* SLIDES 8 & 9 — icon card grids                         */
+/* ===================================================== */
+
+.card-grid{
+  display: grid;
+  gap: 46px 26px;
+  margin-top: 50px;
+}
+
+.card-grid.cols-3{ grid-template-columns: repeat(3, 1fr); }
+.card-grid.cols-2{ grid-template-columns: repeat(2, 1fr); }
+
+.card-grid .card{
+  padding-top: 40px;
+}
+
+.card-grid.cols-2 .card{
+  padding: 26px 26px 24px;
+}
+
+.card-grid.cols-2 .badge{ margin-bottom: 18px; }
+
+.card-grid.cols-2 .card h3{ font-size: 22px; }
+.card-grid.cols-2 .card p{ font-size: 17px; }

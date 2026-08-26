@@ -1,47 +1,24 @@
 /* =====================================================
-   THE SPECTRUM OF MARATHWADA — stylesheet
-   Coordinates below are percentages of the 1536x1024
-   reference artwork (assets/background.jpg), which is
-   exactly 3:2 — matching .stage's fixed aspect-ratio.
-   Because .stage is always letterboxed to 3:2, every
-   percentage-based overlay stays pixel-aligned with the
-   background art at any viewport size (desktop).
+   THE SPECTRUM OF MARATHWADA — slide 3 only
+   -----------------------------------------------------
+   The artwork (assets/background.jpg) is 1536x1024, i.e.
+   exactly 3:2, and every overlay below is positioned as a
+   percentage of it. .spectrum-panel is therefore locked to
+   3:2 too, so the overlays stay pixel-aligned with the art.
+
+   The panel is inset inside the white CMIA slide, and the
+   whole slide is transform-scaled by deck.js — so all type
+   here is plain px, authored against the 1044px-wide panel,
+   and scales with everything else.
    ===================================================== */
 
-/* Vendored locally so the page works with no internet connection.
-   Both are variable fonts — one file per family covers every weight
-   used (300–800), the browser picks the exact weight from the axis. */
-@font-face{
-  font-family: 'Montserrat';
-  font-style: normal;
-  font-weight: 300 700;
-  font-display: swap;
-  src: url('assets/fonts/montserrat-variable.woff2') format('woff2');
-}
-@font-face{
-  font-family: 'Sora';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url('assets/fonts/sora-variable.woff2') format('woff2');
-}
-
 :root{
-  --bg: #04060c;
-  --gold: #cdae5c;
-  --gold-bright: #e9cd8a;
+  --spec-bg: #04060c;
   --ease-expand: cubic-bezier(.16,.84,.32,1);
 
-  /* ---- animation timing (tweak here) ---- */
-  --dur-highlight: .25s;
-  --dur-panel: .55s;
-  --dur-beam: .6s;
-  --dur-map: .6s;
-  --dur-content: .5s;
-
-  /* ---- layout coordinates (% of stage) ---- */
-  --panels-left: 72.6%;
-  --panels-right: 99.4%;
+  /* ---- layout coordinates (% of the 3:2 panel) ---- */
+  --panels-left: 70.5%;
+  --panels-right: 97.6%;
   --panels-top: 12.2%;
   --panels-bottom: 73.2%;
 
@@ -49,54 +26,70 @@
   --map-top: 7%;
   --map-width: 37%;
   --map-height: 73%;
-
-  /* origin light point, in % of the whole stage */
-  --origin-x: 34.2%;
-  --origin-y: 49%;
 }
 
-*{ box-sizing: border-box; }
+/* ===================================================== */
+/* THE INSET PANEL                                        */
+/* ===================================================== */
 
-html, body{
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--bg);
-  overflow: hidden;
-  font-family: 'Montserrat', sans-serif;
-  color: #f4ecd8;
-}
-
-.sr-only{
+.spectrum-panel{
   position: absolute;
-  width: 1px; height: 1px;
+  left: 244px;
+  top: 96px;
+  width: 1032px;
+  height: 688px;          /* 1032 / 688 = 3:2 */
+  z-index: 2;
+  border-radius: 10px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
-  white-space: nowrap;
+  background: var(--spec-bg);
+  box-shadow:
+    0 0 0 1px rgba(31,56,100,.16),
+    0 20px 48px rgba(15,25,45,.30);
 }
 
-/* ===================================================== */
-/* STAGE                                                  */
-/* ===================================================== */
+/* Presenting mode — the panel breaks out of the template and
+   fills the whole slide, for when the spectrum needs the room. */
+.slide.spectrum-full .spectrum-panel{
+  left: 125px;            /* (1600 - 1350) / 2 */
+  top: 0;
+  width: 1350px;          /* the largest un-cropped 3:2 box in a 1600x900 slide */
+  height: 900px;
+  border-radius: 0;
+}
 
-.stage-frame{
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg);
+.slide.spectrum-full .brand,
+.slide.spectrum-full .jubilee,
+.slide.spectrum-full .spine,
+.slide.spectrum-full .swoosh,
+.slide.spectrum-full .page-number,
+.slide.spectrum-full .spectrum-aside{
+  opacity: 0;
+  pointer-events: none;
+}
+
+.brand, .jubilee, .spine, .swoosh, .page-number, .spectrum-aside{
+  transition: opacity .45s ease;
+}
+
+/* The deck arrows stay available while presenting, but the navy-on-white
+   treatment is invisible against the artwork — flip them to light. */
+.slide.spectrum-full .page-nav-btn{
+  border-color: rgba(255,255,255,.42);
+  background: rgba(4,6,12,.5);
+  color: rgba(255,255,255,.9);
+}
+
+.slide.spectrum-full .page-nav-btn:hover,
+.slide.spectrum-full .page-nav-btn:focus-visible{
+  background: #fff;
+  border-color: #fff;
+  color: var(--navy);
 }
 
 .stage{
-  position: relative;
-  width: min(100vw, calc(100vh * 1.5));
-  aspect-ratio: 3 / 2;
-  max-height: 100vh;
-  background: var(--bg);
+  position: absolute;
+  inset: 0;
   overflow: hidden;
-  box-shadow: 0 0 120px rgba(0,0,0,.6);
 }
 
 .bg-image{
@@ -123,13 +116,13 @@ html, body{
    independent DOM/SVG layers are the only visible interactive rainbow */
 .panel-scrim{
   position: absolute;
-  left: 68%;
+  left: 66%;
   top: 9%;
-  width: 32%;
+  width: 34%;
   height: 68%;
   pointer-events: none;
-  background: radial-gradient(ellipse at 0% 50%, transparent 0%, var(--bg) 42%);
-  background-color: var(--bg);
+  background: radial-gradient(ellipse at 0% 50%, transparent 0%, var(--spec-bg) 42%);
+  background-color: var(--spec-bg);
   -webkit-mask-image: linear-gradient(90deg, transparent, black 18%);
   mask-image: linear-gradient(90deg, transparent, black 18%);
 }
@@ -171,7 +164,7 @@ html, body{
   transform: translate(-50%,-50%);
   border-radius: 50%;
   background: radial-gradient(circle, #ffffff, #fff6dd 60%, transparent 75%);
-  box-shadow: 0 0 30px 10px rgba(255,255,255,.55);
+  box-shadow: 0 0 22px 7px rgba(255,255,255,.55);
   will-change: transform, opacity;
 }
 
@@ -211,8 +204,14 @@ html, body{
   will-change: opacity, filter;
 }
 
+/* When one band is chosen its beam burns brighter and the other six
+   are pulled right down — the "dusre colours thode aur light" note. */
 .beam.is-active{
-  filter: url(#beamGlow) brightness(1.4) saturate(1.25);
+  filter: url(#beamGlow) brightness(1.45) saturate(1.3);
+}
+
+.beam.is-dimmed{
+  filter: url(#beamGlow) brightness(.55) saturate(.3);
 }
 
 /* ===================================================== */
@@ -238,7 +237,7 @@ html, body{
   min-height: 0;
   display: flex;
   flex-direction: column;
-  border-radius: .6vw;
+  border-radius: 7px;
   overflow: hidden;
   background: linear-gradient(90deg, color-mix(in srgb, var(--c1) 70%, transparent), var(--c2) 55%, var(--c3) 100%);
   box-shadow: 0 0 0 1px rgba(255,255,255,.06) inset;
@@ -247,19 +246,45 @@ html, body{
   transition: opacity .5s ease, filter .5s ease;
 }
 
+/* ---- the chosen band ------------------------------------------------
+   Grows in BOTH directions: taller (flex-grow, driven from script.js)
+   and wider — a negative left margin lets it reach back out over the
+   beam that feeds it. Its left edge fades to transparent so the beam
+   reads as flowing into the card rather than being covered by it. */
 .section-panel.is-active{
   opacity: 1;
-  filter: brightness(1.12) saturate(1.15);
+  filter: brightness(1.14) saturate(1.18);
+  background: linear-gradient(90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--c1) 55%, transparent) 20%,
+    var(--c2) 62%,
+    var(--c3) 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.22) inset,
+    0 8px 30px rgba(0,0,0,.35);
 }
 
-/* When active, the toggle should only take the height its own content
-   (icon + title + subtitle) needs, not grow to fill the whole enlarged
-   panel — otherwise the content text below gets pushed toward the
-   bottom with a big gap under the subtitle instead of sitting close to it. */
+/* ---- everything that is NOT the chosen band -------------------------
+   Client note: "highlight ke time pe dusre colours thode aur light ho
+   sakte hai" — so the other six drop well back while one is open. */
+.sections.has-active .section-panel:not(.is-active){
+  opacity: .34;
+  filter: brightness(.62) saturate(.32);
+}
+
+.sections.has-active .section-panel:not(.is-active):hover,
+.sections.has-active .section-panel:not(.is-active):focus-within{
+  opacity: .62;
+  filter: brightness(.85) saturate(.7);
+}
+
+/* When active, the toggle takes only the height its own content needs,
+   so the body copy sits directly under the subtitle instead of being
+   pushed to the bottom of the enlarged card. */
 .section-panel.is-active .section-toggle{
   flex: 0 0 auto;
-  padding-top: 3%;
-  padding-bottom: 1.5%;
+  padding-top: 4%;
+  padding-bottom: 1.2%;
 }
 
 .section-panel:not(.is-active):hover,
@@ -290,10 +315,8 @@ html, body{
 
 .section-panel .icon{
   flex: 0 0 auto;
-  width: 2.6vw;
-  height: 2.6vw;
-  min-width: 30px;
-  min-height: 30px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -302,7 +325,7 @@ html, body{
   border: 1px solid rgba(255,255,255,.35);
   transform: scale(1);
   filter: drop-shadow(0 0 0 rgba(255,255,255,0));
-  transition: transform .45s ease, filter .45s ease;
+  transition: transform .45s ease, filter .45s ease, width .5s ease, height .5s ease;
 }
 
 .section-panel .icon svg{
@@ -312,7 +335,8 @@ html, body{
 }
 
 .section-panel.is-active .icon{
-  transform: scale(1.12);
+  width: 42px;
+  height: 42px;
   filter: drop-shadow(0 0 10px rgba(255,255,255,.65));
   background: rgba(255,255,255,.16);
 }
@@ -331,14 +355,15 @@ html, body{
   font-weight: 700;
   letter-spacing: .01em;
   text-transform: uppercase;
-  font-size: clamp(10.5px, .92vw, 16px);
+  font-size: 13px;
   line-height: 1.12;
+  transition: font-size .5s var(--ease-expand);
 }
 
 .section-panel .subtitle{
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  font-size: clamp(8.5px, .66vw, 11.5px);
+  font-size: 9.5px;
   letter-spacing: .01em;
   line-height: 1.25;
   color: rgba(255,255,255,.85);
@@ -346,12 +371,13 @@ html, body{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: font-size .5s var(--ease-expand);
 }
 
-.section-panel.is-active .title{ font-size: clamp(13px, 1.25vw, 22px); }
-.section-panel.is-active .subtitle{ white-space: normal; }
+.section-panel.is-active .title{ font-size: 23px; }
+.section-panel.is-active .subtitle{ font-size: 13.5px; white-space: normal; }
 
-.content{
+.band-content{
   height: 0;
   opacity: 0;
   overflow: hidden;
@@ -359,150 +385,121 @@ html, body{
   flex: 0 0 auto;
 }
 
-.content-text{
+.band-text{
   margin: 0;
-  padding: .3em 0 3%;
+  padding: .35em 0 4%;
+  padding-right: 8%;
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  font-size: clamp(10px, .8vw, 14px);
-  line-height: 1.45;
+  font-size: 15.5px;
+  line-height: 1.6;
   letter-spacing: .01em;
-  color: rgba(255,255,255,.9);
-  max-height: 3.6em; /* ~2 lines; copy is written short to fit within this, this is just a safety clip */
-  overflow: hidden;
+  color: rgba(255,255,255,.92);
 }
 
 /* ===================================================== */
-/* PAGE NAV — bottom-left prev/next arrows.                */
-/* Visual only for now; not wired to any action yet.       */
+/* RIGHT-HAND CAPTION COLUMN (outside the dark panel)     */
 /* ===================================================== */
 
-.page-nav{
+.spectrum-aside{
   position: absolute;
-  left: 2.2%;
-  bottom: 2.4%;
-  display: flex;
-  gap: .6vw;
-  z-index: 5;
+  left: 1316px;
+  top: 190px;
+  width: 244px;
+  z-index: 3;
 }
 
-.page-nav-btn{
+.spectrum-aside .aside-kicker{
+  display: inline-block;
+  margin-bottom: 14px;
+  padding: 6px 12px;
+  background: var(--green-pale);
+  color: #2c3b36;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.spectrum-aside h2{
+  margin: 0 0 14px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 27px;
+  line-height: 1.2;
+  letter-spacing: -.01em;
+  color: var(--green-deep);
+}
+
+.spectrum-aside p{
+  margin: 0 0 16px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.spectrum-aside .aside-hint{
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.spectrum-aside .aside-hint svg{
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  color: var(--green-deep);
+}
+
+/* ---- expand / restore control, top-right of the dark panel ---- */
+.spectrum-expand{
   all: unset;
-  box-sizing: border-box;
-  width: 2.4vw;
-  height: 2.4vw;
-  min-width: 26px;
-  min-height: 26px;
-  max-width: 38px;
-  max-height: 38px;
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 6;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  border: 1px solid rgba(205,174,92,.5);
-  background: rgba(4,6,12,.45);
-  color: var(--gold-bright);
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(4,6,12,.5);
+  color: rgba(255,255,255,.85);
   cursor: pointer;
-  transition: background .3s ease, border-color .3s ease, transform .3s ease;
+  opacity: 0;
+  transition: opacity .3s ease, background .3s ease, border-color .3s ease;
 }
 
-.page-nav-btn svg{
-  width: 45%;
-  height: 45%;
+.spectrum-panel:hover .spectrum-expand,
+.spectrum-expand:focus-visible{ opacity: 1; }
+
+.spectrum-expand:hover{
+  background: rgba(4,6,12,.8);
+  border-color: rgba(255,255,255,.65);
 }
 
-.page-nav-btn:hover,
-.page-nav-btn:focus-visible{
-  background: rgba(205,174,92,.18);
-  border-color: var(--gold-bright);
-  transform: scale(1.08);
-}
+.spectrum-expand:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
 
-.page-nav-btn:focus-visible{
-  outline: 2px solid var(--gold-bright);
-  outline-offset: 2px;
-}
-
-@media (max-width: 900px){
-  .page-nav{
-    position: static;
-    justify-content: center;
-    padding: 4vw 0 2vw;
-  }
-}
+.spectrum-expand svg{ width: 15px; height: 15px; }
+.spectrum-expand .icon-restore{ display: none; }
+.slide.spectrum-full .spectrum-expand .icon-restore{ display: block; }
+.slide.spectrum-full .spectrum-expand .icon-expand{ display: none; }
 
 /* ===================================================== */
 /* REDUCED MOTION                                         */
 /* ===================================================== */
 
 @media (prefers-reduced-motion: reduce){
-  .section-panel, .icon{ transition-duration: .01ms !important; }
-}
-
-/* ===================================================== */
-/* RESPONSIVE — TABLET / MOBILE                           */
-/* Right-side panels become a full-width vertical          */
-/* accordion; the fixed-coordinate beam/map overlay is     */
-/* hidden since it only makes sense at the wide layout.     */
-/* ===================================================== */
-
-@media (max-width: 900px){
-  html, body{ overflow-y: auto; overflow-x: hidden; height: auto; }
-
-  .stage-frame{
-    height: auto;
-    min-height: 100vh;
-    align-items: flex-start;
-    padding-bottom: 4vh;
+  .section-panel, .section-panel .icon,
+  .section-panel .title, .section-panel .subtitle{
+    transition-duration: .01ms !important;
   }
-
-  .stage{
-    width: 100vw;
-    max-width: 100vw;
-    aspect-ratio: unset;
-    max-height: none;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .bg-image{
-    position: relative;
-    height: 46vh;
-    object-position: 0% 28%;
-  }
-
-  .grade-layer, .panel-scrim, .map-wrap, .beams-svg{
-    display: none;
-  }
-
-  .sections{
-    position: relative;
-    left: auto; top: auto; right: auto; bottom: auto;
-    width: 100%;
-    height: auto;
-    padding: 3vw 3vw 6vw;
-    gap: 2.5vw;
-  }
-
-  .section-panel{
-    flex: none;
-    border-radius: 3vw;
-  }
-
-  .section-toggle{
-    padding: 4vw 5vw;
-    gap: 4vw;
-  }
-
-  .section-panel .icon{
-    width: 11vw;
-    height: 11vw;
-  }
-
-  .section-panel .title{ font-size: 4vw; }
-  .section-panel .subtitle{ font-size: 3.1vw; }
-  .section-panel.is-active .title{ font-size: 4.6vw; }
-
-  .content{ padding: 0 5vw; }
-  .content-text{ font-size: 3.2vw; max-height: 4.2em; }
 }

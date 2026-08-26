@@ -1,0 +1,8 @@
+# The client's source deck — reference material, not part of the build, and
+# this repo is public. Keep it local.
+*.pdf
+
+# OS / editor cruft
+Thumbs.db
+desktop.ini
+.DS_Store

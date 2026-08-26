@@ -1,0 +1,371 @@
+/* =====================================================
+   CMIA PRESENTATION DECK — shared template chrome
+   -----------------------------------------------------
+   Every slide is authored inside a fixed 1600 x 900 box
+   (.slide). deck.js measures the viewport and applies a
+   single CSS transform: scale() to that box, so all
+   layout can be written in plain, predictable pixels and
+   still fills any screen exactly like a PowerPoint slide.
+   ===================================================== */
+
+@font-face{
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('assets/fonts/montserrat-variable.woff2') format('woff2');
+}
+@font-face{
+  font-family: 'Sora';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('assets/fonts/sora-variable.woff2') format('woff2');
+}
+
+:root{
+  /* ---- CMIA brand ---- */
+  --navy:        #1f3864;
+  --navy-soft:   #33507f;
+  --green:       #6cb33f;
+  --green-deep:  #1b976f;   /* heading green used across the deck */
+  --green-pale:  #d4f6ec;   /* kicker chip background */
+  --blue:        #2e9bd6;
+  --orange:      #d2451e;   /* CMIA wordmark */
+  --ink:         #454545;   /* body copy */
+  --ink-soft:    #6b7075;
+  --rule:        #c9ccd0;
+  --card:        #ffffff;
+  --card-alt:    #f1f1ef;
+  --page:        #ffffff;
+
+  --slide-w: 1600px;
+  --slide-h: 900px;
+}
+
+*{ box-sizing: border-box; }
+
+html, body{
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #e6e8ea;
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.sr-only{
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+}
+
+/* ===================================================== */
+/* SLIDE SHELL                                            */
+/* ===================================================== */
+
+.deck{
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide{
+  position: relative;
+  width: var(--slide-w);
+  height: var(--slide-h);
+  flex: 0 0 auto;
+  background: var(--page);
+  overflow: hidden;
+  transform-origin: center center;
+  box-shadow: 0 18px 60px rgba(15,25,45,.22);
+}
+
+/* ===================================================== */
+/* TEMPLATE CHROME — green spine, logo, jubilee mark,     */
+/* corner swoosh, page number. Present on every slide.    */
+/* ===================================================== */
+
+.spine{
+  position: absolute;
+  left: 22px;
+  top: 0;
+  width: 9px;
+  height: 100%;
+  background: var(--green);
+  z-index: 3;
+}
+
+.brand{
+  position: absolute;
+  left: 58px;
+  top: 24px;
+  width: 170px;
+  z-index: 4;
+}
+
+.brand img{
+  display: block;
+  width: 118px;
+  height: auto;
+}
+
+.brand .wordmark{
+  margin-top: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 1.32;
+  letter-spacing: .028em;
+  color: var(--orange);
+  text-transform: uppercase;
+}
+
+/* ---- golden-jubilee lockup, bottom-left ---- */
+.jubilee{
+  position: absolute;
+  left: 58px;
+  bottom: 32px;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.jubilee-mark{
+  display: block;
+  width: 116px;
+  height: auto;
+}
+
+.jubilee-tagline{
+  font-family: 'Montserrat', 'Nirmala UI', 'Noto Sans Devanagari', sans-serif;
+  font-weight: 700;
+  font-size: 21px;
+  line-height: 1;
+  color: var(--navy);
+  white-space: nowrap;
+}
+
+.slide[data-tagline="off"] .jubilee-tagline{ display: none; }
+
+/* ---- bottom-right swoosh ---- */
+.swoosh{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 470px;
+  height: 250px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.page-number{
+  position: absolute;
+  right: 40px;
+  bottom: 24px;
+  z-index: 4;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(255,255,255,.92);
+}
+
+/* ===================================================== */
+/* PAGE NAV — "very small arrows", bottom left            */
+/* ===================================================== */
+
+.page-nav{
+  position: absolute;
+  left: 240px;
+  bottom: 40px;
+  display: flex;
+  gap: 10px;
+  z-index: 6;
+}
+
+.page-nav-btn{
+  all: unset;
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(31,56,100,.35);
+  color: var(--navy);
+  background: rgba(255,255,255,.7);
+  cursor: pointer;
+  transition: background .25s ease, border-color .25s ease,
+              transform .25s ease, opacity .25s ease;
+}
+
+.page-nav-btn svg{ width: 12px; height: 12px; }
+
+.page-nav-btn:hover,
+.page-nav-btn:focus-visible{
+  background: var(--navy);
+  border-color: var(--navy);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+.page-nav-btn:focus-visible{
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* first / last slide — the dead arrow stays visible but inert */
+.page-nav-btn[aria-disabled="true"]{
+  opacity: .28;
+  pointer-events: none;
+}
+
+/* ===================================================== */
+/* CONTENT AREA + SHARED TYPOGRAPHY                       */
+/* ===================================================== */
+
+/* The body of every slide. It clears the logo lockup above and the
+   jubilee mark below, and centres its children vertically so sparse
+   slides don't sit in the top third with dead space beneath them. */
+.content{
+  position: absolute;
+  left: 92px;
+  top: 148px;
+  width: 1420px;
+  height: 616px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.kicker{
+  display: inline-block;
+  /* .content is a flex column, so without this the chip would stretch
+     to the full content width instead of hugging its label */
+  align-self: flex-start;
+  margin: 0 0 14px;
+  padding: 7px 14px;
+  background: var(--green-pale);
+  color: #2c3b36;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+h1.slide-title{
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1.16;
+  letter-spacing: -.012em;
+  color: var(--green-deep);
+}
+
+h1.slide-title.ink{ color: #14181c; }
+
+.slide-sub{
+  margin: 18px 0 0;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #2b2f33;
+}
+
+.slide-sub.light{ font-weight: 400; color: var(--ink); }
+
+.rule{
+  height: 1px;
+  margin: 22px 0 0;
+  background: var(--rule);
+}
+
+/* ---- generic card grid ---- */
+.card-row{
+  display: grid;
+  gap: 26px;
+  margin-top: 34px;
+}
+.card-row.cols-3{ grid-template-columns: repeat(3, 1fr); }
+.card-row.cols-2{ grid-template-columns: repeat(2, 1fr); }
+
+.card{
+  position: relative;
+  background: var(--card);
+  padding: 26px 24px 24px;
+  box-shadow: 0 2px 14px rgba(20,30,50,.10);
+}
+
+.card.flat{ background: var(--card-alt); box-shadow: none; }
+
+.card.topbar::before{
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: -7px;
+  height: 7px;
+  background: var(--green-deep);
+}
+
+.card h3{
+  margin: 0 0 10px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 1.26;
+  color: #14181c;
+}
+
+.card p{
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* circular green icon badge */
+.badge{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--green-deep);
+  color: #fff;
+  margin-bottom: 16px;
+}
+
+.badge svg{ width: 24px; height: 24px; }
+
+/* a badge that straddles the card's top edge */
+.badge.straddle{
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  box-shadow: 0 0 0 6px var(--page);
+}
+
+/* ===================================================== */
+/* PRINT / REDUCED MOTION                                 */
+/* ===================================================== */
+
+@media print{
+  html, body{ background: #fff; }
+  .slide{ box-shadow: none; }
+  .page-nav{ display: none; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .page-nav-btn{ transition-duration: .01ms; }
+}

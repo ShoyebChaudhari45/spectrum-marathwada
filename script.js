@@ -1,6 +1,7 @@
 /* =====================================================
    THE SPECTRUM OF MARATHWADA — interaction layer
    State machine + GSAP timelines for the 7 sections.
+   Runs on slide 3 only.
    ===================================================== */
 
 (() => {
@@ -17,7 +18,7 @@
   ];
 
   // Beam / accent colors per section (mirrors the --c1/--c2/--c3 vars set
-  // inline on each .section-panel in index.html).
+  // inline on each .section-panel in 03-spectrum.html).
   const COLORS = {
     industry:     ["#7a1414", "#c0392b", "#ff5a3c"],
     agriculture:  ["#7a3c10", "#c1440e", "#ff9d3c"],
@@ -30,16 +31,27 @@
 
   // Reference artwork is 1536x1024 — the SVG viewBox matches it 1:1, so we
   // can hand-place beam geometry in the same pixel space the image was
-  // authored in, and it will always line up with .stage (locked to 3:2).
+  // authored in, and it will always line up with the 3:2 inset panel.
   const VB_W = 1536;
   const VB_H = 1024;
 
   const ORIGIN = { x: VB_W * 0.342, y: VB_H * 0.49 };
   const PANELS_TOP = VB_H * 0.122;
   const PANELS_BOTTOM = VB_H * 0.732;
-  const PANELS_LEFT_X = VB_W * 0.726;
+  // Must track --panels-left in spectrum.css, or the beams stop short of
+  // (or run under) the cards they feed.
+  const PANELS_LEFT_X = VB_W * 0.705;
   const BAND_H = (PANELS_BOTTOM - PANELS_TOP) / SECTIONS.length;
   const WEDGE_HALF_H = BAND_H * 0.46;
+
+  // ---- how far the chosen card outgrows its neighbours ----------------
+  // Client note: "ye itna bada ho sakta hai kya?" — so the open card now
+  // grows on both axes. GROW_* drive the height (flex-grow within the
+  // stack) and ACTIVE_BLEED pulls the card's left edge back out over the
+  // beam feeding it, widening it by ~30%.
+  const GROW_ACTIVE = 3.2;
+  const GROW_RESTING = 0.7;
+  const ACTIVE_BLEED = "-30%";
 
   const reduceMotion =
     window.matchMedia &&
@@ -49,6 +61,9 @@
   // DOM references
   // ---------------------------------------------------
   const svg = document.getElementById("beamsSvg");
+  if (!svg) return;
+
+  const sectionsEl = document.getElementById("sections");
   const mapGlow = document.getElementById("mapGlow");
   const mapCore = document.getElementById("mapCore");
 
@@ -138,6 +153,11 @@
   // toId may be null, meaning "close whatever is open and return to the
   // neutral, nothing-active state" — this is what clicking the already-
   // active panel triggers (toggle-to-close).
+  //
+  // Note on brightness: the resting / active / dimmed treatment of each
+  // card lives in spectrum.css and is driven purely by the .is-active and
+  // .has-active classes, so GSAP never writes an inline `filter` that
+  // would then outrank the stylesheet for the rest of the session.
   // ---------------------------------------------------
   function switchSection(toId) {
     if (toId === activeSection) return;
@@ -162,31 +182,26 @@
     });
     currentTimeline = tl;
 
-    // ---- 0–0.35s : active highlight -----------------------------------
+    // ---- 0s : hand the highlight/dim state over to CSS -----------------
+    sectionsEl.classList.toggle("has-active", Boolean(toId));
     SECTIONS.forEach((id) => {
       const isActive = id === toId;
       panelEls[id].classList.toggle("is-active", isActive);
       toggleEls[id].setAttribute("aria-expanded", String(isActive));
     });
 
-    tl.to(
-      Object.values(panelEls),
-      { filter: "brightness(1)", duration: 0.35 * durScale },
-      0
-    );
-
     // ---- 0.15–1.0s : panel expansion / collapse ------------------------
-    // Bigger active panel (taller + a slight pop-out via x-translate) when
-    // opening; every panel returns to its neutral size when closing. A
-    // ripple stagger radiates outward from the relevant panel instead of
-    // every row moving in lockstep.
+    // The open card grows taller (flex-grow) and wider (negative left
+    // margin, so it reaches back over its own beam). A ripple stagger
+    // radiates outward from the relevant panel instead of every row
+    // moving in lockstep.
     SECTIONS.forEach((id) => {
       const isActive = id === toId;
       tl.to(
         panelEls[id],
         {
-          flexGrow: toId ? (isActive ? 2.7 : 0.8) : 1,
-          x: isActive ? -14 : 0,
+          flexGrow: toId ? (isActive ? GROW_ACTIVE : GROW_RESTING) : 1,
+          marginLeft: isActive ? ACTIVE_BLEED : "0%",
           duration: 0.85 * durScale,
           ease: flowEase,
         },
@@ -194,29 +209,15 @@
       );
     });
 
-    // icon emphasis
-    if (toId) {
-      tl.to(
-        `.section-panel[data-section="${toId}"] .icon`,
-        { scale: 1.16, duration: 0.55 * durScale, ease: "power2.out" },
-        0.22 * durScale
-      );
-    }
-    if (fromId) {
-      tl.to(
-        `.section-panel[data-section="${fromId}"] .icon`,
-        { scale: 1, duration: 0.55 * durScale },
-        0.15 * durScale
-      );
-    }
-
     // ---- 0.2–1.1s : beam animation --------------------------------------
     SECTIONS.forEach((id) => {
-      beamEls[id].classList.toggle("is-active", id === toId);
+      const isActive = id === toId;
+      beamEls[id].classList.toggle("is-active", isActive);
+      beamEls[id].classList.toggle("is-dimmed", Boolean(toId) && !isActive);
       tl.to(
         beamEls[id],
         {
-          opacity: id === toId ? 1 : 0.28,
+          opacity: toId ? (isActive ? 1 : 0.12) : 0.38,
           duration: 0.9 * durScale,
         },
         0.2 * durScale + rippleDelay(id, rippleOrigin, durScale)
@@ -294,6 +295,32 @@
   });
 
   // ---------------------------------------------------
+  // Expand / restore — lets the artwork step out of the
+  // template frame and take the whole slide.
+  // ---------------------------------------------------
+  function initExpand() {
+    const btn = document.getElementById("spectrumExpand");
+    const slide = document.querySelector(".slide");
+    if (!btn || !slide) return;
+
+    btn.addEventListener("click", () => {
+      const full = slide.classList.toggle("spectrum-full");
+      btn.setAttribute("aria-pressed", String(full));
+      btn.setAttribute(
+        "aria-label",
+        full ? "Restore the spectrum into the slide frame" : "Expand the spectrum to fill the slide"
+      );
+    });
+
+    // Esc always returns to the framed view.
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && slide.classList.contains("spectrum-full")) {
+        btn.click();
+      }
+    });
+  }
+
+  // ---------------------------------------------------
   // Subtle mouse parallax on the map + background
   // ---------------------------------------------------
   function initParallax() {
@@ -313,10 +340,10 @@
       const nx = (e.clientX - rect.left) / rect.width - 0.5; // -0.5..0.5
       const ny = (e.clientY - rect.top) / rect.height - 0.5;
 
-      mapX(nx * 10);
-      mapY(ny * 8);
-      bgX(nx * -4);
-      bgY(ny * -3);
+      mapX(nx * 8);
+      mapY(ny * 6);
+      bgX(nx * -3);
+      bgY(ny * -2);
     });
 
     stage.addEventListener("mouseleave", () => {
@@ -331,5 +358,6 @@
   // Init
   // ---------------------------------------------------
   buildBeams();
+  initExpand();
   initParallax();
 })();

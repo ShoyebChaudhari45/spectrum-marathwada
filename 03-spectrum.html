@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Spectrum of Marathwada | CMIA</title>
+<meta name="description" content="Interactive spectrum of Marathwada &amp; Chhatrapati Sambhajinagar — seven strengths, each rooted in a heritage anchor." />
+<link rel="stylesheet" href="deck.css" />
+<link rel="stylesheet" href="slides.css" />
+<link rel="stylesheet" href="spectrum.css" />
+</head>
+<body>
+
+<div class="deck">
+  <section class="slide" data-page="3">
+
+    <!-- ============================================= -->
+    <!-- THE INSET PANEL — the 3:2 cinematic artwork    -->
+    <!-- sitting inside the white CMIA template.        -->
+    <!-- ============================================= -->
+    <div class="spectrum-panel" id="spectrumPanel">
+      <div class="stage" id="stage">
+
+        <!-- Base cinematic art: logo art, prism/map imagery, bottom landscape.
+             The right-side panel/beam artwork baked into this image is covered
+             by .panel-scrim and replaced with fully independent DOM/SVG layers. -->
+        <img class="bg-image" src="assets/background.jpg" alt="" aria-hidden="true" />
+
+        <!-- Subtle vignette / cinematic grade -->
+        <div class="grade-layer" aria-hidden="true"></div>
+
+        <!-- Scrim that hides the flattened rainbow+panels baked into the photo,
+             so only our independent interactive layers are visible there. -->
+        <div class="panel-scrim" aria-hidden="true"></div>
+
+        <div class="sr-only">
+          <p>Chamber of Marathwada Industries &amp; Agriculture</p>
+          <h1>The Spectrum of Marathwada &amp; Chhatrapati Sambhajinagar</h1>
+          <p>A legacy of strength. A spectrum of possibilities.</p>
+        </div>
+
+        <!-- ============================================= -->
+        <!-- CENTRAL MAP / PRISM REACTION LAYER             -->
+        <!-- ============================================= -->
+        <div class="map-wrap" id="mapWrap">
+          <div class="map-glow" id="mapGlow" aria-hidden="true"></div>
+          <div class="map-core" id="mapCore" aria-hidden="true"></div>
+
+          <!-- Per-section tint overlays: brighten/tint the prism region to
+               "react" to the active section without needing separate cut-out
+               image assets (see README for how to swap in real crops later). -->
+          <div class="map-overlay" data-section="industry" aria-hidden="true"></div>
+          <div class="map-overlay" data-section="agriculture" aria-hidden="true"></div>
+          <div class="map-overlay" data-section="heritage" aria-hidden="true"></div>
+          <div class="map-overlay" data-section="education" aria-hidden="true"></div>
+          <div class="map-overlay" data-section="connectivity" aria-hidden="true"></div>
+          <div class="map-overlay" data-section="innovation" aria-hidden="true"></div>
+          <div class="map-overlay" data-section="trade" aria-hidden="true"></div>
+        </div>
+
+        <!-- ============================================= -->
+        <!-- BEAMS: SVG paths from the prism light-point to  -->
+        <!-- each panel. Independently colored/animatable.   -->
+        <!-- ============================================= -->
+        <svg class="beams-svg" id="beamsSvg" viewBox="0 0 1536 1024" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <filter id="beamGlow" x="-30%" y="-120%" width="160%" height="340%">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <!-- paths injected/positioned by script.js data, one per section -->
+          <path class="beam" data-section="industry" />
+          <path class="beam" data-section="agriculture" />
+          <path class="beam" data-section="heritage" />
+          <path class="beam" data-section="education" />
+          <path class="beam" data-section="connectivity" />
+          <path class="beam" data-section="innovation" />
+          <path class="beam" data-section="trade" />
+        </svg>
+
+        <!-- ============================================= -->
+        <!-- RIGHT SIDE: 7 INTERACTIVE SECTION PANELS       -->
+        <!-- ============================================= -->
+        <ul class="sections" id="sections" aria-label="The Spectrum of Marathwada — seven strengths">
+
+          <li class="section-panel" data-section="industry" style="--c1:#7a1414; --c2:#c0392b; --c3:#ff5a3c;">
+            <button class="section-toggle" id="toggle-industry" aria-expanded="false" aria-controls="content-industry" type="button">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" /></svg>
+              </span>
+              <span class="text">
+                <span class="title">Funding &amp; Trade</span>
+                <span class="subtitle">Rooted in the Silk Route.</span>
+              </span>
+            </button>
+            <div class="band-content" id="content-industry" role="region" aria-labelledby="toggle-industry">
+              <p class="band-text">Financed by the Silk Route — capital, commerce &amp; exchange, then and now.</p>
+            </div>
+          </li>
+
+          <li class="section-panel" data-section="agriculture" style="--c1:#7a3c10; --c2:#c1440e; --c3:#ff9d3c;">
+            <button class="section-toggle" id="toggle-agriculture" aria-expanded="false" aria-controls="content-agriculture" type="button">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 9l10-5 10 5-10 5-10-5Z" /><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5" /><path d="M22 9v6" /></svg>
+              </span>
+              <span class="text">
+                <span class="title">Education &amp; Skills</span>
+                <span class="subtitle">Inspired by Ellora.</span>
+              </span>
+            </button>
+            <div class="band-content" id="content-agriculture" role="region" aria-labelledby="toggle-agriculture">
+              <p class="band-text">Ellora's caves were centres of learning &amp; craft across generations.</p>
+            </div>
+          </li>
+
+          <li class="section-panel" data-section="heritage" style="--c1:#7a5c10; --c2:#c9a227; --c3:#ffd35c;">
+            <button class="section-toggle" id="toggle-heritage" aria-expanded="false" aria-controls="content-heritage" type="button">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a9 9 0 1 0 6 15.7c.8-.7.3-2-.7-2h-1.6a1.9 1.9 0 0 1 0-3.8h2.2c1 0 1.9-.8 1.9-1.9A9 9 0 0 0 12 3Z" /><circle cx="8.5" cy="9.5" r=".9" fill="currentColor" stroke="none"/><circle cx="12.5" cy="7.5" r=".9" fill="currentColor" stroke="none"/><circle cx="16" cy="10.5" r=".9" fill="currentColor" stroke="none"/><circle cx="7.5" cy="13.5" r=".9" fill="currentColor" stroke="none"/></svg>
+              </span>
+              <span class="text">
+                <span class="title">Creativity</span>
+                <span class="subtitle">Inspired by Ajanta.</span>
+              </span>
+            </button>
+            <div class="band-content" id="content-heritage" role="region" aria-labelledby="toggle-heritage">
+              <p class="band-text">Ajanta's murals reflect centuries of artistic mastery &amp; imagination.</p>
+            </div>
+          </li>
+
+          <li class="section-panel" data-section="education" style="--c1:#124a12; --c2:#2e8b3e; --c3:#6be07a;">
+            <button class="section-toggle" id="toggle-education" aria-expanded="false" aria-controls="content-education" type="button">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6" /><path d="M3 18h18M3 21v-3M21 21v-3" /><path d="M7 10V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v3" /></svg>
+              </span>
+              <span class="text">
+                <span class="title">Hospitality</span>
+                <span class="subtitle">Inspired by the Viharas.</span>
+              </span>
+            </button>
+            <div class="band-content" id="content-education" role="region" aria-labelledby="toggle-education">
+              <p class="band-text">Viharas at Ellora &amp; Ajanta sheltered monks &amp; travellers alike.</p>
+            </div>
+          </li>
+
+          <li class="section-panel" data-section="connectivity" style="--c1:#0e3a5c; --c2:#1f6fbd; --c3:#5cc2ff;">
+            <button class="section-toggle" id="toggle-connectivity" aria-expanded="false" aria-controls="content-connectivity" type="button">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3h12l4 6-10 12L2 9Z" /><path d="M2 9h20M9 3l-3 6 6 12 6-12-3-6" /></svg>
+              </span>
+              <span class="text">
+                <span class="title">Value Addition</span>
+                <span class="subtitle">Inspired by Paithani.</span>
+              </span>
+            </button>
+            <div class="band-content" id="content-connectivity" role="region" aria-labelledby="toggle-connectivity">
+              <p class="band-text">Paithani weaving turns raw silk into heirloom art &amp; value.</p>
+            </div>
+          </li>
+
+          <li class="section-panel" data-section="innovation" style="--c1:#2a1a5c; --c2:#5a3d9e; --c3:#9a7cff;">
+            <button class="section-toggle" id="toggle-innovation" aria-expanded="false" aria-controls="content-innovation" type="button">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3" /><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" /></svg>
+              </span>
+              <span class="text">
+                <span class="title">Engineering</span>
+                <span class="subtitle">Inspired by Nahar-e-Ambari.</span>
+              </span>
+            </button>
+            <div class="band-content" id="content-innovation" role="region" aria-labelledby="toggle-innovation">
+              <p class="band-text">The Nahar-e-Ambari water system engineered flow, centuries ahead.</p>
+            </div>
+          </li>
+
+          <li class="section-panel" data-section="trade" style="--c1:#3c1450; --c2:#7a1f8c; --c3:#ff5ce0;">
+            <button class="section-toggle" id="toggle-trade" aria-expanded="false" aria-controls="content-trade" type="button">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3 4H9l3-4Z" /><path d="M5 10v10M9 10v10M15 10v10M19 10v10" /><path d="M3 10h18M4 21h16" /></svg>
+              </span>
+              <span class="text">
+                <span class="title">Legacy</span>
+                <span class="subtitle">Inspired by Devgiri.</span>
+              </span>
+            </button>
+            <div class="band-content" id="content-trade" role="region" aria-labelledby="toggle-trade">
+              <p class="band-text">Devgiri (Daulatabad), a seat of power for centuries — built to last.</p>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- Lets the artwork break out of the template and fill the whole
+           slide while presenting, then snap back into the frame. -->
+      <button class="spectrum-expand" id="spectrumExpand" type="button"
+              aria-pressed="false" aria-label="Expand the spectrum to fill the slide">
+        <svg class="icon-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" /></svg>
+        <svg class="icon-restore" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h6V3M21 9h-6V3M3 15h6v6M21 15h-6v6" /></svg>
+      </button>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- CAPTION COLUMN — sits in the template's white  -->
+    <!-- margin, to the right of the artwork.           -->
+    <!-- ============================================= -->
+    <div class="spectrum-aside">
+      <p class="aside-kicker">One Region</p>
+      <h2>Seven Strengths</h2>
+      <p>Each band traces a modern industrial capability back to the heritage that formed it.</p>
+      <p class="aside-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11.5V5a1.8 1.8 0 0 1 3.6 0v6" /><path d="M12.6 11V9.2a1.7 1.7 0 0 1 3.4 0V12" /><path d="M16 11.4a1.7 1.7 0 0 1 3.4 0V15a6 6 0 0 1-6 6h-1.6a5 5 0 0 1-3.8-1.8l-3-3.6a1.7 1.7 0 0 1 2.4-2.4L9 14.6" /></svg>
+        <span>Click any band to open it.</span>
+      </p>
+    </div>
+
+  </section>
+</div>
+
+<script src="deck.js"></script>
+<script src="assets/gsap.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
