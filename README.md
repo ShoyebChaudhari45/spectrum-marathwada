@@ -1,10 +1,10 @@
 # CMIA — Spectrum: The Industrial Story of Marathwada
 
-A seven-page HTML presentation for the Chamber of Marathwada Industries &
+A ten-page HTML presentation for the Chamber of Marathwada Industries &
 Agriculture, built from the *Project-CSNTech: India's Next IT and GCC
 Powerhouse* deck. Every page is wrapped in the official CMIA slide template
 (logo, 58-years jubilee mark, bottom spectrum wave) on a dark
-theme, and page 2 carries the interactive "Spectrum of Marathwada" artwork
+theme, and page 4 carries the interactive "Spectrum of Marathwada" artwork
 inset inside that frame.
 
 ## Running it — works with no internet
@@ -69,12 +69,15 @@ pushing any other branch gets its own preview URL.
 | # | File | Slide |
 |---|------|-------|
 | 1 | `index.html` | Spectrum — The Industrial Story of Marathwada (title) |
-| 2 | `02-spectrum.html` | **The Spectrum of Marathwada** (interactive) |
-| 3 | `03-industrial-might.html` | Industrial Might: Scale & Ground Reality |
-| 4 | `04-cmia-apex.html` | CMIA — The Apex Industrial Voice |
-| 5 | `05-rise-framework.html` | The CSN RISE Framework |
-| 6 | `06-national-demands.html` | Strategic National Demands: What We Seek |
-| 7 | `07-commitments.html` | CMIA Commitments |
+| 2 | `02-heritage-legacy.html` | A Heritage of Legacy (showcase artwork) |
+| 3 | `03-industrial-vision.html` | An Industrial Vision (showcase artwork) |
+| 4 | `04-spectrum.html` | **The Spectrum of Marathwada** (interactive) |
+| 5 | `05-industrial-might.html` | Industrial Might: Scale & Ground Reality |
+| 6 | `06-cmia-apex.html` | CMIA — The Apex Industrial Voice |
+| 7 | `07-rise-framework.html` | The CSN RISE Framework |
+| 8 | `08-national-demands.html` | Strategic National Demands: What We Seek |
+| 9 | `09-commitments.html` | CMIA Commitments |
+| 10 | `10-thank-you.html` | Thank You (closing) |
 
 Each slide is a standalone page. Navigate with the small prev/next arrows at
 the bottom left, or with <kbd>←</kbd> / <kbd>→</kbd> (also <kbd>PageUp</kbd> /
@@ -120,8 +123,9 @@ place.
 `data-page` is the only thing a slide has to declare.
 
 - `deck.css` — the template chrome and shared typography/cards
-- `slides.css` — per-slide layout blocks (title slide, table, timelines, grids)
-- `spectrum.css` + `script.js` — page 2 only
+- `slides.css` — per-slide layout blocks (title slide, showcase art, table,
+  timelines, grids)
+- `spectrum.css` + `script.js` — page 4 only
 
 ## Brand assets
 
@@ -130,13 +134,16 @@ place.
 - `assets/cmia-58-years.png` — the 58-years jubilee lockup. The supplied
   artwork already carries the *niti se nirmiti* line, so the template draws no
   separate text for it.
-- `assets/csn-rise-logo.png` — the CSN RISE lockup, used on slide 5 only.
+- `assets/csn-rise-logo.png` — the CSN RISE lockup, used on slide 7 only.
+- `assets/heritage-legacy-showcase.png`, `assets/industrial-vision-showcase.png`
+  — the two full-slide sketch collages on pages 2 and 3 (`.showcase-image` in
+  `slides.css`). Plain template chrome, no other content.
 
 Both supplied marks were down-sampled to roughly 3x their display size; the
 originals were far larger than needed and made the deck slower to load from a
 stick.
 
-## Page 2 — the interactive spectrum
+## Page 4 — the interactive spectrum
 
 The source artwork (`assets/background.jpg`, 1536×1024, exactly 3:2) is a
 flattened photo composite. The prism collage, the left-hand typography block
@@ -159,8 +166,8 @@ step**, and the artwork is what the presenter talks over:
 
 | Step | What happens |
 |------|--------------|
-| 0 | the prism fades in — on load, no click needed |
-| 1 | the ray travels in from the left, through the prism |
+| 0 | at rest — logos, the baked title block, the map/prism, the landscape strip. No ray, no colour, on load, no click needed |
+| 1 | the ray travels in from the left and hits the prism; the baked title block fades out |
 | 2 | red — Funding & Trade |
 | 3 | orange — Education & Skills |
 | 4 | yellow — Creativity |
@@ -168,7 +175,7 @@ step**, and the artwork is what the presenter talks over:
 | 6 | blue — Value Addition |
 | 7 | violet — Engineering |
 | 8 | magenta — Legacy |
-| 9 | back to step 0, so the sequence can run again |
+| 9 | Legacy closes, leaving all seven as ribbons — clamped here, further clicks do nothing |
 
 Colours **accumulate**: each click adds the next band and leaves the earlier
 ones in place, so the spectrum builds to the full seven and ends on the
@@ -177,7 +184,10 @@ earlier ones sit back as ribbons, and their beams drop to 55% so the newest
 still reads as the one being discussed.
 
 - Nothing is on the right-hand side at step 0: `.section-panel` and `.beam`
-  both start at `opacity: 0` in `spectrum.css`.
+  both start at `opacity: 0` in `spectrum.css`, and the ray hasn't drawn in
+  yet either — `prepareRay()` only measures it, `playRayEntrance()` (fired on
+  step 1) is what draws it and fades `.left-content-mask` over the baked
+  title block.
 - The ray is a single SVG path drawn on with `stroke-dashoffset`, so it reads
   as travelling in from the left edge rather than just fading up.
 - Rapid clicks are safe: `renderStep()` kills the in-flight GSAP timeline and
@@ -204,7 +214,8 @@ This slide sets `data-chrome="minimal"`, which hides the template's outside
 CMIA and 58-years marks: the photo has the CMIA logo baked into its top-left,
 and `.stage-58` places the jubilee mark beside it inside the frame.
 
-Two things flattened into the photo are covered rather than cropped:
+Several things flattened into the photo are covered, tinted, or faded rather
+than cropped:
 
 - `.panel-scrim` — the baked rainbow, which would otherwise read as all seven
   ribbons being visible at once. Falloff starts at 60% of the panel, just past
@@ -215,6 +226,16 @@ Two things flattened into the photo are covered rather than cropped:
   line along the bottom. Opaque from ~94.6% of the panel: past the bottom of
   the landscape strip but above the text, so the text goes and the artwork
   stays.
+- `.left-content-mask` — the baked "THE SPECTRUM OF MARATHWADA..." title
+  block. Hidden at load; `script.js`'s `playRayEntrance()` dims it (to 0.45
+  opacity — a fade, not a hide) on the first click, once the ray has
+  somewhere to point. Uses `var(--spec-bg)` so the text dissolves into the
+  panel's own background rather than behind a visible box.
+- `#mapGlow` / `#mapCore` — the light point where the ray meets the prism.
+  These are live DOM (not baked pixels), but their CSS base opacity is `0`
+  for the same reason: no light point before the ray exists. Revealed by
+  `playRayEntrance()`, then each later band-open step flares them brighter
+  and back down to that resting glow.
 
 #### The scrim, and why its falloff is where it is
 

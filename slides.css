@@ -61,6 +61,38 @@
 /* the wordmark is re-tinted on click by title.js */
 .title-slide h1{ transition: color .35s ease; }
 
+/* Final click state: the seven spectrum colours flow across the glyphs
+   instead of sitting still. title.js sizes the gradient to double width
+   and loops the background-position — because the gradient is two full
+   colour cycles back to back, the loop point is invisible. */
+.title-slide h1.is-wave{
+  background-size: 200% 100%;
+  animation: titleWave 5s linear infinite;
+}
+
+@keyframes titleWave{
+  from{ background-position: 0% 0; }
+  to{ background-position: -200% 0; }
+}
+
+/* Closing slide: the same flowing wave as the title slide's final click
+   state, but permanent — no click to wire up on a slide that doesn't load
+   title.js. Same doubled gradient (two full colour cycles back to back)
+   so the background-position loop has no visible seam. */
+.title-slide h1.rainbow-always{
+  background-image:
+    linear-gradient(100deg,
+      #ff3b30 0%, #ff9500 8.5%, #ffd60a 16.5%,
+      #34c759 25%, #0a84ff 33.5%, #5e5ce6 42%, #ff2d92 50%,
+      #ff3b30 50%, #ff9500 58.5%, #ffd60a 66.5%,
+      #34c759 75%, #0a84ff 83.5%, #5e5ce6 92%, #ff2d92 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  animation: titleWave 5s linear infinite;
+}
+
 /* ---- title slide: the CMIA | 58 pair is centred above the wordmark
    rather than parked in the top-left corner. Each half is pushed off the
    50% line by half the gap, which centres the pair without needing a
@@ -73,7 +105,11 @@
   text-align: center;
 }
 
-.slide[data-chrome="centred"] .brand img{ margin: 0 auto; }
+/* Bigger than the top-left corner size everywhere else — this pair is the
+   whole focal point of the title slide, so it can afford the extra weight.
+   150px/140px keeps the same ratio to one another as the corner lockup
+   (118px/110px), so the two still read as one matched pair, just larger. */
+.slide[data-chrome="centred"] .brand img{ margin: 0 auto; width: 150px; }
 
 .slide[data-chrome="centred"] .jubilee{
   left: 50%;
@@ -81,11 +117,42 @@
   transform: translateX(24px);
 }
 
+.slide[data-chrome="centred"] .jubilee-mark{ width: 140px; }
+
 /* the title block drops to make room for the pair above it */
 .title-slide .content{ top: 336px; height: 400px; }
 
 /* ===================================================== */
-/* SLIDE 3 — industrial might, two columns                */
+/* SLIDES 2 & 3 — full-bleed showcase artwork             */
+/* Centred CMIA | 58 lockup above the image, same as the   */
+/* title slide (data-chrome="centred") — these two bookend */
+/* the opening slide, so they share its logo treatment.    */
+/* The artwork is already a white plate, so it needs no    */
+/* extra card/background behind it.                        */
+/* ===================================================== */
+
+.showcase-slide .content{
+  align-items: center;
+  /* Tighter drop than .title-slide .content (305 vs 336) and taller (510
+     vs 400): there's no lede/rule/tagline competing for room here, just
+     the logo pair to clear, so the image can claim the rest of the frame
+     and read with the same visual weight as the content on other slides. */
+  top: 305px;
+  height: 510px;
+}
+
+.showcase-image{
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 24px 70px rgba(0,0,0,.55);
+}
+
+/* ===================================================== */
+/* SLIDE 5 — industrial might, two columns                */
 /* ===================================================== */
 
 .split{
@@ -186,7 +253,7 @@
 }
 
 /* ===================================================== */
-/* SLIDE 4 — apex voice, three cards plus a wide one      */
+/* SLIDE 6 — apex voice, three cards plus a wide one      */
 /* ===================================================== */
 
 .card.centered{ text-align: center; }
@@ -215,7 +282,7 @@
 }
 
 /* ===================================================== */
-/* SLIDE 5 — the RISE framework                           */
+/* SLIDE 7 — the RISE framework                           */
 /* ===================================================== */
 
 .rise-list{
@@ -274,7 +341,7 @@
 }
 
 .rise-list h3 .letter{
-  color: var(--green-deep);
+  color: var(--green-heading);
   font-weight: 700;
 }
 
@@ -306,7 +373,7 @@
 .card-grid.cols-2 .card p{ font-size: 17px; }
 
 /* =====================================================
-   SLIDE 5 — the CSN RISE lockup
+   SLIDE 7 — the CSN RISE lockup
    ===================================================== */
 
 /* Sits in the empty right-hand half, level with the middle of the R-I-S-E
@@ -331,7 +398,7 @@
 }
 
 /* =====================================================
-   SLIDE 6 — strategic national demands
+   SLIDE 8 — strategic national demands
    -----------------------------------------------------
    Six cards; at full size the bottom-right one grazed the green band of
    the corner swoosh, so the grid is tightened to finish clear of it.
@@ -355,7 +422,7 @@
 }
 
 /* =====================================================
-   SLIDE 7 — CMIA Commitments
+   SLIDE 9 — CMIA Commitments
    -----------------------------------------------------
    The closing slide: seven short pledges. Deliberately large and
    left-aligned so it reads as a statement rather than a data slide.

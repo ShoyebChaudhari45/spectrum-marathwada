@@ -104,7 +104,11 @@
    The falloff starts at 60% — just past the widest point of the map outline,
    which measures at 60.7% — and reaches full black by 66%, well before the cards
    begin. A soft ramp rather than a hard edge: the baked rainbow has to die
-   out as if the light were simply fading, not get sliced off by a seam. */
+   out as if the light were simply fading, not get sliced off by a seam.
+
+   Deliberately NOT pushed further left to also hide the rainbow bleed
+   between the crystal and this point — that bleed and the map's own jagged
+   outline occupy the same pixels, and the map has to stay untouched. */
 .panel-scrim{
   position: absolute;
   left: 60%;
@@ -117,6 +121,29 @@
     rgba(4,6,12,.8) 9%,
     var(--spec-bg) 15%,
     var(--spec-bg) 100%);
+}
+
+/* The "THE SPECTRUM OF MARATHWADA..." block is baked into the photo below
+   the logo (which stays put — only the title text fades). Hidden at load
+   (opacity 0, script.js's playRayEntrance() brings it in on the first
+   click) so the reveal reads as the light arriving and pulling focus
+   toward the prism, not a hard cut. var(--spec-bg) matches the panel's own
+   background, so the text dissolves into it rather than behind a visible
+   box; the diagonal fade on the right/bottom keeps the edge soft. */
+.left-content-mask{
+  position: absolute;
+  left: 0;
+  top: 14%;
+  width: 46%;
+  height: 48%;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(115deg,
+    var(--spec-bg) 0%,
+    var(--spec-bg) 55%,
+    rgba(4,6,12,.7) 75%,
+    transparent 100%);
 }
 
 /* The 58-years lockup, sitting beside the CMIA logo that is baked into the
@@ -161,6 +188,10 @@
   pointer-events: none;
 }
 
+/* Both start invisible: this is the light POINT where the ray meets the
+   prism, so it has no business showing before the ray does. script.js's
+   playRayEntrance() (step 1) brings them up to their resting glow; each
+   later step then flares brighter and back down to that resting value. */
 .map-glow{
   position: absolute;
   left: 20.5%;
@@ -172,7 +203,7 @@
   background: radial-gradient(circle, rgba(255,255,255,.9), rgba(255,240,200,.35) 35%, transparent 70%);
   filter: blur(6px);
   mix-blend-mode: screen;
-  opacity: .8;
+  opacity: 0;
   will-change: transform, opacity, filter;
 }
 
@@ -186,6 +217,7 @@
   border-radius: 50%;
   background: radial-gradient(circle, #ffffff, #fff6dd 60%, transparent 75%);
   box-shadow: 0 0 22px 7px rgba(255,255,255,.55);
+  opacity: 0;
   will-change: transform, opacity;
 }
 
@@ -362,7 +394,7 @@
   font-weight: 700;
   letter-spacing: .01em;
   text-transform: uppercase;
-  font-size: 26px;
+  font-size: 22px;
   line-height: 1.12;
   transition: font-size .5s var(--ease-expand);
 }

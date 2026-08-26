@@ -40,8 +40,10 @@
   --ink-soft:   #868f9c;
 
   /* ---- CMIA brand, lifted for legibility on near-black ---- */
-  --green-deep: #35c99a;    /* headings, badges */
-  --green-glow: #6fe0b6;    /* kicker text */
+  --green-deep:    #35c99a;    /* badges, dots, rules, borders */
+  --green-heading: #90f820;    /* heading text — sampled from the lime-green
+                                   arrow/chip mark in assets/cmia-58-years.png */
+  --green-glow:    #6fe0b6;    /* kicker text */
   --navy:       #22406e;    /* the swoosh */
   --blue:       #2e9bd6;
   --orange:     #ff7a4d;    /* CMIA wordmark */
@@ -316,7 +318,7 @@ h1.slide-title{
   font-size: 46px;
   line-height: 1.16;
   letter-spacing: -.012em;
-  color: var(--green-deep);
+  color: var(--green-heading);
 }
 
 h1.slide-title.ink{ color: var(--ink-strong); }

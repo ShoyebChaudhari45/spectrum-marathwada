@@ -5,16 +5,19 @@
    The slide is a click-through sequence. Clicking anywhere
    on it advances one step:
 
-     on load  the artwork is on screen and the ray draws itself in
-              from the left; no band is open yet
-     click 1  red      — Funding & Trade
-     click 2  orange   — Education & Skills
-     click 3  yellow   — Creativity
-     click 4  green    — Hospitality
-     click 5  blue     — Value Addition
-     click 6  violet   — Engineering
-     click 7  magenta  — Legacy
-     click 8  Legacy closes, leaving all seven as ribbons
+     on load  the artwork is on screen at rest — logos, the baked
+              title block, the map/prism, the landscape strip. No
+              ray, no colour, nothing to click for.
+     click 1  the ray draws in from the left and hits the prism;
+              the baked title block fades out to make room
+     click 2  red      — Funding & Trade
+     click 3  orange   — Education & Skills
+     click 4  yellow   — Creativity
+     click 5  green    — Hospitality
+     click 6  blue     — Value Addition
+     click 7  violet   — Engineering
+     click 8  magenta  — Legacy
+     click 9  Legacy closes, leaving all seven as ribbons
 
    That last click matters: without it Legacy would stay open forever,
    since it is the final band and nothing follows to displace it. After
@@ -63,11 +66,13 @@
   const ORIGIN = { x: VB_W * 0.342, y: VB_H * 0.49 };
 
   // ---- the step sequence ----
-  // Step 1..7 open a band each; step 8 closes the last one and leaves all
-  // seven sitting as ribbons.
-  const FIRST_COLOR_STEP = 1;
-  const ALL_OPEN_STEP = FIRST_COLOR_STEP + SECTIONS.length - 1; // 7
-  const LAST_STEP = ALL_OPEN_STEP + 1;                          // 8
+  // Step 1 is the ray/title-fade entrance (see playRayEntrance()); steps
+  // 2..8 open a band each; step 9 closes the last one and leaves all seven
+  // sitting as ribbons.
+  const RAY_STEP = 1;
+  const FIRST_COLOR_STEP = RAY_STEP + 1;                        // 2
+  const ALL_OPEN_STEP = FIRST_COLOR_STEP + SECTIONS.length - 1; // 8
+  const LAST_STEP = ALL_OPEN_STEP + 1;                          // 9
 
   // ---- how far the newest card outgrows the rest -----------------------
   // It grows on both axes: GROW_* drive the height (flex-grow within the
@@ -95,6 +100,7 @@
   const ray = document.getElementById("lightRay");
   const mapGlow = document.getElementById("mapGlow");
   const mapCore = document.getElementById("mapCore");
+  const leftMask = document.querySelector(".left-content-mask");
 
   const panelEls = {};
   const toggleEls = {};
@@ -180,21 +186,56 @@
   }
 
   // The ray is drawn on with stroke-dashoffset, so it needs its own length
-  // as the dash pattern before it can be animated.
+  // as the dash pattern before it can be animated. Just the setup here —
+  // the slide arrives at rest, ray undrawn; playRayEntrance() below fires
+  // it on the first click.
   function prepareRay() {
     if (!ray) return;
     const rayLength = ray.getTotalLength();
     ray.style.strokeDasharray = String(rayLength);
     ray.style.strokeDashoffset = String(rayLength);
-    // Draws in from the left edge on load — the slide is already visible,
-    // so this is an entrance rather than a step the presenter clicks for.
-    gsap.to(ray, {
-      opacity: 1,
-      strokeDashoffset: 0,
-      duration: reduceMotion ? 0.3 : 1.1,
-      ease: "power2.inOut",
-      delay: reduceMotion ? 0 : 0.25,
-    });
+  }
+
+  // ---- step 1: the ray hits the prism, the baked title block fades ----
+  // A one-time entrance, not part of renderStep()'s per-band timeline —
+  // nothing here is undone by later clicks.
+  function playRayEntrance() {
+    const durScale = reduceMotion ? 0.25 : 1;
+
+    if (ray) {
+      gsap.to(ray, {
+        opacity: 1,
+        strokeDashoffset: 0,
+        duration: 1.1 * durScale,
+        ease: "power2.inOut",
+      });
+    }
+
+    if (leftMask) {
+      // A dim, not a hide: the title has done its job once the light
+      // reaches the prism, but this is a fade, not a disappearance.
+      gsap.to(leftMask, {
+        opacity: 0.45,
+        duration: 0.9 * durScale,
+        ease: "sine.inOut",
+        delay: 0.3 * durScale,
+      });
+    }
+
+    // the light point at the prism switches on — both start at opacity 0
+    // (see spectrum.css), so this is a reveal, not a flare. Settles at the
+    // same resting opacity the source art used (.8 / 1), then each later
+    // band-open step (renderStep) flares brighter and back down to this.
+    gsap.fromTo(
+      mapGlow,
+      { opacity: 0, scale: 0.85 },
+      { opacity: 0.8, scale: 1, duration: 0.6 * durScale, ease: "sine.out", delay: 0.85 * durScale }
+    );
+    gsap.fromTo(
+      mapCore,
+      { opacity: 0, scale: 0.85 },
+      { opacity: 1, scale: 1, duration: 0.5 * durScale, ease: "sine.out", delay: 0.85 * durScale }
+    );
   }
 
   // ---------------------------------------------------
@@ -340,6 +381,7 @@
       // must not clear it.
       if (step >= LAST_STEP) return;
       step += 1;
+      if (step === RAY_STEP) playRayEntrance();
       renderStep(step);
     }
 

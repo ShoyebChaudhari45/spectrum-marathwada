@@ -23,12 +23,15 @@
   // read from this array.
   const PAGES = [
     "index.html",
-    "02-spectrum.html",
-    "03-industrial-might.html",
-    "04-cmia-apex.html",
-    "05-rise-framework.html",
-    "06-national-demands.html",
-    "07-commitments.html",
+    "02-heritage-legacy.html",
+    "03-industrial-vision.html",
+    "04-spectrum.html",
+    "05-industrial-might.html",
+    "06-cmia-apex.html",
+    "07-rise-framework.html",
+    "08-national-demands.html",
+    "09-commitments.html",
+    "10-thank-you.html",
   ];
 
   const slide = document.querySelector(".slide");
