@@ -40,7 +40,9 @@
   --ink-soft:   #868f9c;
 
   /* ---- CMIA brand, lifted for legibility on near-black ---- */
-  --green-deep:    #35c99a;    /* badges, dots, rules, borders */
+  --green-deep:    #64b018;    /* badges, dots, rules, borders — same green as
+                                   --green-heading, kept as a separate token so
+                                   usages can be told apart in the CSS */
   --green-heading: #64b018;    /* heading text — measured off the green swoosh
                                    in assets/cmia-58-years.png as it renders on
                                    the dark page (7.4:1 against --page) */

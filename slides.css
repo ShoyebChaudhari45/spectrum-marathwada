@@ -135,7 +135,12 @@
 /* ---- slides 2 & 3: the pair moves to the top-right corner and shrinks,
    freeing the whole centre of the frame for the artwork. Sizes are picked
    so both blocks stay the same height (90/1.85 + wordmark = 79px; the
-   jubilee's 1.165 aspect gives 79px at 92px wide). ---- */
+   jubilee's 1.165 aspect gives 79px at 92px wide).
+
+   jubilee's right offset (78px, not the 58px you'd expect symmetric with
+   .brand's spacing) leaves clear space for .fs-btn, which sits fixed at
+   right:30px/width:30px on every slide — at 58px the two overlapped by a
+   couple of pixels since nothing here previously accounted for it. ---- */
 .slide[data-chrome="corner-right"] .brand{
   left: auto;
   right: 200px;
@@ -153,7 +158,7 @@
 
 .slide[data-chrome="corner-right"] .jubilee{
   left: auto;
-  right: 58px;
+  right: 78px;
   top: 26px;
   transform: none;
 }
@@ -494,7 +499,7 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: rgba(53,201,154,.16);
+  background: rgba(100,176,24,.16);
   border: 1px solid var(--green-deep);
 }
 
