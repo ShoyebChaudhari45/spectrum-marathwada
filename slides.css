@@ -178,12 +178,15 @@
   align-items: center;
   /* With the lockup out of the way in the top-right corner, nothing
      competes for the centre, so the artwork takes almost the whole frame.
-     At 670px tall its 3:2 ratio makes it 1005px wide — comfortably inside
-     the 1420px content width, so height is what bounds it. The 135px drop
-     keeps a 30px gap under the corner lockup, which the image would
-     otherwise sit right beneath. */
-  top: 135px;
-  height: 670px;
+     At 755px tall its 3:2 ratio makes it 1132.5px wide — comfortably inside
+     the 1420px content width, so height is what bounds it. The 115px drop
+     keeps a 10px gap under the corner lockup (which sits at top:26px,
+     ~79px tall); the wave and page-nav/page-number don't need their own
+     clearance here — they sit in the black margin either side of the
+     artwork horizontally, not underneath it, so the artwork can run right
+     down near the bottom edge. */
+  top: 115px;
+  height: 755px;
 }
 
 .showcase-image{
