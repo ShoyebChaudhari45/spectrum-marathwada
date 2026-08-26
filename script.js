@@ -5,16 +5,17 @@
    The slide is a click-through sequence. Clicking anywhere
    on it advances one step:
 
-     step 0  the prism fades in (on load, no click needed)
-     step 1  the ray travels in from the left, through the prism
-     step 2  red      — Funding & Trade
-     step 3  orange   — Education & Skills
-     step 4  yellow   — Creativity
-     step 5  green    — Hospitality
-     step 6  blue     — Value Addition
-     step 7  violet   — Engineering
-     step 8  magenta  — Legacy
-     step 9  back to step 0, so the sequence can run again
+     step 0  nothing — no map, no ray, no colour
+     step 1  the Marathwada map pops up
+     step 2  a single ray travels in from the left, through the prism
+     step 3  red      — Funding & Trade
+     step 4  orange   — Education & Skills
+     step 5  yellow   — Creativity
+     step 6  green    — Hospitality
+     step 7  blue     — Value Addition
+     step 8  violet   — Engineering
+     step 9  magenta  — Legacy
+     step 10 back to step 0, so the sequence can run again
 
    Colours ACCUMULATE: each click adds the next band and
    leaves the previous ones in place, so the spectrum builds
@@ -53,19 +54,15 @@
   const VB_W = 1536;
   const VB_H = 1024;
 
+  // The prism's light point — where every beam starts. The only hand-placed
+  // coordinate left; the far end of each beam is measured off its card.
   const ORIGIN = { x: VB_W * 0.342, y: VB_H * 0.49 };
-  const PANELS_TOP = VB_H * 0.122;
-  const PANELS_BOTTOM = VB_H * 0.732;
-  // Must track --panels-left in spectrum.css, or the beams stop short of
-  // (or run under) the cards they feed.
-  const PANELS_LEFT_X = VB_W * 0.705;
-  const BAND_H = (PANELS_BOTTOM - PANELS_TOP) / SECTIONS.length;
-  const WEDGE_HALF_H = BAND_H * 0.46;
 
   // ---- the step sequence ----
-  const RAY_STEP = 1;
-  const FIRST_COLOR_STEP = 2;
-  const LAST_STEP = FIRST_COLOR_STEP + SECTIONS.length - 1; // 8
+  const MAP_STEP = 1;
+  const RAY_STEP = 2;
+  const FIRST_COLOR_STEP = 3;
+  const LAST_STEP = FIRST_COLOR_STEP + SECTIONS.length - 1; // 9
 
   // ---- how far the newest card outgrows the rest -----------------------
   // It grows on both axes: GROW_* drive the height (flex-grow within the
@@ -87,6 +84,7 @@
 
   const stage = document.getElementById("stage");
   const ray = document.getElementById("lightRay");
+  const mapReveal = document.getElementById("mapReveal");
   const mapGlow = document.getElementById("mapGlow");
   const mapCore = document.getElementById("mapCore");
 
@@ -105,7 +103,8 @@
   });
 
   // ---------------------------------------------------
-  // Build beam gradients + wedge geometry once
+  // Build the beam gradients once. The wedge geometry is NOT fixed —
+  // see syncBeams(), which measures the cards every frame.
   // ---------------------------------------------------
   function buildBeams() {
     const defs = svg.querySelector("defs");
@@ -127,23 +126,48 @@
         <stop offset="100%" stop-color="${c3}" />
       `;
       defs.appendChild(grad);
-
-      const targetY = PANELS_TOP + BAND_H * i + BAND_H / 2;
-      const topY = targetY - WEDGE_HALF_H;
-      const bottomY = targetY + WEDGE_HALF_H;
-      const cx1 = ORIGIN.x + (PANELS_LEFT_X - ORIGIN.x) * 0.55;
-      const cx2 = ORIGIN.x + (PANELS_LEFT_X - ORIGIN.x) * 0.86;
-
-      const d = `
-        M ${ORIGIN.x} ${ORIGIN.y}
-        C ${cx1} ${ORIGIN.y}, ${cx2} ${topY}, ${PANELS_LEFT_X} ${topY}
-        L ${PANELS_LEFT_X} ${bottomY}
-        C ${cx2} ${bottomY}, ${cx1} ${ORIGIN.y}, ${ORIGIN.x} ${ORIGIN.y}
-        Z
-      `.trim();
-
-      beamEls[id].setAttribute("d", d);
       beamEls[id].setAttribute("fill", `url(#${gradId})`);
+    });
+  }
+
+  // ---------------------------------------------------
+  // Glue each beam to its own card.
+  //
+  // The cards move: the open one grows on both axes, which shifts its
+  // centre away from the slot the band started in. A beam aimed at the
+  // original slot therefore lands off the card's edge, and the colour
+  // reads as misaligned with the border. So instead of fixed geometry,
+  // every beam is rebuilt from the card's measured rectangle — its wedge
+  // ends exactly on that card's left edge, spanning its full height.
+  //
+  // Called from the timeline's onUpdate, so the beams track the cards
+  // while they are still animating, and from a ResizeObserver so they
+  // survive the panel changing size.
+  // ---------------------------------------------------
+  function syncBeams() {
+    const sr = stage.getBoundingClientRect();
+    if (!sr.width || !sr.height) return;
+
+    const sx = VB_W / sr.width;
+    const sy = VB_H / sr.height;
+
+    SECTIONS.forEach((id) => {
+      const r = panelEls[id].getBoundingClientRect();
+      // a hair of overshoot so no hairline shows between beam and card
+      const xEnd = (r.left - sr.left) * sx + 2;
+      const top = (r.top - sr.top) * sy;
+      const bottom = (r.bottom - sr.top) * sy;
+
+      const cx1 = ORIGIN.x + (xEnd - ORIGIN.x) * 0.55;
+      const cx2 = ORIGIN.x + (xEnd - ORIGIN.x) * 0.86;
+
+      beamEls[id].setAttribute(
+        "d",
+        `M ${ORIGIN.x} ${ORIGIN.y}` +
+          ` C ${cx1} ${ORIGIN.y}, ${cx2} ${top}, ${xEnd} ${top}` +
+          ` L ${xEnd} ${bottom}` +
+          ` C ${cx2} ${bottom}, ${cx1} ${ORIGIN.y}, ${ORIGIN.x} ${ORIGIN.y} Z`
+      );
     });
   }
 
@@ -188,18 +212,47 @@
     );
     const activeIdx = revealed - 1;
     const rayOn = n >= RAY_STEP;
+    const mapOn = n >= MAP_STEP;
 
     if (currentTimeline) currentTimeline.kill();
 
     const durScale = reduceMotion ? 0.25 : 1;
     const tl = gsap.timeline({
       defaults: { ease: "sine.inOut" },
+      // the cards are still moving while this runs, and the beams have to
+      // stay glued to their edges
+      onUpdate: syncBeams,
       onComplete: () => {
         currentTimeline = null;
+        syncBeams();
         if (n === LAST_STEP) playFinalAnimation();
       },
     });
     currentTimeline = tl;
+
+    // ---- the artwork pops in on the first click ----
+    if (mapReveal) {
+      tl.to(
+        mapReveal,
+        {
+          opacity: mapOn ? 0 : 1,
+          duration: (mapOn ? 0.7 : 0.35) * durScale,
+          ease: mapOn ? "power2.out" : "sine.inOut",
+        },
+        0
+      );
+      tl.fromTo(
+        stage,
+        { scale: mapOn ? 0.975 : 1 },
+        {
+          scale: 1,
+          duration: (mapOn ? 0.85 : 0.35) * durScale,
+          ease: "power2.out",
+          transformOrigin: "46% 45%",
+        },
+        0
+      );
+    }
 
     // ---- the ray -------------------------------------------------------
     if (ray) {
@@ -216,8 +269,9 @@
       }
     }
 
-    // the prism flares as the ray lands on it, and each time a band opens
-    if (n === RAY_STEP || revealed > 0) {
+    // the prism flares as the map arrives, as the ray lands, and each
+    // time a band opens
+    if (n === MAP_STEP || n === RAY_STEP || revealed > 0) {
       tl.to(
         mapGlow,
         { scale: 1.12, opacity: 1, duration: 0.4 * durScale, yoyo: true, repeat: 1 },
@@ -255,7 +309,7 @@
       tl.to(
         beamEls[id],
         {
-          opacity: inSet ? (isActive ? 1 : 0.55) : 0,
+          opacity: inSet ? (isActive ? 0.82 : 0.42) : 0,
           duration: 0.7 * durScale,
         },
         0.1 * durScale
@@ -330,20 +384,6 @@
   }
 
   // ---------------------------------------------------
-  // The prism fades in on load — step 0 of the sequence
-  // ---------------------------------------------------
-  function introducePrism() {
-    if (reduceMotion) return;
-    gsap.from(stage, {
-      opacity: 0,
-      scale: 0.965,
-      duration: 1.1,
-      ease: "power2.out",
-      transformOrigin: "40% 50%",
-    });
-  }
-
-  // ---------------------------------------------------
   // Expand / restore — lets the artwork step out of the
   // template frame and take the whole slide.
   // ---------------------------------------------------
@@ -408,7 +448,11 @@
   buildBeams();
   prepareRay();
   initSequence();
-  introducePrism();
   initExpand();
   initParallax();
+
+  // Keep the beams on their cards when the panel itself changes size —
+  // the expand toggle, or the window being resized.
+  if (window.ResizeObserver) new ResizeObserver(syncBeams).observe(stage);
+  window.addEventListener("resize", syncBeams);
 })();

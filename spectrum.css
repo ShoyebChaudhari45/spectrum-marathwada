@@ -115,14 +115,36 @@
     var(--spec-bg) 100%);
 }
 
+/* The slide opens black, and the first click pops the artwork in.
+   -----------------------------------------------------------------
+   Worth knowing why this covers the WHOLE artwork rather than just the
+   prism. background.jpg is flattened: the prism, the rainbow inside it,
+   the title lettering and the incoming ray are all one JPEG. The prism's
+   left vertex lands exactly where the title text ends, so any cover big
+   enough to hide the prism either clips the lettering or, shaped to the
+   prism, reads as a black blob over the photo. Covering everything and
+   fading it out is the only version with no artefact.
+
+   Consequence: the rainbow baked inside the prism arrives with the
+   artwork on click 1. Removing that needs a rainbow-free export of the
+   image from whoever authored it — see the README. */
+.map-reveal{
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: var(--spec-bg);
+  will-change: opacity;
+}
+
 /* The 58-years lockup, sitting beside the CMIA logo that is baked into the
    top-left of the artwork. Percentages of the 3:2 panel, like everything
    else here, so it stays put at any scale. */
 .stage-58{
   position: absolute;
-  left: 21.5%;
-  top: 4.2%;
-  width: 11%;
+  left: 21%;
+  top: 5.2%;
+  width: 8.4%;   /* deliberately smaller than the CMIA mark beside it */
   height: auto;
   z-index: 3;
   pointer-events: none;

@@ -68,7 +68,8 @@
   background: rgba(255,255,255,.22);
 }
 
-.slide[data-chrome="lockup"] .jubilee-mark{ width: 104px; }
+/* smaller than the 118px CMIA mark it sits beside */
+.slide[data-chrome="lockup"] .jubilee-mark{ width: 84px; }
 
 /* ===================================================== */
 /* SLIDE 3 — industrial might, two columns                */
