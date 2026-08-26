@@ -20,10 +20,14 @@
   --ease-expand: cubic-bezier(.16,.84,.32,1);
 
   /* ---- layout coordinates (% of the 3:2 panel) ---- */
-  --panels-left: 70.5%;
-  --panels-right: 97.6%;
-  --panels-top: 12.2%;
-  --panels-bottom: 73.2%;
+  /* Widened and deepened to carry 26px type — an 18-character title like
+     "EDUCATION & SKILLS" needs ~270px beside a 34px icon. The beams find
+     these edges by measurement (syncBeams), so moving them needs no
+     matching change in script.js. */
+  --panels-left: 63%;
+  --panels-right: 98%;
+  --panels-top: 9%;
+  --panels-bottom: 86%;
 
   --map-left: 27%;
   --map-top: 7%;
@@ -340,8 +344,8 @@
 
 .section-panel .icon{
   flex: 0 0 auto;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -360,8 +364,8 @@
 }
 
 .section-panel.is-active .icon{
-  width: 42px;
-  height: 42px;
+  width: 46px;
+  height: 46px;
   filter: drop-shadow(0 0 10px rgba(255,255,255,.65));
   background: rgba(255,255,255,.16);
 }
@@ -380,7 +384,7 @@
   font-weight: 700;
   letter-spacing: .01em;
   text-transform: uppercase;
-  font-size: 13px;
+  font-size: 26px;
   line-height: 1.12;
   transition: font-size .5s var(--ease-expand);
 }
@@ -388,9 +392,9 @@
 .section-panel .subtitle{
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  font-size: 9.5px;
+  font-size: 26px;
   letter-spacing: .01em;
-  line-height: 1.25;
+  line-height: 1.22;
   color: rgba(255,255,255,.85);
   opacity: .9;
   white-space: nowrap;
@@ -399,8 +403,12 @@
   transition: font-size .5s var(--ease-expand);
 }
 
-.section-panel.is-active .title{ font-size: 23px; }
-.section-panel.is-active .subtitle{ font-size: 13.5px; white-space: normal; }
+/* A resting band shows its title only — at 26px there is no room for both,
+   and the subtitle belongs to the band being talked about. */
+.section-panel:not(.is-active) .subtitle{ display: none; }
+
+.section-panel.is-active .title{ font-size: 30px; }
+.section-panel.is-active .subtitle{ white-space: normal; }
 
 .band-content{
   height: 0;
@@ -416,8 +424,8 @@
   padding-right: 8%;
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  font-size: 15.5px;
-  line-height: 1.6;
+  font-size: 26px;
+  line-height: 1.35;
   letter-spacing: .01em;
   color: rgba(255,255,255,.92);
 }
