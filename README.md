@@ -68,6 +68,10 @@ pushing any other branch gets its own preview URL.
 
 ## The deck
 
+`present.html` isn't in this table — it's not a slide, it's the presentation
+shell (see "Presenting full-screen" below). Open it instead of `index.html`
+when the fullscreen button needs to survive the whole deck.
+
 | # | File | Slide |
 |---|------|-------|
 | 1 | `index.html` | CMIA \| 58 lockup, centred, no other content (extreme opener) |
@@ -97,14 +101,29 @@ shortcuts all read from it.
 
 ### Presenting full-screen
 
-**Use F11.** The slide and the letterbox around it are the same near-black, so
-at any window shape the deck already reads edge-to-edge with no visible frame —
-and the browser's own fullscreen survives navigating between slides.
+**Open `present.html`, not `index.html`, to present.** It's a thin shell that
+holds the whole deck in one full-viewport `<iframe>` and does nothing else.
+Click its fullscreen button (or press <kbd>F</kbd>) once and it stays
+fullscreen through every slide, because the arrows only ever navigate the
+iframe's `src` — the shell document itself never unloads. Every slide's own
+fullscreen button (`deck.js`) detects it's running inside this shell and hands
+control to it over `postMessage` instead of requesting fullscreen on itself.
 
-There is also a fullscreen button top-right, and <kbd>F</kbd> does the same
-thing. Both use the Fullscreen API, which is per-document: it drops the moment
-the arrows load the next slide's file. Fine for one slide, not for presenting
-the deck — hence F11.
+This exists because the Fullscreen API is tied to a single Document, and each
+slide is its own file: browsers flatly refuse to re-grant fullscreen on a
+freshly-navigated page, even though the navigation that got you there was
+itself a click — there's no scripting around that rule, only around it (hence
+the shell). Confirmed against real Chromium: requesting it directly on the
+next slide's `load` throws *"API can only be initiated by a user gesture."*
+
+Opening a slide file directly (or `index.html` and clicking through the old
+way) still works exactly as before, `present.html` isn't required for
+anything except this — its own fullscreen button/<kbd>F</kbd> just does plain
+per-document fullscreen there, which resets on the next arrow click. **F11**
+(the browser's own fullscreen, not the page's) also still works everywhere on
+any of these, no cooperation from the page needed. The slide and the
+letterbox around it are the same near-black, so at any window shape the deck
+reads edge-to-edge with no visible frame either way.
 
 ## How a slide is built
 
