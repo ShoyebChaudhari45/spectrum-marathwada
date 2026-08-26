@@ -27,7 +27,7 @@
     "03-industrial-vision.html",
     "04-spectrum.html",
     "05-industrial-might.html",
-    "06-cmia-apex.html",
+    "06-anchoring-investments.html",
     "07-rise-framework.html",
     "08-national-demands.html",
     "09-commitments.html",

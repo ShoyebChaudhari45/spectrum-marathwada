@@ -22,9 +22,11 @@ python -m http.server 8080
 
 ## Dark theme
 
-Tokens live in `:root` in `deck.css`. Two brand colours are lifted from their
-print values so they hold up on near-black: the heading green (`--green-deep`,
-`#35c99a`) and the CMIA wordmark orange (`--orange`, `#ff7a4d`).
+Tokens live in `:root` in `deck.css`. Headings use `--green-heading`
+(`#64b018`), measured off the green swoosh in `assets/cmia-58-years.png` as it
+renders on the dark page — 7.4:1 against `--page`. Badges, dots and rules use
+`--green-deep` (`#35c99a`), and the CMIA wordmark orange is lifted to
+`--orange` (`#ff7a4d`) so it holds up on near-black.
 
 The navy/green corner swoosh is gone, and so is the green vertical spine that
 ran down the left edge. In their place is a full-width **spectrum wave** along
@@ -73,10 +75,10 @@ pushing any other branch gets its own preview URL.
 | 3 | `03-industrial-vision.html` | An Industrial Vision (showcase artwork) |
 | 4 | `04-spectrum.html` | **The Spectrum of Marathwada** (interactive) |
 | 5 | `05-industrial-might.html` | Industrial Might: Scale & Ground Reality |
-| 6 | `06-cmia-apex.html` | CMIA — The Apex Industrial Voice |
+| 6 | `06-anchoring-investments.html` | Anchoring Investments in CSN |
 | 7 | `07-rise-framework.html` | The CSN RISE Framework |
-| 8 | `08-national-demands.html` | Strategic National Demands: What We Seek |
-| 9 | `09-commitments.html` | CMIA Commitments |
+| 8 | `08-national-demands.html` | Strategic National Demands: What We Seek (click-reveal) |
+| 9 | `09-commitments.html` | What We Pledge to Deliver (click-reveal) |
 | 10 | `10-thank-you.html` | Thank You (closing) |
 
 Each slide is a standalone page. Navigate with the small prev/next arrows at
@@ -126,6 +128,10 @@ place.
 - `slides.css` — per-slide layout blocks (title slide, showcase art, table,
   timelines, grids)
 - `spectrum.css` + `script.js` — page 4 only
+- `title.js` — page 1 only (click re-tints the wordmark)
+- `reveal.js` — shared by pages 8 and 9: any `.reveal-item` in the slide
+  starts hidden and comes in one per click, in document order, then holds
+  once they are all up
 
 ## Brand assets
 
@@ -135,6 +141,9 @@ place.
   artwork already carries the *niti se nirmiti* line, so the template draws no
   separate text for it.
 - `assets/csn-rise-logo.png` — the CSN RISE lockup, used on slide 7 only.
+- `assets/cmia-action-1..4.jpg` — the four photographs on slide 6, extracted
+  from `Copy-of-Project-CSNTech-Indias-Next-IT-and-GCC-Powerhouse.pptx` and
+  capped at 900px on the long edge (~3x their display size).
 - `assets/heritage-legacy-showcase.png`, `assets/industrial-vision-showcase.png`
   — the two full-slide sketch collages on pages 2 and 3 (`.showcase-image` in
   `slides.css`). Plain template chrome, no other content.

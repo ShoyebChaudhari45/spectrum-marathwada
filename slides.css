@@ -122,23 +122,53 @@
 /* the title block drops to make room for the pair above it */
 .title-slide .content{ top: 336px; height: 400px; }
 
+/* ---- slides 2 & 3: the pair moves to the top-right corner and shrinks,
+   freeing the whole centre of the frame for the artwork. Sizes are picked
+   so both blocks stay the same height (90/1.85 + wordmark = 79px; the
+   jubilee's 1.165 aspect gives 79px at 92px wide). ---- */
+.slide[data-chrome="corner-right"] .brand{
+  left: auto;
+  right: 200px;
+  top: 26px;
+  width: auto;
+  transform: none;
+  text-align: right;
+}
+
+.slide[data-chrome="corner-right"] .brand img{
+  width: 90px;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.slide[data-chrome="corner-right"] .jubilee{
+  left: auto;
+  right: 58px;
+  top: 26px;
+  transform: none;
+}
+
+.slide[data-chrome="corner-right"] .jubilee-mark{ width: 92px; }
+
 /* ===================================================== */
 /* SLIDES 2 & 3 — full-bleed showcase artwork             */
-/* Centred CMIA | 58 lockup above the image, same as the   */
-/* title slide (data-chrome="centred") — these two bookend */
-/* the opening slide, so they share its logo treatment.    */
+/* The CMIA | 58 lockup sits small in the top-right corner */
+/* (data-chrome="corner-right") so the artwork can claim   */
+/* the centre of the frame.                                */
 /* The artwork is already a white plate, so it needs no    */
 /* extra card/background behind it.                        */
 /* ===================================================== */
 
 .showcase-slide .content{
   align-items: center;
-  /* Tighter drop than .title-slide .content (305 vs 336) and taller (510
-     vs 400): there's no lede/rule/tagline competing for room here, just
-     the logo pair to clear, so the image can claim the rest of the frame
-     and read with the same visual weight as the content on other slides. */
-  top: 305px;
-  height: 510px;
+  /* With the lockup out of the way in the top-right corner, nothing
+     competes for the centre, so the artwork takes almost the whole frame.
+     At 670px tall its 3:2 ratio makes it 1005px wide — comfortably inside
+     the 1420px content width, so height is what bounds it. The 135px drop
+     keeps a 30px gap under the corner lockup, which the image would
+     otherwise sit right beneath. */
+  top: 135px;
+  height: 670px;
 }
 
 .showcase-image{
@@ -475,4 +505,160 @@
   margin-top: 4px;
   color: var(--green-glow);
   font-weight: 600;
+}
+
+/* =====================================================
+   SLIDES 6, 8 & 9 — click-to-reveal card grids
+   -----------------------------------------------------
+   Driven by reveal.js: each item comes in on its own
+   click, in document order.
+   ===================================================== */
+
+.reveal-item{
+  opacity: 0;
+  transform: scale(.88);
+  transition: opacity .3s ease,
+              transform .45s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+.reveal-item.is-in{
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal-item{ transition-duration: .01ms; }
+}
+
+/* ---- the 3 + 3 + 1 grid used by slides 8 and 9 ---- */
+/* Anchored to the top rather than centred. .content centres its children,
+   which is right for sparse slides but means a grid taller than the box
+   overflows UPWARD as well as down — and up is where the logo lives. */
+.content.seek{ justify-content: flex-start; }
+
+.seek-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+
+/* the seventh card runs the full width, as on the brief */
+.seek-grid .seek-card:last-child{ grid-column: 1 / -1; }
+
+.seek-card{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--surface-alt);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Smaller than the shared 48px badge: slide 9's longer pledges wrap to two
+   lines, which made three rows of cards overrun the content box. */
+.seek-card .badge{
+  margin: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.seek-card .badge svg{ width: 21px; height: 21px; }
+
+.seek-card h3{
+  margin: 0;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.28;
+  color: var(--ink-strong);
+}
+
+/* =====================================================
+   SLIDE 6 — anchoring investments
+   ===================================================== */
+
+.anchor-split{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.05fr;
+  gap: 40px;
+  margin-top: 26px;
+  align-items: start;
+}
+
+.anchor-co h3{
+  margin: 0 0 14px;
+  font-family: 'Sora', sans-serif;
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 1.25;
+  color: var(--green-heading);
+}
+
+.anchor-figure{ margin-bottom: 18px; }
+
+.anchor-figure .num{
+  display: block;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 46px;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--ink-strong);
+}
+
+.anchor-figure .label{
+  display: block;
+  margin-top: 4px;
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+
+/* the four supporting facts, two across */
+.anchor-facts{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.anchor-facts li{
+  position: relative;
+  padding-left: 20px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.anchor-facts li::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .45em;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--green-deep);
+}
+
+/* ---- the four photographs along the bottom ---- */
+.anchor-photos{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 26px;
+}
+
+.anchor-photos img{
+  display: block;
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,.09);
 }
