@@ -177,9 +177,9 @@
   to{ background-position: -200% 0; }
 }
 
-/* Tier 2 — "MARATHWADA"'s treatment: same size class, gold. "1 City" is
-   short enough to run bigger than "7 Colours" with room to spare, so it's
-   sized up further for presence, same as the reference's own emphasis. */
+/* Tier 2 — "1 Region": short enough to run bigger than "7 Colours" with
+   room to spare, so it's sized up further for presence. Gold (#c9a227)
+   picks up the same token used by .tagline-gold on the title slide. */
 .pl-place{
   font-size: 54px;
   font-weight: 700;

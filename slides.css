@@ -58,6 +58,12 @@
   font-weight: 300;
 }
 
+/* "1 Region" highlight — same gold as .pl-place on the Spectrum slide */
+.tagline-gold{
+  color: #c9a227;
+  font-weight: 700;
+}
+
 /* closing slide: now the only line on the slide (Thank You / CMIA credit
    removed), so it runs large and centred — .content's own flex centring
    (deck.css) handles both axes, this just sets the size/width. */
@@ -151,6 +157,23 @@
 
 /* the title block drops to make room for the pair above it */
 .title-slide .content{ top: 336px; height: 400px; }
+
+/* ---- seek slides (9 & 10): compact the top zone so the image gets
+   maximum vertical space. Logos pinned near the very top edge, sized
+   down slightly so the pair still reads as CMIA | 58-Years without
+   dominating the narrow header band. Scoped by data-page so the title
+   slide (data-page="4") keeps its larger 168px / 150px / 140px values. ---- */
+.slide[data-page="9"][data-chrome="centred"] .brand,
+.slide[data-page="10"][data-chrome="centred"] .brand{ top: 14px; }
+
+.slide[data-page="9"][data-chrome="centred"] .brand img,
+.slide[data-page="10"][data-chrome="centred"] .brand img{ width: 100px; }
+
+.slide[data-page="9"][data-chrome="centred"] .jubilee,
+.slide[data-page="10"][data-chrome="centred"] .jubilee{ top: 14px; }
+
+.slide[data-page="9"][data-chrome="centred"] .jubilee-mark,
+.slide[data-page="10"][data-chrome="centred"] .jubilee-mark{ width: 90px; }
 
 /* Slide 11 (closing) — same bigger lockup as slide 1's opener, rather
    than the standard 150px/140px "centred" pair used everywhere else this
@@ -441,27 +464,23 @@
   box-shadow: 0 4px 24px rgba(0,0,0,.55);
 }
 
-/* Four delegation photos, sitting below the logo in the same empty
-   right-hand column — widened past the logo card's width to fill the
-   rest of that free space (right-hand column runs from x~735 to the
-   160px right margin, i.e. ~705px available, so 700px comfortably fits
-   four now instead of the previous three). Pulled up close under the
-   logo card (which is ~194px tall at this width) rather than the ~125px
-   gap a lower top left before. */
+/* Four delegation photos arranged as a 2 × 2 grid in the empty
+   right-hand column, below the rule that follows the heading block.
+   Width stays 700px; two columns of equal width, two rows. */
 .rise-photos{
   position: absolute;
   right: 160px;
-  top: 383px;
+  top: 430px;
   width: 700px;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
   z-index: 2;
 }
 
 .rise-photos img{
-  flex: 1 1 0;
-  min-width: 0;
-  height: 220px;
+  width: 100%;
+  height: 160px;
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,.12);
@@ -555,54 +574,37 @@
    panels, already laid out and coloured) rather than the deck's own
    hand-built card grid, so the whole thing is a single <img>. The source
    is 1672x941 (~1.78:1), close enough to the 1600x900 (1.78:1) slide that
-   object-fit:cover crops next to nothing — unlike slide 5's 3:2 crystal,
-   full-bleed doesn't cost this artwork anything visible.
+   data-chrome="centred" centres the CMIA | 58 lockup at top.
+   Layout (top-to-bottom):
+     1. Logos  — centred, ~168px–290px (dark slide background)
+     2. Heading — centred, ~310px–420px (dark slide background)
+     3. Image  — fills remaining ~430px–900px, revealed by curtain-drop */
 
-   data-chrome="centred" (deck.css) puts the CMIA | 58 lockup centred at
-   the top, same as the title slide; .content.seek below sits right under
-   it with just the heading, so logos + heading read as one centred group
-   floating over the full-bleed art behind them. */
+/* Image stage — starts BELOW the heading so the top zone is plain dark
+   background. The masks (same colour as --page) hide the image until
+   reveal.js drops them at t=1.4s. */
 .seek-stage{
   position: absolute;
-  inset: 0;
+  top: 210px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1;
   overflow: hidden;
-  /* Invisible at load. reveal.js adds .is-active the moment the panels
-     start revealing, fading the whole stage in alongside them. */
-  opacity: 0;
-  transition: opacity .9s ease;
 }
-
-.seek-stage.is-active{ opacity: 1; }
 
 .seek-image{
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
 }
 
-/* The centred logo pair (~168px-288px) and the heading (top:336px) both
-   float over the artwork's own top edge, which is full of icons and copy
-   right up to y:0 — a plain darkening band behind that whole zone so both
-   read cleanly, rather than a backdrop behind the heading alone. */
-.seek-top-fade{
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 460px;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(180deg,
-    rgba(4,6,12,.88) 0%,
-    rgba(4,6,12,.72) 55%,
-    transparent 100%);
-}
-
+/* Heading sits on plain dark background — no gradient overlay needed. */
 .content.seek{
   left: 0;
-  top: 336px;           /* level with .title-slide .content */
+  top: 130px;
   width: 1600px;
   height: auto;
   z-index: 2;
@@ -610,22 +612,16 @@
   text-align: center;
 }
 
-/* A contained plate behind the heading only (not a full-width bar) —
-   legible against the busy, colourful artwork behind it without reading
-   as a heavy banner across the slide.
-
-   Sequenced entrance: the logos (deck.js chrome) have no animation of
-   their own, so they're already on screen at load; this heading fades
-   up starting at .5s so it visibly follows them rather than appearing
-   at the same instant, and reveal.js's own start delay (1.4s) is timed
-   to begin only once this animation (.5s delay + .6s duration) is
-   done — logos, then heading, then the image reveal. */
+/* Three-stage entrance:
+     1. Logos   — immediately visible (deck.js chrome, no animation)
+     2. Heading — fades up with 0.5s delay, lands at t=1.1s
+     3. Image   — reveal.js drops curtains at t=1.4s (after heading)
+   No dark pill background needed — heading is on plain dark slide bg. */
 .content.seek h1{
   display: inline-block;
   margin: 0;
-  padding: 18px 40px;
-  border-radius: 12px;
-  background: rgba(4,6,12,.72);
+  padding: 0;
+  background: none;
   opacity: 0;
   transform: translateY(14px);
   animation: seekHeadingIn .6s .5s ease forwards;
@@ -638,6 +634,7 @@
 @media (prefers-reduced-motion: reduce){
   .content.seek h1{ animation-duration: .01ms; animation-delay: 0s; }
 }
+
 
 /* Each source image is seven equal-width rainbow panels, numbered/ordered
    left to right — .seek-mask-1..7 sit exactly over one panel each, opaque
@@ -781,6 +778,7 @@
 /* Noticeably bigger than the base 150px — the photos are the lead visual
    on this slide now, with the stats row below shrunk to make room. */
 .anchor-photos--top img{ height: 210px; border-radius: 6px; }
+
 
 /* ---- total investment banner + the roster of investor names ---- */
 .anchor-total{

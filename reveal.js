@@ -1,15 +1,15 @@
 /* =====================================================
-   AUTO-REVEAL — shared by the card-grid slides
+   AUTO-REVEAL — seek slides (08-national-demands, 09-commitments)
    -----------------------------------------------------
-   Any slide whose content carries .reveal-item children
-   starts with them hidden; on load they all come in
-   together, no click needed.
+   Three-stage entrance:
+     1. Logos   — visible immediately (deck.js chrome, no animation)
+     2. Heading — fades up from t=0.5s, done at t=1.1s  (slides.css)
+     3. Image   — curtain-drop starts at t=1.4s here, after heading lands
 
-   The items' shared parent gets .is-active at the same
-   moment — lets that container itself (e.g. a card shadow/
-   frame) stay invisible until there is something inside it
-   to show, instead of sitting there as an empty box while
-   nothing has appeared yet.
+   The .seek-mask divs are the same colour as the page background so
+   they hide the image without any opacity trick on the stage itself.
+   Each mask slides translateY(100%) when .is-in is added, uncovering
+   its panel from top to bottom.
    ===================================================== */
 
 (() => {
@@ -21,20 +21,15 @@
   const items = [...slide.querySelectorAll(".reveal-item")];
   if (!items.length) return;
 
-  const stage = items[0].parentElement;
-
   const reduceMotion =
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Logos are on screen at load (no animation of their own); the heading
-  // (.content.seek h1 in slides.css) fades up starting at .5s, done by
-  // 1.1s. This waits past that so the sequence reads as logos, then
-  // heading, then the image reveal — not two things landing at once.
+  // 0.5s heading delay + 0.6s heading duration = 1.1s for heading to land.
+  // 1.4s gives a clean 0.3s beat before the curtains drop.
   const START_DELAY = reduceMotion ? 0 : 1400;
 
   setTimeout(() => {
-    if (stage) stage.classList.add("is-active");
     items.forEach((el) => el.classList.add("is-in"));
   }, START_DELAY);
 })();
