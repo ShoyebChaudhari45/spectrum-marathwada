@@ -12,6 +12,17 @@
    reads as edge-to-edge with no visible frame.
    ===================================================== */
 
+/* Smooth cross-fade between slides instead of the hard cut a normal page
+   navigation is by default. Each slide is its own file (deck.js's go()
+   just sets location.href / the shell iframe's src), so this is a
+   cross-document view transition, not the same-document kind — Chromium
+   126+ auto-crossfades old/new pages on any standard navigation once this
+   is declared, no JS needed. Browsers that don't support it just keep
+   the instant cut; there's no fallback to wire up. */
+@view-transition{
+  navigation: auto;
+}
+
 @font-face{
   font-family: 'Montserrat';
   font-style: normal;

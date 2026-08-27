@@ -349,27 +349,27 @@
   gap: 20px;
 }
 
+/* No body copy under the heading any more (removed per feedback) — the
+   card is just the heading now, so it's centred vertically inside the
+   card's height rather than pinned to the top the way a heading-plus-
+   paragraph stack would be. */
 .stat-card{
+  min-height: 100px;
   padding: 20px 20px 22px;
+  display: flex;
+  align-items: center;
   border: 1px solid rgba(255,255,255,.08);
   border-left: 6px solid var(--green-deep);
   background: var(--surface);
 }
 
 .stat-card h4{
-  margin: 0 0 12px;
+  margin: 0;
   font-family: 'Sora', sans-serif;
-  font-weight: 600;
-  font-size: 19px;
+  font-weight: 700;
+  font-size: 26px;
   line-height: 1.22;
   color: var(--ink-strong);
-}
-
-.stat-card p{
-  margin: 0;
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--ink);
 }
 
 /* ===================================================== */
