@@ -59,17 +59,17 @@
 
 .title-meta{ margin-top: 42px; }
 
-/* Same styling as the Spectrum slide's punchline (spectrum.css's .pl-title
-   /.pl-place/.pl-sub) — serif, "7 Colours" in the rainbow wave, "1 Region"
-   gold — so the phrase reads consistently wherever it appears in the deck. */
+/* Bold white, all three phrases the same — no rainbow/gold here (that
+   distinct per-phrase colour treatment lives on slide 5's punchline
+   instead, spectrum.css's .pl-title/.pl-place/.pl-sub). */
 .title-meta .tagline{
   margin: 0;
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 30px;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1.4;
   letter-spacing: .01em;
-  color: var(--ink-strong);
+  color: #fff;
 }
 
 /* The separators sit back so the three phrases read as the content. */
@@ -79,28 +79,14 @@
   font-weight: 300;
 }
 
-/* "7 Colours" — same doubled gradient + loop as .pl-title on the Spectrum
-   slide (spectrum.css), reproduced here since this slide doesn't load
-   that stylesheet. Reuses .title-slide h1.is-wave's own titleWave
-   keyframe below rather than redefining it a third time. */
-.title-meta .tagline .tagline-rainbow{
-  font-weight: 700;
-  background-image: linear-gradient(100deg,
-    #ff3b30 0%, #ff9500 8.5%, #ffd60a 16.5%,
-    #34c759 25%, #0a84ff 33.5%, #5e5ce6 42%, #ff2d92 50%,
-    #ff3b30 50%, #ff9500 58.5%, #ffd60a 66.5%,
-    #34c759 75%, #0a84ff 83.5%, #5e5ce6 92%, #ff2d92 100%);
-  background-size: 200% 100%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: titleWave 5s linear infinite;
-}
-
-/* "1 Region" — same gold as .pl-place on the Spectrum slide. */
+/* "7 Colours" and "1 Region" — no special treatment now, just inherit the
+   tagline's own bold white. Kept as their own classes/spans rather than
+   removed from the markup, so a future request to re-differentiate them
+   doesn't need the HTML touched again. */
+.title-meta .tagline .tagline-rainbow,
 .title-meta .tagline .tagline-gold{
-  color: #c9a227;
-  font-weight: 700;
+  color: inherit;
+  font-weight: inherit;
 }
 
 /* closing slide: now the only line on the slide (Thank You / CMIA credit
