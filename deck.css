@@ -178,25 +178,29 @@ html, body{
 
 .page-number{
   position: absolute;
-  right: 44px;
   bottom: 74px;
   z-index: 4;
   font-size: 15px;
   font-weight: 500;
   color: rgba(255,255,255,.45);
-  /* Wide enough for two digits, right-aligned within it, so the number's
-     LEFT edge lands in the same place on page 9 as on page 11. .fs-btn is
-     positioned against that edge and would otherwise shuffle sideways as
-     the digit count changed. */
+  /* right:86px, not the corner: .fs-btn sits OUTSIDE the number, between it
+     and the slide edge, so the number gives up the 42px the button needs.
+     min-width keeps the box two digits wide with the number right-aligned
+     in it, so the gap to the button is the same on page 9 as on page 11
+     instead of shuffling with the digit count. */
+  right: 86px;
   min-width: 18px;
   text-align: right;
 }
 
 /* ---- fullscreen toggle, paired with the page number -----------------
-   Sits immediately left of the number so the two read as one bottom-right
-   cluster. bottom:68px centres the 30px button on the number's own centre
-   (bottom:74px plus half of its ~18px line box); right:74px leaves a 12px
-   gutter to the left edge of the number's 18px box above.
+   Sits immediately AFTER the number — outboard of it, between the number
+   and the slide's right edge — so the two read as one bottom-right cluster
+   with the button on the outside. right:44px puts the cluster's outer edge
+   on the margin the page number used to hold alone; the number has moved
+   in to 86px, leaving a 12px gutter between them. bottom:68px centres the
+   30px button on the number's own centre (bottom:74px plus half of its
+   ~18px line box).
 
    Hidden until the slide is hovered — this is presentation chrome, not
    part of the artwork. */
@@ -204,7 +208,7 @@ html, body{
   all: unset;
   box-sizing: border-box;
   position: absolute;
-  right: 74px;
+  right: 44px;
   bottom: 68px;
   z-index: 6;
   width: 30px;
@@ -253,9 +257,6 @@ body.is-fullscreen .fs-btn .icon-enter{ display: none; }
 .slide[data-chrome="mark-centered"] .spectrum-wave,
 .slide[data-chrome="mark-centered"] .page-number{ display: none; }
 
-/* No page number here to sit beside, so the button takes its place in the
-   corner rather than floating 74px in from nothing. */
-.slide[data-chrome="mark-centered"] .fs-btn{ right: 44px; }
 
 .slide[data-chrome="mark-centered"] .brand{
   left: 50%;
