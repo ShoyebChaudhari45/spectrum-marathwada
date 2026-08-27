@@ -8,7 +8,7 @@ theme, and page 4 carries the interactive "Spectrum of Marathwada" artwork
 inset inside that frame.
 
 ## Running it — works with no internet
-
+.
 Nothing is fetched from the network. GSAP, both fonts and every image are
 vendored into `assets/`, and there is no build step and no backend, so the
 deck runs from a folder on a USB stick in a hall with no wifi. Open
