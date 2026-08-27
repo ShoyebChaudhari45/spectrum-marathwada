@@ -184,7 +184,61 @@ html, body{
   font-size: 15px;
   font-weight: 500;
   color: rgba(255,255,255,.45);
+  /* Wide enough for two digits, right-aligned within it, so the number's
+     LEFT edge lands in the same place on page 9 as on page 11. .fs-btn is
+     positioned against that edge and would otherwise shuffle sideways as
+     the digit count changed. */
+  min-width: 18px;
+  text-align: right;
 }
+
+/* ---- fullscreen toggle, paired with the page number -----------------
+   Sits immediately left of the number so the two read as one bottom-right
+   cluster. bottom:68px centres the 30px button on the number's own centre
+   (bottom:74px plus half of its ~18px line box); right:74px leaves a 12px
+   gutter to the left edge of the number's 18px box above.
+
+   Hidden until the slide is hovered — this is presentation chrome, not
+   part of the artwork. */
+.fs-btn{
+  all: unset;
+  box-sizing: border-box;
+  position: absolute;
+  right: 74px;
+  bottom: 68px;
+  z-index: 6;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.04);
+  color: rgba(255,255,255,.6);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .3s ease, background .25s ease,
+              border-color .25s ease, color .25s ease;
+}
+
+.slide:hover .fs-btn,
+.fs-btn:focus-visible{ opacity: 1; }
+
+.fs-btn:hover{
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.5);
+  color: #fff;
+}
+
+.fs-btn:focus-visible{ outline: 2px solid var(--green-deep); outline-offset: 2px; }
+
+.fs-btn svg{ width: 15px; height: 15px; }
+
+/* deck.js ships both icons and lets CSS pick, so the swap costs no JS. */
+.fs-btn .icon-exit{ display: none; }
+body.is-fullscreen .fs-btn .icon-exit{ display: block; }
+body.is-fullscreen .fs-btn .icon-enter{ display: none; }
 
 /* The spectrum slide carries the CMIA and 58-years marks inside its own
    artwork, so the template's copies outside the frame are suppressed. */
@@ -198,6 +252,10 @@ html, body{
 
 .slide[data-chrome="mark-centered"] .spectrum-wave,
 .slide[data-chrome="mark-centered"] .page-number{ display: none; }
+
+/* No page number here to sit beside, so the button takes its place in the
+   corner rather than floating 74px in from nothing. */
+.slide[data-chrome="mark-centered"] .fs-btn{ right: 44px; }
 
 .slide[data-chrome="mark-centered"] .brand{
   left: 50%;
@@ -415,9 +473,9 @@ h1.slide-title.ink{ color: var(--ink-strong); }
 /* ===================================================== */
 
 @media print{
-  .page-nav{ display: none; }
+  .page-nav, .fs-btn{ display: none; }
 }
 
 @media (prefers-reduced-motion: reduce){
-  .page-nav-btn{ transition-duration: .01ms; }
+  .page-nav-btn, .fs-btn{ transition-duration: .01ms; }
 }
