@@ -128,7 +128,7 @@ html, body{
   font-size: 10px;
   line-height: 1.32;
   letter-spacing: .028em;
-  color: var(--orange);
+  color: #fff;
   text-transform: uppercase;
 }
 
@@ -269,12 +269,11 @@ body.is-fullscreen .fs-btn .icon-enter{ display: none; }
 .slide[data-chrome="mark-centered"] .brand img{ margin: 0 auto; width: 320px; }
 
 /* Scaled up to match the bigger mark above it — the default 10px/118px
-   ratio would read as a tiny caption under a 320px logo.
-   White instead of orange so the text reads clearly on the dark opener. */
+   ratio would read as a tiny caption under a 320px logo. Colour is
+   inherited from .brand .wordmark's own white now (used everywhere). */
 .slide[data-chrome="mark-centered"] .brand .wordmark{
   margin-top: 12px;
   font-size: 18px;
-  color: #ffffff;
 }
 
 .slide[data-chrome="mark-centered"] .jubilee{

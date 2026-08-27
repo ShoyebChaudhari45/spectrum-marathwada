@@ -59,9 +59,12 @@
 
 .title-meta{ margin-top: 42px; }
 
+/* Same styling as the Spectrum slide's punchline (spectrum.css's .pl-title
+   /.pl-place/.pl-sub) — serif, "7 Colours" in the rainbow wave, "1 Region"
+   gold — so the phrase reads consistently wherever it appears in the deck. */
 .title-meta .tagline{
   margin: 0;
-  font-family: 'Sora', sans-serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 30px;
   font-weight: 500;
   line-height: 1.4;
@@ -69,29 +72,35 @@
   color: var(--ink-strong);
 }
 
-/* The separators sit back so the three phrases read as the content.
-   :not() matters — the highlight below is a span too, and without this
-   exclusion this rule outranks it (two classes + an element beats one
-   class) and quietly paints "1 Region" grey at weight 300. */
-.title-meta .tagline span:not(.tagline-gold){
+/* The separators sit back so the three phrases read as the content. */
+.title-meta .tagline span:not(.tagline-gold):not(.tagline-rainbow){
   color: var(--ink-soft);
   margin: 0 14px;
   font-weight: 300;
 }
 
-/* "1 Region" highlight. Plain white, not the #c9a227 gold this used to
-   share with .pl-place on the Spectrum slide — that gold reads as dark
-   against the near-black page beside the --ink-strong phrases either side
-   of it, so the emphasis now comes from weight alone. Only used on slide 4. */
-.title-meta .tagline .tagline-gold{
-  color: #fff;
+/* "7 Colours" — same doubled gradient + loop as .pl-title on the Spectrum
+   slide (spectrum.css), reproduced here since this slide doesn't load
+   that stylesheet. Reuses .title-slide h1.is-wave's own titleWave
+   keyframe below rather than redefining it a third time. */
+.title-meta .tagline .tagline-rainbow{
   font-weight: 700;
+  background-image: linear-gradient(100deg,
+    #ff3b30 0%, #ff9500 8.5%, #ffd60a 16.5%,
+    #34c759 25%, #0a84ff 33.5%, #5e5ce6 42%, #ff2d92 50%,
+    #ff3b30 50%, #ff9500 58.5%, #ffd60a 66.5%,
+    #34c759 75%, #0a84ff 83.5%, #5e5ce6 92%, #ff2d92 100%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleWave 5s linear infinite;
 }
 
-/* Slide 4's CMIA wordmark, white rather than the deck's --orange. Scoped to
-   this slide — the orange lockup is the template's own elsewhere. */
-.slide[data-page="4"] .brand .wordmark{
-  color: #fff;
+/* "1 Region" — same gold as .pl-place on the Spectrum slide. */
+.title-meta .tagline .tagline-gold{
+  color: #c9a227;
+  font-weight: 700;
 }
 
 /* closing slide: now the only line on the slide (Thank You / CMIA credit
