@@ -22,67 +22,67 @@
   --spec-bg: #04060c;
   --ease-expand: cubic-bezier(.16,.84,.32,1);
 
-  /* ---- layout coordinates (% of the 3:2 panel) ---- */
-  /* The beams find these edges by measurement (syncBeams), so moving them
-     needs no matching change in script.js. */
-  --panels-left: 70.5%;
+  /* ---- layout coordinates (% of the PANEL BOX, not the source image) ---- */
+  /* The panel is 1600x900 (16:9) but the source photo is 1280x853 (3:2), so
+     object-fit:cover on .bg-image scales it to match the panel's width and
+     crops the overflow off the top and bottom equally — 66.5px off each
+     side of the 853px-tall source, leaving a 720px-tall visible window.
+     Every Y-axis number below is that source image's own percentage
+     re-expressed against this cropped, visible window:
+       new% = (orig% * 853 - 66.5) / 720 * 100
+     X-axis numbers are untouched — cover only crops vertically here, since
+     the panel is wider-per-height than the source (object-fit:cover
+     matches on width when that's true), so horizontal percentages still
+     map straight onto the same pixels regardless of panel width.
+     The beams find the panel-list edges by measurement (syncBeams), so
+     moving --panels-* needs no matching change in script.js — but
+     script.js's ORIGIN.y (the light point) is hand-set to line up with
+     --map-top/--map-height below, so it moved too when these did. */
+  --panels-left: 75%;
   --panels-right: 97.6%;
-  --panels-top: 12.2%;
-  --panels-bottom: 73.2%;
+  --panels-top: 5.2%;     /* was 12.2% of the uncropped source */
+  --panels-bottom: 77.5%; /* was 73.2% */
 
   /* Sized to assets/prism-crystal.jpg's own crystal — measured off its
-     bright-pixel bounding box (22.3%–69.8% wide, 5.6%–88% tall of the
-     1280x853, exactly-3:2 source). */
+     bright-pixel bounding box (22.3%–69.8% wide of the source, untouched;
+     5.6%–88% tall of the source, re-expressed above for the crop). The
+     crop line falls below the crystal's own top edge, so its apex is
+     clipped and --map-top is pinned to 0% rather than going negative. */
   --map-left: 22.3%;
-  --map-top: 5.6%;
+  --map-top: 0%;
   --map-width: 47.5%;
-  --map-height: 82.4%;
+  --map-height: 95%;      /* was 82.4% */
 }
 
 /* ===================================================== */
 /* THE INSET PANEL                                        */
 /* ===================================================== */
 
-/* Sized/positioned to clear the CMIA | 58-years lockup and the kicker line
-   under it (both at their default slide-chrome spot, top-left) — this slide
-   no longer overrides that chrome to sit closer, so the panel starts lower
-   than it used to. 960/640 keeps 3:2, centred in the 1600px slide. */
+/* Full-bleed, same as slides 2/3 — no side margins. This crops the
+   crystal (see the Y-axis note above) rather than letterboxing it, which
+   is the tradeoff that buys the edge-to-edge look. */
 .spectrum-panel{
   position: absolute;
-  left: 320px;
-  top: 160px;
-  width: 960px;
-  height: 640px;          /* 960 / 640 = 3:2 */
+  left: 0;
+  top: 0;
+  width: 1600px;
+  height: 900px;
   z-index: 2;
-  border-radius: 10px;
   overflow: hidden;
   background: var(--spec-bg);
-  box-shadow: 0 0 0 1px rgba(255,255,255,.07);
 }
 
-/* Presenting mode — the panel breaks out of the template and
-   fills the whole slide, for when the spectrum needs the room. The logo
-   lockup and kicker line go with the rest of the chrome here — the panel
-   is filling the space they'd otherwise sit in. */
-.slide.spectrum-full .spectrum-panel{
-  left: 125px;            /* (1600 - 1350) / 2 */
-  top: 0;
-  width: 1350px;          /* the largest un-cropped 3:2 box in a 1600x900 slide */
-  height: 900px;
-  border-radius: 0;
-}
+/* The default top-left logo spot (58px) sits left of the punchline column
+   (.spectrum-punchline, 18px-338px now the panel is full-bleed at left:0)
+   — shifted here so the pair centres directly above it instead of
+   floating off to its side. */
+.slide[data-page="5"] .brand{ left: 26px; }
+.slide[data-page="5"] .jubilee{ left: 220px; }
 
-.slide.spectrum-full .spectrum-wave,
-.slide.spectrum-full .page-number,
-.slide.spectrum-full .brand,
-.slide.spectrum-full .jubilee{
-  opacity: 0;
-  pointer-events: none;
-}
-
-.spectrum-wave, .page-number, .brand, .jubilee{
-  transition: opacity .45s ease;
-}
+/* Full-bleed panel now covers the wave completely (no side margin left
+   for it to peek through), same as slides 2/3's artwork already does —
+   hidden outright rather than left as a dead, invisible element. */
+.slide[data-page="5"] .spectrum-wave{ display: none; }
 
 .stage{
   position: absolute;
@@ -464,42 +464,6 @@
   letter-spacing: .01em;
   color: rgba(255,255,255,.92);
 }
-
-/* ---- expand / restore control, top-right of the dark panel ---- */
-.spectrum-expand{
-  all: unset;
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  z-index: 6;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,.28);
-  background: rgba(4,6,12,.5);
-  color: rgba(255,255,255,.85);
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity .3s ease, background .3s ease, border-color .3s ease;
-}
-
-.spectrum-panel:hover .spectrum-expand,
-.spectrum-expand:focus-visible{ opacity: 1; }
-
-.spectrum-expand:hover{
-  background: rgba(4,6,12,.8);
-  border-color: rgba(255,255,255,.65);
-}
-
-.spectrum-expand:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
-
-.spectrum-expand svg{ width: 15px; height: 15px; }
-.spectrum-expand .icon-restore{ display: none; }
-.slide.spectrum-full .spectrum-expand .icon-restore{ display: block; }
-.slide.spectrum-full .spectrum-expand .icon-expand{ display: none; }
 
 /* ===================================================== */
 /* REDUCED MOTION                                         */

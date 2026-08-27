@@ -142,19 +142,17 @@
 /* needs no extra card/background behind it.               */
 /* ===================================================== */
 
+/* True edge-to-edge: the content box IS the 1600x900 slide, no margin on
+   any side, so nothing but the artwork itself is visible — no rounded
+   corners or shadow either, since those would read as a floating card
+   rather than a full-bleed background. This covers the bottom spectrum
+   wave (z-index 1, under .content's z-index 2); the page number and nav
+   arrows sit above both and still show. */
 .showcase-slide .content{
-  /* .content's own left edge matches the standard chrome's logo spot
-     (58px) so the image still lines up with every other slide's left
-     margin, even with the logo itself hidden here. */
-  left: 58px;
-  align-items: flex-start;
-  /* No logo to clear now, so just a small top margin. Height is
-     deliberately NOT the image's own 3:2 height at full width (1420px
-     wide would want 947px tall) — there isn't 947px of clear room above
-     the bottom wave, so the image covers this shorter box and crops
-     top/bottom instead of shrinking to fit. */
-  top: 24px;
-  height: 781px;
+  left: 0;
+  top: 0;
+  width: 1600px;
+  height: 900px;
 }
 
 .showcase-image{
@@ -162,8 +160,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 6px;
-  box-shadow: 0 24px 70px rgba(0,0,0,.55);
 }
 
 /* These two slides are pencil-sketch art — the deck's usual rainbow wave

@@ -397,32 +397,6 @@
   }
 
   // ---------------------------------------------------
-  // Expand / restore — lets the artwork step out of the
-  // template frame and take the whole slide.
-  // ---------------------------------------------------
-  function initExpand() {
-    const btn = document.getElementById("spectrumExpand");
-    const slide = document.querySelector(".slide");
-    if (!btn || !slide) return;
-
-    btn.addEventListener("click", () => {
-      const full = slide.classList.toggle("spectrum-full");
-      btn.setAttribute("aria-pressed", String(full));
-      btn.setAttribute(
-        "aria-label",
-        full ? "Restore the spectrum into the slide frame" : "Expand the spectrum to fill the slide"
-      );
-    });
-
-    // Esc always returns to the framed view.
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && slide.classList.contains("spectrum-full")) {
-        btn.click();
-      }
-    });
-  }
-
-  // ---------------------------------------------------
   // Subtle mouse parallax on the map + background
   // ---------------------------------------------------
   function initParallax() {
@@ -461,7 +435,6 @@
   buildBeams();
   prepareRay();
   initSequence();
-  initExpand();
   initParallax();
 
   // Keep the beams on their cards when the panel itself changes size —

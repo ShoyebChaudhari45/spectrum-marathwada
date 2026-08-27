@@ -207,8 +207,14 @@ html, body{
   text-align: center;
 }
 
-.slide[data-chrome="mark-centered"] .brand img{ margin: 0 auto; width: 220px; }
-.slide[data-chrome="mark-centered"] .brand .wordmark{ display: none; }
+.slide[data-chrome="mark-centered"] .brand img{ margin: 0 auto; width: 320px; }
+
+/* Scaled up to match the bigger mark above it — the default 10px/118px
+   ratio would read as a tiny caption under a 320px logo. */
+.slide[data-chrome="mark-centered"] .brand .wordmark{
+  margin-top: 12px;
+  font-size: 18px;
+}
 
 .slide[data-chrome="mark-centered"] .jubilee{
   left: 50%;
@@ -217,7 +223,7 @@ html, body{
 }
 
 .slide[data-chrome="mark-centered"] .jubilee::before{ top: -50px; bottom: -50px; }
-.slide[data-chrome="mark-centered"] .jubilee-mark{ width: 206px; }
+.slide[data-chrome="mark-centered"] .jubilee-mark{ width: 300px; }
 
 /* ===================================================== */
 /* PAGE NAV — "very small arrows", bottom left            */
