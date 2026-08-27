@@ -612,13 +612,31 @@
 
 /* A contained plate behind the heading only (not a full-width bar) —
    legible against the busy, colourful artwork behind it without reading
-   as a heavy banner across the slide. */
+   as a heavy banner across the slide.
+
+   Sequenced entrance: the logos (deck.js chrome) have no animation of
+   their own, so they're already on screen at load; this heading fades
+   up starting at .5s so it visibly follows them rather than appearing
+   at the same instant, and reveal.js's own start delay (1.4s) is timed
+   to begin only once this animation (.5s delay + .6s duration) is
+   done — logos, then heading, then the image reveal. */
 .content.seek h1{
   display: inline-block;
   margin: 0;
   padding: 18px 40px;
   border-radius: 12px;
   background: rgba(4,6,12,.72);
+  opacity: 0;
+  transform: translateY(14px);
+  animation: seekHeadingIn .6s .5s ease forwards;
+}
+
+@keyframes seekHeadingIn{
+  to{ opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .content.seek h1{ animation-duration: .01ms; animation-delay: 0s; }
 }
 
 /* Each source image is seven equal-width rainbow panels, numbered/ordered

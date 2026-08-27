@@ -27,9 +27,10 @@
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Long enough that the logos + heading (already on screen at load) read
-  // as showing up first, with the image animation following after them —
-  // not the two feeling simultaneous.
+  // Logos are on screen at load (no animation of their own); the heading
+  // (.content.seek h1 in slides.css) fades up starting at .5s, done by
+  // 1.1s. This waits past that so the sequence reads as logos, then
+  // heading, then the image reveal — not two things landing at once.
   const START_DELAY = reduceMotion ? 0 : 1400;
 
   setTimeout(() => {

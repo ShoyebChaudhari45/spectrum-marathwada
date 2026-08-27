@@ -370,9 +370,14 @@
 
 /* When active, the toggle takes only the height its own content needs,
    so the body copy sits directly under the subtitle instead of being
-   pushed to the bottom of the enlarged card. */
+   pushed to the bottom of the enlarged card. align-items switches to
+   flex-start here too: centered (the resting default, fine for a single
+   title line) was centering the icon against the heading+subtitle pair
+   combined, which read as the icon hovering toward the body copy below
+   rather than sitting with the heading it belongs to. */
 .section-panel.is-active .section-toggle{
   flex: 0 0 auto;
+  align-items: flex-start;
   padding-top: 4%;
   padding-bottom: 1.2%;
 }
