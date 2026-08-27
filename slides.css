@@ -69,24 +69,44 @@
   color: var(--ink-strong);
 }
 
-/* the separators sit back so the three phrases read as the content */
-.title-meta .tagline span{
+/* The separators sit back so the three phrases read as the content.
+   :not() matters — the highlight below is a span too, and without this
+   exclusion this rule outranks it (two classes + an element beats one
+   class) and quietly paints "1 Region" grey at weight 300. */
+.title-meta .tagline span:not(.tagline-gold){
   color: var(--ink-soft);
   margin: 0 14px;
   font-weight: 300;
 }
 
-/* "1 Region" highlight — same gold as .pl-place on the Spectrum slide */
-.tagline-gold{
-  color: #c9a227;
+/* "1 Region" highlight. Plain white, not the #c9a227 gold this used to
+   share with .pl-place on the Spectrum slide — that gold reads as dark
+   against the near-black page beside the --ink-strong phrases either side
+   of it, so the emphasis now comes from weight alone. Only used on slide 4. */
+.title-meta .tagline .tagline-gold{
+  color: #fff;
   font-weight: 700;
+}
+
+/* Slide 4's CMIA wordmark, white rather than the deck's --orange. Scoped to
+   this slide — the orange lockup is the template's own elsewhere. */
+.slide[data-page="4"] .brand .wordmark{
+  color: #fff;
 }
 
 /* closing slide: now the only line on the slide (Thank You / CMIA credit
    removed), so it runs large and centred — .content's own flex centring
    (deck.css) handles both axes, this just sets the size/width. */
 .tagline.hindi-close.hindi-solo{
-  max-width: 1300px;
+  /* width, not max-width: .content is a flex column, and `margin: 0 auto`
+     on a flex child overrides the default cross-axis stretch, so the box
+     shrink-wrapped whatever typewriter.js had typed so far — 300px early
+     on, growing to 1300px. The rainbow gradient below is sized to that box,
+     so it was being re-scaled on every keystroke. A fixed box holds the
+     colours still while the characters arrive; the settled layout is
+     identical, since the full line hits the 1300px cap anyway. */
+  width: 1300px;
+  max-width: 100%;
   margin: 0 auto;
   font-size: 42px;
   font-weight: 600;
@@ -132,8 +152,14 @@
 /* Closing slide: the same flowing wave as the title slide's final click
    state, but permanent — no click to wire up on a slide that doesn't load
    title.js. Same doubled gradient (two full colour cycles back to back)
-   so the background-position loop has no visible seam. */
-.title-slide h1.rainbow-always{
+   so the background-position loop has no visible seam.
+
+   Not tied to h1 any more: the closing line is a <p class="tagline"> that
+   typewriter.js types out, which had orphaned this rule. The gradient is
+   sized to the element's box rather than its text, so that box has to be a
+   fixed width or the colours re-scale on every keystroke — see the width
+   on .tagline.hindi-close.hindi-solo above. */
+.title-slide .rainbow-always{
   background-image:
     linear-gradient(100deg,
       #ff3b30 0%, #ff9500 8.5%, #ffd60a 16.5%,
@@ -823,10 +849,12 @@
   color: var(--ink-soft);
 }
 
-/* Six investor logos, one row, equal width each. A uniform WHITE plate under
-   all six: these logos ship with no alpha, each on its own opaque background
-   (white, black, near-white), and one light card is what makes six different
-   logo styles read as one row instead of six mismatched cutouts.
+/* The investor logos, one row, equal width each (flex: 1 1 0, so the row
+   re-divides itself if one is added or dropped). A uniform WHITE plate under
+   all of them: these logos ship with no alpha, each on its own opaque
+   background (white, black, near-white), and one light card is what makes
+   several different logo styles read as one row rather than mismatched
+   cutouts.
 
    What makes the marks legible is not the plate size but the art — the source
    files are cropped tight to the mark (assets/logos/_original/ keeps the
