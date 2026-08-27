@@ -150,7 +150,14 @@ html, body{
 .jubilee{
   position: absolute;
   left: 252px;
-  top: 24px;      /* same as .brand, so the pair shares a baseline */
+  top: 24px;      /* same as .brand's top */
+  /* .brand's box (logo + wordmark) is 94px tall; giving this box the same
+     height and centering the mark inside it (rather than top-aligning)
+     lines the 58-years mark up on the CMIA lockup's vertical centre
+     instead of its top edge. */
+  height: 94px;
+  display: flex;
+  align-items: center;
   z-index: 4;
 }
 
@@ -171,6 +178,10 @@ html, body{
   width: 80px;
   height: auto;
 }
+
+/* Thank-you slide only — the mark reads slightly oversized against the
+   plain, mostly-empty closing frame, so it's trimmed down a bit more here. */
+.slide[data-page="11"] .jubilee-mark{ width: 66px; }
 
 /* ---- bottom spectrum wave ------------------------------------------
    Replaces the navy/green corner swoosh: a full-width ribbon carrying the

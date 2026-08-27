@@ -113,7 +113,7 @@
   /* Dropped clear of the logo pair (top:24px, ~94px tall) and centred in
      the space below it, rather than hugging the top edge right under the
      logos — reads as its own centred block in the empty left margin. */
-  top: 260px;
+  top: 300px;
   bottom: 0;
   /* --map-left (22.3%, 534px in the slide) is the crystal's overall
      bounding box, but that leftmost point is its floor reflection near
@@ -150,17 +150,17 @@
   white-space: nowrap;
 }
 
-/* All three lines share one font/size. "7 Colours" and "Infinite
-   Possibilities" both carry the rainbow wave (.pl-title, .pl-sub);
-   "1 Region" stays plain gold between them (.pl-place). 33px is
-   load-bearing: paired with the 410px box and its 60px left offset,
-   that's the largest size where "Infinite Possibilities" (the widest
-   phrase) still clears the stage's own left edge — any bigger and its
-   centred overflow gets clipped by the stage's overflow:hidden,
-   swallowing the "I" of "Infinite". */
+/* "7 Colours" and "Infinite Possibilities" both carry the rainbow wave
+   (.pl-title, .pl-sub); "1 Region" stays plain gold between them
+   (.pl-place). .pl-sub's 33px is load-bearing: paired with the 410px box
+   and its 60px left offset, that's the largest size where "Infinite
+   Possibilities" (the widest phrase) still clears the stage's own left
+   edge — any bigger and its centred overflow gets clipped by the stage's
+   overflow:hidden, swallowing the "I" of "Infinite". "7 Colours" and
+   "1 Region" are much shorter, so they can run bigger (38px) without
+   hitting that same edge. */
 .pl-title,
 .pl-sub{
-  font-size: 33px;
   font-weight: 700;
   letter-spacing: .01em;
   text-transform: uppercase;
@@ -178,12 +178,13 @@
   animation: plTitleWave 5s linear infinite;
 }
 
-.pl-sub{ margin: 0; }
+.pl-title{ font-size: 38px; }
+.pl-sub{ font-size: 33px; margin: 0; }
 
 /* "1 Region" — gold (#c9a227), same token used by .tagline-gold on the
-   title slide. */
+   title slide. Sized to match .pl-title, the other short line. */
 .pl-place{
-  font-size: 33px;
+  font-size: 38px;
   font-weight: 700;
   letter-spacing: .01em;
   text-transform: uppercase;
@@ -446,7 +447,7 @@
   font-weight: 700;
   letter-spacing: .01em;
   text-transform: uppercase;
-  font-size: 23px;
+  font-size: 21px;
   line-height: 1.12;
   transition: font-size .5s var(--ease-expand);
 }
@@ -468,6 +469,18 @@
 /* Every band carries its heritage anchor, open or not. */
 .section-panel.is-active .title{ font-size: 40px; }
 .section-panel.is-active .subtitle{ font-size: 24px; white-space: normal; }
+
+/* A card stepping DOWN from active has to lose that big 40px/24px type
+   before its card (script.js's flex-grow tween, ~0.8s) finishes shrinking
+   back to resting height, or the two run out of sync — the box gets thin
+   before the font has caught up, and the still-oversized heading gets
+   clipped by this panel's own overflow:hidden. Growing INTO active never
+   has that problem (the box is only ever getting roomier), so only the
+   shrink direction needs to be instant rather than eased. */
+.section-panel:not(.is-active) .title,
+.section-panel:not(.is-active) .subtitle{
+  transition: none;
+}
 
 /* The body copy starts where the TITLE starts, not where the icon does.
    That inset is the same stack .section-toggle builds up before its text:
