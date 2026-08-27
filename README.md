@@ -5,7 +5,7 @@ Agriculture, built from the *Project-CSNTech: India's Next IT and GCC
 Powerhouse* deck. Every page is wrapped in the official CMIA slide template
 (logo, 58-years jubilee mark, bottom spectrum wave) on a dark
 theme, and page 4 carries the interactive "Spectrum of Marathwada" artwork
-inset inside that frame.
+inset inside that frame..
 ...
 ## Running it — works with no internet
 .
