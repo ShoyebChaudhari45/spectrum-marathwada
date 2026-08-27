@@ -582,26 +582,27 @@
    left to right — .seek-mask-1..7 sit exactly over one panel each, opaque
    at load (var(--page), matching the slide behind it) so nothing reads
    until its turn. reveal.js adds .is-in to each one in turn on its own,
-   in the DOM order they're written here (1 through 7), fading it away to
-   reveal that panel — no click needed, see reveal.js's own comment. */
+   in the DOM order they're written here (1 through 7); it drops straight
+   down and out, uncovering that panel top-to-bottom as it falls — no
+   click needed, see reveal.js's own comment. */
 .seek-mask{
   position: absolute;
   top: 0;
   bottom: 0;
   width: calc(100% / 7);
   background: var(--page);
-  opacity: 1;
-  transform: scaleX(1);
-  transform-origin: right center;
-  transition: opacity 1.1s ease, transform 1.1s cubic-bezier(.65,0,.35,1);
+  /* No opacity fade here on purpose — a solid cover sliding away reads
+     as a crisp top-to-bottom curtain drop; fading it at the same time
+     blends into a uniform dim instead of a clean moving edge. */
+  transform: translateY(0%);
+  transition: transform 1.1s cubic-bezier(.55,0,.85,.35);
   pointer-events: none;
 }
 
-/* Wipes away toward its own right edge rather than just fading, so each
-   panel reads as sliding open left-to-right instead of dissolving. */
+/* Drops straight down and off the bottom edge, so each panel reads as
+   its cover falling away rather than dissolving. */
 .seek-mask.is-in{
-  opacity: 0;
-  transform: scaleX(0);
+  transform: translateY(100%);
 }
 
 .seek-mask-1{ left: 0%; }
