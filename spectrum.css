@@ -110,6 +110,87 @@
     linear-gradient(180deg, rgba(0,0,0,.15), transparent 15%, transparent 80%, rgba(0,0,0,.35));
 }
 
+/* Fills the empty margin left of the crystal (0%-22.3% of the panel) —
+   the deck's own tagline (matching the title slide's), so the slide
+   doesn't open on bare dark space. Styled like the client's title-block
+   reference (serif, not Sora/Montserrat, so a system stack rather than a
+   new webfont asset; the deck ships with none, by design — see README). */
+.spectrum-punchline{
+  position: absolute;
+  left: 18px;
+  top: 0;
+  bottom: 0;
+  /* --map-left (22.3%, 534px in the slide) is the crystal's overall
+     bounding box, but that leftmost point is its floor reflection near
+     the very bottom of the image — where this text actually sits (roughly
+     43%-56% down the panel) the crystal's own left edge doesn't start
+     until ~650-675px, measured straight off assets/prism-crystal.jpg. So
+     there's real room here; 280px is comfortable rather than load-bearing. */
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.spectrum-punchline p{ margin: 0; font-family: Georgia, 'Times New Roman', serif; }
+
+/* Tier 1 — "SPECTRUM"'s own treatment in the reference: big, bold, white. */
+.pl-title{
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: #fdf6e6;
+  line-height: 1;
+  margin-bottom: 14px;
+}
+
+/* Tier 2 — "MARATHWADA"'s treatment: same size class, gold. "1 City" is
+   short enough to run bigger than "7 Colours" with room to spare, so it's
+   sized up further for presence, same as the reference's own emphasis. */
+.pl-place{
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: #c9a227;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+/* Tier 3 — "& CHHATRAPATI SAMBHAJINAGAR"'s treatment: small, tracked, quiet. */
+.pl-sub{
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.82);
+}
+
+.pl-flourish{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.pl-flourish span{
+  width: 20px;
+  height: 1px;
+  background: rgba(255,255,255,.3);
+}
+
+.pl-flourish i{
+  font-style: normal;
+  font-size: 10px;
+  color: rgba(255,255,255,.5);
+}
+
 /* ===================================================== */
 /* CENTRAL MAP / PRISM REACTION LAYER                     */
 /* ===================================================== */

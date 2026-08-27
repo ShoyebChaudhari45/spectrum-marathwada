@@ -136,40 +136,40 @@
 
 /* ===================================================== */
 /* SLIDES 2 & 3 — full-bleed showcase artwork             */
-/* The CMIA | 58 lockup sits at its usual top-left spot,   */
-/* same as every other slide (no data-chrome override),   */
-/* just dropped down to sit flush against the artwork's    */
-/* top edge instead of floating above it with a gap.       */
-/* The artwork is already a white plate, so it needs no    */
-/* extra card/background behind it.                        */
+/* data-chrome="minimal" hides the CMIA | 58 lockup (see  */
+/* deck.css) so the artwork is the whole slide, top to     */
+/* bottom. The artwork is already a white plate, so it     */
+/* needs no extra card/background behind it.               */
 /* ===================================================== */
 
-/* Default top:24px leaves the lockup's bottom (~94px tall) well above
-   where the artwork starts. Dropped to 30px so it sits close to the
-   artwork's top edge with a small 11px gap — flush (41px) read as
-   touching, too tight. */
-.showcase-slide .brand,
-.showcase-slide .jubilee{
-  top: 30px;
-}
-
 .showcase-slide .content{
-  align-items: center;
-  /* At 670px tall its 3:2 ratio makes it 1005px wide — comfortably inside
-     the 1420px content width, so height is what bounds it. The 135px drop
-     keeps a small 11px gap under the lockup (top:30px, ~94px tall). */
-  top: 135px;
-  height: 670px;
+  /* .content's own left edge matches the standard chrome's logo spot
+     (58px) so the image still lines up with every other slide's left
+     margin, even with the logo itself hidden here. */
+  left: 58px;
+  align-items: flex-start;
+  /* No logo to clear now, so just a small top margin. Height is
+     deliberately NOT the image's own 3:2 height at full width (1420px
+     wide would want 947px tall) — there isn't 947px of clear room above
+     the bottom wave, so the image covers this shorter box and crops
+     top/bottom instead of shrinking to fit. */
+  top: 24px;
+  height: 781px;
 }
 
 .showcase-image{
   display: block;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 6px;
   box-shadow: 0 24px 70px rgba(0,0,0,.55);
+}
+
+/* These two slides are pencil-sketch art — the deck's usual rainbow wave
+   read as a jarring bit of colour against it, so it's desaturated to match. */
+.showcase-slide .spectrum-wave{
+  filter: grayscale(1);
 }
 
 /* ===================================================== */
@@ -408,7 +408,7 @@
 .rise-logo{
   position: absolute;
   right: 160px;
-  top: 120px;
+  top: 60px;
   width: 360px;
   height: auto;
   z-index: 2;
@@ -427,7 +427,7 @@
 .rise-photos{
   position: absolute;
   right: 160px;
-  top: 338px;
+  top: 383px;
   width: 620px;
   display: flex;
   gap: 16px;
@@ -551,6 +551,9 @@
   border-radius: 10px;
   box-shadow: 0 24px 70px rgba(0,0,0,.55);
 }
+
+/* Slide 10 only — the deck's usual light-gray subtitle, in green. */
+.slide[data-page="10"] .slide-sub{ color: var(--green-heading); }
 
 /* =====================================================
    SLIDE 6 — anchoring investments
