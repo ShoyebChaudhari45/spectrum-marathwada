@@ -126,7 +126,7 @@
      43%-56% down the panel) the crystal's own left edge doesn't start
      until ~650-675px, measured straight off assets/prism-crystal.jpg. So
      there's real room here; 280px is comfortable rather than load-bearing. */
-  width: 280px;
+  width: 320px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -134,13 +134,22 @@
   text-align: center;
   z-index: 2;
   pointer-events: none;
+  transform: translateY(-46px);
 }
 
-.spectrum-punchline p{ margin: 0; font-family: Georgia, 'Times New Roman', serif; }
+/* nowrap on every line: several of these have spaces ("7 Colours",
+   "Infinity Possibilities") which would otherwise wrap onto a second line
+   the moment the container is narrower than the text — better to overflow
+   the (generously-sized, non-clipping) container than break mid-phrase. */
+.spectrum-punchline p{
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  white-space: nowrap;
+}
 
 /* Tier 1 — "SPECTRUM"'s own treatment in the reference: big, bold, white. */
 .pl-title{
-  font-size: 42px;
+  font-size: 48px;
   font-weight: 700;
   letter-spacing: .01em;
   text-transform: uppercase;
@@ -153,7 +162,7 @@
    short enough to run bigger than "7 Colours" with room to spare, so it's
    sized up further for presence, same as the reference's own emphasis. */
 .pl-place{
-  font-size: 48px;
+  font-size: 54px;
   font-weight: 700;
   letter-spacing: .01em;
   text-transform: uppercase;
@@ -164,7 +173,7 @@
 
 /* Tier 3 — "& CHHATRAPATI SAMBHAJINAGAR"'s treatment: small, tracked, quiet. */
 .pl-sub{
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 500;
   letter-spacing: .05em;
   text-transform: uppercase;
