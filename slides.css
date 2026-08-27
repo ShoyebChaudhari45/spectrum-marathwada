@@ -540,16 +540,80 @@
 /* 1672x941 source, ~1.78:1. Height-bound: at 420px, width comes out to
    ~747px, well inside the 1420px content width, so it's centred rather
    than filling it edge to edge. 430px measured a few px into the bottom
-   spectrum wave; backed off to clear it. */
-.seek-image{
+   spectrum wave; backed off to clear it.
+
+   The stage wraps the image so the seven .seek-mask strips below have
+   something to be absolutely positioned against — aspect-ratio keeps its
+   box locked to the source image's own ratio at any height. */
+.seek-stage{
+  /* .content has no align-items of its own (default: stretch) — the old
+     .seek-image was a replaced element, exempt from being stretched full
+     width, but a plain div isn't, which would blow out the height/aspect
+     ratio below. align-self overrides just this one item back to
+     shrink-to-fit. */
+  align-self: center;
+  position: relative;
   display: block;
   margin: 28px auto 0;
-  max-width: 100%;
-  max-height: 420px;
+  height: 420px;
   width: auto;
-  height: auto;
+  aspect-ratio: 1672 / 941;
   border-radius: 10px;
+  overflow: hidden;
   box-shadow: 0 24px 70px rgba(0,0,0,.55);
+  /* Invisible at load — its box-shadow would otherwise silhouette an
+     empty rounded rectangle before any panel has appeared. reveal.js
+     adds .is-active the moment the first .seek-mask starts revealing,
+     fading the whole stage in alongside it. */
+  opacity: 0;
+  transition: opacity .9s ease;
+}
+
+.seek-stage.is-active{ opacity: 1; }
+
+.seek-image{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Each source image is seven equal-width rainbow panels, numbered/ordered
+   left to right — .seek-mask-1..7 sit exactly over one panel each, opaque
+   at load (var(--page), matching the slide behind it) so nothing reads
+   until its turn. reveal.js adds .is-in to each one in turn on its own,
+   in the DOM order they're written here (1 through 7), fading it away to
+   reveal that panel — no click needed, see reveal.js's own comment. */
+.seek-mask{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(100% / 7);
+  background: var(--page);
+  opacity: 1;
+  transform: scaleX(1);
+  transform-origin: right center;
+  transition: opacity 1.1s ease, transform 1.1s cubic-bezier(.65,0,.35,1);
+  pointer-events: none;
+}
+
+/* Wipes away toward its own right edge rather than just fading, so each
+   panel reads as sliding open left-to-right instead of dissolving. */
+.seek-mask.is-in{
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.seek-mask-1{ left: 0%; }
+.seek-mask-2{ left: 14.2857%; }
+.seek-mask-3{ left: 28.5714%; }
+.seek-mask-4{ left: 42.8571%; }
+.seek-mask-5{ left: 57.1429%; }
+.seek-mask-6{ left: 71.4286%; }
+.seek-mask-7{ left: 85.7143%; }
+
+@media (prefers-reduced-motion: reduce){
+  .seek-mask{ transition-duration: .01ms; }
 }
 
 /* Slide 10 only — the deck's usual light-gray subtitle, in green. */
