@@ -805,16 +805,20 @@
   color: var(--ink-soft);
 }
 
-/* Six investor logos, one row, equal width each. White plates behind all
-   of them — like the CSN RISE lockup elsewhere, most of these logos ship
-   on their own opaque background (white, black, cream…) with no alpha,
-   so a uniform light card is what makes six different logo styles read
-   as one consistent row instead of six mismatched cutouts. */
+/* Six investor logos, one row, equal width each. These logos ship with no
+   alpha, on their own opaque background (white, black, near-white), so each
+   sits on a plate — but the plate is sized to be COVERED, not to frame the
+   mark. Two things do that: the source files are cropped tight to the mark
+   (assets/logos/_original/ keeps the untrimmed versions), and the img fills
+   the whole padding box below, so the mark scales up until it hits an edge.
+   --tile carries the plate colour, set per <li> in the slide to whatever
+   that logo's own background is, so the plate disappears into the artwork
+   instead of ringing it in white. */
 .anchor-companies{
   display: flex;
   flex-wrap: nowrap;
-  gap: 16px;
-  margin: 28px 0 0;
+  gap: 14px;
+  margin: 18px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -822,21 +826,22 @@
 .anchor-companies li{
   flex: 1 1 0;
   min-width: 0;
-  height: 92px;
+  height: 112px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 18px;
+  padding: 8px;
+  overflow: hidden;
   border-radius: 12px;
-  background: #fff;
+  background: var(--tile, #fff);
   box-shadow: 0 4px 14px rgba(0,0,0,.3);
 }
 
+/* Fills the padding box rather than sitting inside it at natural size —
+   with the art trimmed, contain then scales the mark up to the plate. */
 .anchor-companies img{
   display: block;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }

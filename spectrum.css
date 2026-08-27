@@ -472,18 +472,27 @@
 .section-panel.is-active .title{ font-size: 23px; }
 .section-panel.is-active .subtitle{ font-size: 13.5px; white-space: normal; }
 
+/* The body copy starts where the TITLE starts, not where the icon does.
+   That inset is the same stack .section-toggle builds up before its text:
+   the card's 4% padding, the 42px active icon, and the 3% flex gap between
+   them — a column-gap percentage measures against the toggle's own content
+   box, which the 4% side padding has already reduced to 92%, so the gap
+   contributes 3% × .92 = 2.76%. Hence calc(6.76% + 42px). */
 .band-content{
   height: 0;
   opacity: 0;
   overflow: hidden;
-  padding: 0 4%;
+  padding-left: calc(6.76% + 42px);
+  padding-right: 4%;
   flex: 0 0 auto;
 }
 
 .band-text{
   margin: 0;
   padding: .35em 0 4%;
-  padding-right: 8%;
+  /* trimmed from 8% — the copy is indented past the icon now, so it needs
+     the width back on the right to keep its line count */
+  padding-right: 6%;
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   font-size: 15.5px;
