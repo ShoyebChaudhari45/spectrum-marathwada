@@ -6,7 +6,7 @@ Powerhouse* deck. Every page is wrapped in the official CMIA slide template
 (logo, 58-years jubilee mark, bottom spectrum wave) on a dark
 theme, and page 4 carries the interactive "Spectrum of Marathwada" artwork
 inset inside that frame.
-
+..
 ## Running it — works with no internet
 .
 Nothing is fetched from the network. GSAP, both fonts and every image are
