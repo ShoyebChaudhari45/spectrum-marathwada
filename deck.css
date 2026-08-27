@@ -164,11 +164,11 @@ html, body{
   background: rgba(255,255,255,.22);
 }
 
-/* 110px makes this block 94px tall — the same height as the CMIA lockup
-   beside it, so the two marks read as one pair rather than two sizes. */
+/* Slightly smaller than the CMIA lockup beside it, on purpose — the mark
+   reads as a secondary jubilee badge, not an equal partner to the logo. */
 .jubilee-mark{
   display: block;
-  width: 110px;
+  width: 80px;
   height: auto;
 }
 
@@ -294,8 +294,8 @@ body.is-fullscreen .fs-btn .icon-enter{ display: none; }
 }
 
 .slide[data-chrome="mark-centered"] .jubilee::before{ top: -50px; bottom: -50px; }
-/* Reduced from 300px — smaller mark balances better against the 320px CMIA logo */
-.slide[data-chrome="mark-centered"] .jubilee-mark{ width: 220px; }
+/* Reduced from 300px, then again from 220px — smaller mark balances better against the 320px CMIA logo */
+.slide[data-chrome="mark-centered"] .jubilee-mark{ width: 185px; }
 
 /* ===================================================== */
 /* PAGE NAV — "very small arrows", bottom left            */
