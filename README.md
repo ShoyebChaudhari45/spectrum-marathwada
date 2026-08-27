@@ -16,7 +16,7 @@ deck runs from a folder on a USB stick in a hall with no wifi. Open
 .....
 ```bash
 npx serve .
-# or
+# or0
 python -m http.server 8080
 ```
 
