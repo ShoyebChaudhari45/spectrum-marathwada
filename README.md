@@ -13,7 +13,7 @@ Nothing is fetched from the network. GSAP, both fonts and every image are
 vendored into `assets/`, and there is no build step and no backend, so the
 deck runs from a folder on a USB stick in a hall with no wifi. Open
 `index.html` in a browser, or serve the folder:
-
+..
 ```bash
 npx serve .
 # or
