@@ -805,20 +805,21 @@
   color: var(--ink-soft);
 }
 
-/* Six investor logos, one row, equal width each. These logos ship with no
-   alpha, on their own opaque background (white, black, near-white), so each
-   sits on a plate — but the plate is sized to be COVERED, not to frame the
-   mark. Two things do that: the source files are cropped tight to the mark
-   (assets/logos/_original/ keeps the untrimmed versions), and the img fills
-   the whole padding box below, so the mark scales up until it hits an edge.
-   --tile carries the plate colour, set per <li> in the slide to whatever
-   that logo's own background is, so the plate disappears into the artwork
-   instead of ringing it in white. */
+/* Six investor logos, one row, equal width each. A uniform WHITE plate under
+   all six: these logos ship with no alpha, each on its own opaque background
+   (white, black, near-white), and one light card is what makes six different
+   logo styles read as one row instead of six mismatched cutouts.
+
+   What makes the marks legible is not the plate size but the art — the source
+   files are cropped tight to the mark (assets/logos/_original/ keeps the
+   untrimmed originals, some of which were nearly half padding). The img then
+   fills the padding box, so the mark scales to the plate and the padding
+   below is the only margin around it. */
 .anchor-companies{
   display: flex;
   flex-wrap: nowrap;
   gap: 14px;
-  margin: 18px 0 0;
+  margin: 20px 0 0;
   padding: 0;
   list-style: none;
 }
@@ -826,19 +827,19 @@
 .anchor-companies li{
   flex: 1 1 0;
   min-width: 0;
-  height: 112px;
+  height: 104px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 10px 16px;
   overflow: hidden;
   border-radius: 12px;
-  background: var(--tile, #fff);
+  background: #fff;
   box-shadow: 0 4px 14px rgba(0,0,0,.3);
 }
 
 /* Fills the padding box rather than sitting inside it at natural size —
-   with the art trimmed, contain then scales the mark up to the plate. */
+   with the art trimmed, contain then scales the mark to the plate. */
 .anchor-companies img{
   display: block;
   width: 100%;
