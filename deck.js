@@ -40,6 +40,30 @@
     "10-thank-you.html",
   ];
 
+  // ---------------------------------------------------
+  // 0. Make sure we are running inside the shell
+  // ---------------------------------------------------
+  // Fullscreen is granted to a DOCUMENT. Every slide is its own file, so a
+  // slide that fullscreens itself loses the grant the moment an arrow
+  // navigates — browsers refuse to re-grant it to a freshly loaded document,
+  // even though the navigation was itself a click. index.html never
+  // navigates (only its iframe's src does), so the grant has to live there.
+  //
+  // Which means a slide opened straight from the address bar has to be
+  // hoisted into the shell, or its fullscreen button would work exactly once
+  // and then drop out on the next arrow. ?solo opts out, for inspecting a
+  // single slide on its own.
+  const inFrame = window.parent !== window;
+  const solo = /(^|[?&])solo(=|&|$)/.test(window.location.search);
+
+  if (!inFrame && !solo) {
+    const here = window.location.pathname.split("/").pop() || "";
+    if (PAGES.includes(here)) {
+      window.location.replace(`index.html#${here}`);
+      return;
+    }
+  }
+
   const slide = document.querySelector(".slide");
   if (!slide) return;
 
@@ -220,4 +244,65 @@
         break;
     }
   });
+
+  // ---------------------------------------------------
+  // 4. Fullscreen toggle — top-right of the slide
+  // ---------------------------------------------------
+  // See section 0 for why the grant cannot live in this document. In the
+  // shell we only ASK: the toggle goes up over postMessage and this document
+  // mirrors whatever state the shell reports back, so the icon stays honest
+  // across arrows. Standalone (?solo) we do it ourselves, and the next arrow
+  // drops out of fullscreen — unavoidable, which is why ?solo is opt-in.
+  const fsBtn = el(`
+    <button class="fs-btn" type="button" aria-pressed="false" aria-label="Enter fullscreen">
+      <svg class="icon-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5" /></svg>
+      <svg class="icon-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h5V3M21 8h-5V3M3 16h5v5M21 16h-5v5" /></svg>
+    </button>
+  `);
+  slide.appendChild(fsBtn);
+
+  let isFull = false;
+
+  function reflectFs(state) {
+    isFull = Boolean(state);
+    document.body.classList.toggle("is-fullscreen", isFull);
+    fsBtn.setAttribute("aria-pressed", String(isFull));
+    fsBtn.setAttribute("aria-label", isFull ? "Exit fullscreen" : "Enter fullscreen");
+  }
+
+  reflectFs(false);
+
+  if (inFrame) {
+    fsBtn.addEventListener("click", () => {
+      window.parent.postMessage(
+        { source: "cmia-deck", type: "fullscreen-toggle", want: !isFull },
+        "*"
+      );
+    });
+
+    window.addEventListener("message", (e) => {
+      const data = e.data;
+      if (!data || data.source !== "cmia-deck") return;
+      if (data.type === "fullscreen-state") reflectFs(data.isFullscreen);
+    });
+
+    // This document was loaded by an arrow and knows nothing about a grant
+    // made before it existed — so ask. Without this the button would show
+    // "enter" on every slide after the first while already being fullscreen.
+    window.parent.postMessage({ source: "cmia-deck", type: "fullscreen-query" }, "*");
+  } else {
+    fsBtn.addEventListener("click", () => {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      } else {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+    });
+
+    document.addEventListener("fullscreenchange", () =>
+      reflectFs(Boolean(document.fullscreenElement))
+    );
+  }
 })();

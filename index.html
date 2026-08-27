@@ -55,6 +55,9 @@
 
   const frame = document.getElementById("deckFrame");
 
+  const FALLBACK = "01-opener.html";
+  const SLIDE_NAME = /^[0-9]{2}[a-z0-9-]*\.html$/i;
+
   function isFs() {
     return Boolean(document.fullscreenElement);
   }
@@ -65,6 +68,44 @@
       "*"
     );
   }
+
+  // ---- which slide ----------------------------------------------------
+  // The hash names the slide inside the frame, so this shell is linkable,
+  // reloadable and bookmarkable at any point in the deck. deck.js sends a
+  // slide opened directly in the address bar here as index.html#<slide>,
+  // which is what this reads.
+  function wanted() {
+    const h = decodeURIComponent(window.location.hash.replace(/^#/, ""));
+    return SLIDE_NAME.test(h) ? h : FALLBACK;
+  }
+
+  function showing() {
+    try {
+      return frame.contentWindow.location.pathname.split("/").pop();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  if (wanted() !== FALLBACK) frame.src = wanted();
+
+  frame.addEventListener("load", () => {
+    const name = showing();
+    // replaceState, not location.hash: the arrows are the deck's history, and
+    // one entry per slide would turn Back into an unpredictable second nav.
+    if (name && window.location.hash !== `#${name}`) {
+      history.replaceState(null, "", `#${name}`);
+    }
+    // Keyboard nav lives in the slide document, so focus has to follow the
+    // frame — otherwise the arrow keys land on this shell and do nothing.
+    try {
+      frame.contentWindow.focus();
+    } catch (e) {}
+  });
+
+  window.addEventListener("hashchange", () => {
+    if (wanted() !== showing()) frame.src = wanted();
+  });
 
   window.addEventListener("message", (e) => {
     const data = e.data;
@@ -84,7 +125,14 @@
     }
   });
 
-  document.addEventListener("fullscreenchange", reportState);
+  document.addEventListener("fullscreenchange", () => {
+    reportState();
+    // Entering fullscreen moves focus to the element that was made
+    // fullscreen — this shell's root — so hand it back to the slide.
+    try {
+      frame.contentWindow.focus();
+    } catch (e) {}
+  });
 })();
 </script>
 
