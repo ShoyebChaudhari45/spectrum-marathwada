@@ -10,6 +10,24 @@
 
 .title-slide .content{ text-align: center; }
 
+/* ---- pages 6-8: one heading level for all three ---------------------
+   deck.css centres .content vertically inside its 620px box, so the
+   heading's position was a function of how tall the body below it
+   happened to be — measured at 232px, 158px and 199px from the top of the
+   slide, a 74px jump as you page through them. Packing to the top instead
+   puts every kicker at the top of the content box, so the kicker, heading,
+   sub and rule hold still and only the body length varies.
+
+   The tallest of the three (page 7) already needs 603 of the 620px, so
+   this is also the only level they CAN share — anything lower would push
+   page 7's logo row off the bottom. The slack now falls under the body:
+   165px on page 6, 97px on page 8, above the bottom wave. */
+.slide[data-page="6"] .content,
+.slide[data-page="7"] .content,
+.slide[data-page="8"] .content{
+  justify-content: flex-start;
+}
+
 /* One plain colour — the spectrum idea is carried by the wave along the
    bottom and by the artwork on the next slide, so the wordmark stays quiet. */
 .title-slide h1{
