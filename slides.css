@@ -70,6 +70,24 @@
   text-align: center;
 }
 
+/* typewriter.js empties this line and types it back in — a blinking
+   caret at the end while that's happening, matching the rest of the
+   deck's cool green rather than a plain black text-cursor. */
+.typewriter.is-typing::after{
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: .9em;
+  margin-left: 4px;
+  vertical-align: -.1em;
+  background: var(--green-heading);
+  animation: caretBlink 1s step-end infinite;
+}
+
+@keyframes caretBlink{
+  50%{ opacity: 0; }
+}
+
 /* the wordmark is re-tinted on click by title.js */
 .title-slide h1{ transition: color .35s ease; }
 
@@ -133,6 +151,15 @@
 
 /* the title block drops to make room for the pair above it */
 .title-slide .content{ top: 336px; height: 400px; }
+
+/* Slide 11 (closing) — same bigger lockup as slide 1's opener, rather
+   than the standard 150px/140px "centred" pair used everywhere else this
+   chrome mode appears. Content dropped further to clear the taller mark
+   + wordmark this size produces. */
+.slide[data-page="11"] .brand img{ width: 320px; }
+.slide[data-page="11"] .brand .wordmark{ margin-top: 12px; font-size: 18px; }
+.slide[data-page="11"] .jubilee-mark{ width: 300px; }
+.slide[data-page="11"].title-slide .content{ top: 430px; height: 340px; }
 
 /* ===================================================== */
 /* SLIDES 2 & 3 — full-bleed showcase artwork             */
@@ -414,19 +441,20 @@
   box-shadow: 0 4px 24px rgba(0,0,0,.55);
 }
 
-/* three delegation photos, sitting below the logo in the same empty
+/* Four delegation photos, sitting below the logo in the same empty
    right-hand column — widened past the logo card's width to fill the
    rest of that free space (right-hand column runs from x~735 to the
-   160px right margin, i.e. ~705px available). Pulled up close under the
+   160px right margin, i.e. ~705px available, so 700px comfortably fits
+   four now instead of the previous three). Pulled up close under the
    logo card (which is ~194px tall at this width) rather than the ~125px
    gap a lower top left before. */
 .rise-photos{
   position: absolute;
   right: 160px;
   top: 383px;
-  width: 620px;
+  width: 700px;
   display: flex;
-  gap: 16px;
+  gap: 14px;
   z-index: 2;
 }
 
@@ -521,46 +549,26 @@
 }
 
 /* =====================================================
-   SLIDES 8 & 9 — full artwork, national demands / pledge
+   SLIDES 9 & 10 — full-bleed artwork, national demands / pledge
    -----------------------------------------------------
-   Each is now one finished infographic (numbered demand cards / pledge
+   Each is one finished infographic (numbered demand cards / pledge
    panels, already laid out and coloured) rather than the deck's own
-   hand-built card grid, so the whole thing is a single <img>.
-   ===================================================== */
+   hand-built card grid, so the whole thing is a single <img>. The source
+   is 1672x941 (~1.78:1), close enough to the 1600x900 (1.78:1) slide that
+   object-fit:cover crops next to nothing — unlike slide 5's 3:2 crystal,
+   full-bleed doesn't cost this artwork anything visible.
 
-/* Anchored to the top rather than centred. .content centres its children,
-   which is right for sparse slides but means an image taller than the box
-   overflows UPWARD as well as down — and up is where the logo lives. */
-.content.seek{ justify-content: flex-start; }
-
-/* 1672x941 source, ~1.78:1. Height-bound: at 420px, width comes out to
-   ~747px, well inside the 1420px content width, so it's centred rather
-   than filling it edge to edge. 430px measured a few px into the bottom
-   spectrum wave; backed off to clear it.
-
-   The stage wraps the image so the seven .seek-mask strips below have
-   something to be absolutely positioned against — aspect-ratio keeps its
-   box locked to the source image's own ratio at any height. */
+   data-chrome="centred" (deck.css) puts the CMIA | 58 lockup centred at
+   the top, same as the title slide; .content.seek below sits right under
+   it with just the heading, so logos + heading read as one centred group
+   floating over the full-bleed art behind them. */
 .seek-stage{
-  /* .content has no align-items of its own (default: stretch) — the old
-     .seek-image was a replaced element, exempt from being stretched full
-     width, but a plain div isn't, which would blow out the height/aspect
-     ratio below. align-self overrides just this one item back to
-     shrink-to-fit. */
-  align-self: center;
-  position: relative;
-  display: block;
-  margin: 28px auto 0;
-  height: 420px;
-  width: auto;
-  aspect-ratio: 1672 / 941;
-  border-radius: 10px;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   overflow: hidden;
-  box-shadow: 0 24px 70px rgba(0,0,0,.55);
-  /* Invisible at load — its box-shadow would otherwise silhouette an
-     empty rounded rectangle before any panel has appeared. reveal.js
-     adds .is-active the moment the first .seek-mask starts revealing,
-     fading the whole stage in alongside it. */
+  /* Invisible at load. reveal.js adds .is-active the moment the panels
+     start revealing, fading the whole stage in alongside them. */
   opacity: 0;
   transition: opacity .9s ease;
 }
@@ -574,13 +582,51 @@
   object-fit: cover;
 }
 
+/* The centred logo pair (~168px-288px) and the heading (top:336px) both
+   float over the artwork's own top edge, which is full of icons and copy
+   right up to y:0 — a plain darkening band behind that whole zone so both
+   read cleanly, rather than a backdrop behind the heading alone. */
+.seek-top-fade{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 460px;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(4,6,12,.88) 0%,
+    rgba(4,6,12,.72) 55%,
+    transparent 100%);
+}
+
+.content.seek{
+  left: 0;
+  top: 336px;           /* level with .title-slide .content */
+  width: 1600px;
+  height: auto;
+  z-index: 2;
+  display: block;
+  text-align: center;
+}
+
+/* A contained plate behind the heading only (not a full-width bar) —
+   legible against the busy, colourful artwork behind it without reading
+   as a heavy banner across the slide. */
+.content.seek h1{
+  display: inline-block;
+  margin: 0;
+  padding: 18px 40px;
+  border-radius: 12px;
+  background: rgba(4,6,12,.72);
+}
+
 /* Each source image is seven equal-width rainbow panels, numbered/ordered
    left to right — .seek-mask-1..7 sit exactly over one panel each, opaque
    at load (var(--page), matching the slide behind it) so nothing reads
-   until its turn. reveal.js adds .is-in to each one in turn on its own,
-   in the DOM order they're written here (1 through 7); it drops straight
-   down and out, uncovering that panel top-to-bottom as it falls — no
-   click needed, see reveal.js's own comment. */
+   until its turn. reveal.js adds .is-in to all of them together, in one
+   go rather than in sequence; each drops straight down and out,
+   uncovering that panel top-to-bottom as it falls. */
 .seek-mask{
   position: absolute;
   top: 0;
@@ -612,9 +658,6 @@
 @media (prefers-reduced-motion: reduce){
   .seek-mask{ transition-duration: .01ms; }
 }
-
-/* Slide 10 only — the deck's usual light-gray subtitle, in green. */
-.slide[data-page="10"] .slide-sub{ color: var(--green-heading); }
 
 /* =====================================================
    SLIDE 6 — anchoring investments
@@ -744,26 +787,38 @@
   color: var(--ink-soft);
 }
 
-/* All seven chips have to fit on one line — at the previous padding/gap
-   (22px/8px) they came out to ~1428px, just past the 1420px content
-   width, which wrapped "and more…" onto its own row. Trimmed to comfortably
-   clear that in one line instead. */
+/* Six investor logos, one row, equal width each. White plates behind all
+   of them — like the CSN RISE lockup elsewhere, most of these logos ship
+   on their own opaque background (white, black, cream…) with no alpha,
+   so a uniform light card is what makes six different logo styles read
+   as one consistent row instead of six mismatched cutouts. */
 .anchor-companies{
   display: flex;
   flex-wrap: nowrap;
-  gap: 6px;
+  gap: 16px;
   margin: 28px 0 0;
   padding: 0;
   list-style: none;
 }
 
 .anchor-companies li{
-  padding: 10px 18px;
-  border: 1px solid rgba(100,176,24,.35);
-  border-radius: 999px;
-  background: rgba(100,176,24,.08);
-  font-size: 20px;
-  font-weight: 500;
-  color: var(--ink);
-  white-space: nowrap;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0,0,0,.3);
+}
+
+.anchor-companies img{
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }

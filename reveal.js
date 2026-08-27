@@ -2,17 +2,14 @@
    AUTO-REVEAL — shared by the card-grid slides
    -----------------------------------------------------
    Any slide whose content carries .reveal-item children
-   starts with them hidden; on load they come in on their
-   own, one at a time in document order, no click needed.
+   starts with them hidden; on load they all come in
+   together, no click needed.
 
-   The items' shared parent gets .is-active the moment the
-   first one starts revealing — lets that container itself
-   (e.g. a card shadow/frame) stay invisible until there is
-   something inside it to show, instead of sitting there as
-   an empty box while nothing has appeared yet.
-
-   Once they are all up, that's it — reload the slide to
-   run it again.
+   The items' shared parent gets .is-active at the same
+   moment — lets that container itself (e.g. a card shadow/
+   frame) stay invisible until there is something inside it
+   to show, instead of sitting there as an empty box while
+   nothing has appeared yet.
    ===================================================== */
 
 (() => {
@@ -30,21 +27,13 @@
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // Under reduced motion, bring the whole grid up at once rather than
-  // stepping through an animation someone asked not to see.
-  if (reduceMotion) {
+  // Long enough that the logos + heading (already on screen at load) read
+  // as showing up first, with the image animation following after them —
+  // not the two feeling simultaneous.
+  const START_DELAY = reduceMotion ? 0 : 1400;
+
+  setTimeout(() => {
     if (stage) stage.classList.add("is-active");
     items.forEach((el) => el.classList.add("is-in"));
-    return;
-  }
-
-  const START_DELAY = 600;  // lets the slide itself settle in first
-  const STEP_DELAY = 950;   // gap between each item appearing
-
-  items.forEach((el, i) => {
-    setTimeout(() => {
-      if (i === 0 && stage) stage.classList.add("is-active");
-      el.classList.add("is-in");
-    }, START_DELAY + i * STEP_DELAY);
-  });
+  }, START_DELAY);
 })();

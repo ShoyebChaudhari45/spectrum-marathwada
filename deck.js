@@ -169,70 +169,6 @@
     el(`<div class="page-number">${pageNo}</div>`)
   );
 
-  // ---- fullscreen toggle, top-right --------------------------------------
-  // The Fullscreen API is tied to one Document, and browsers refuse to
-  // grant it again on a freshly-navigated page even when that navigation
-  // was itself a click — there's no scripting around that, it's the spec's
-  // user-gesture rule. So a *real* fullscreen that survives the arrows
-  // moving between slide files needs fullscreen requested on a document
-  // that never navigates. index.html is that document: it's the
-  // presentation shell, holding the deck in an <iframe> and is the one
-  // actually put into fullscreen, while the iframe's src (and therefore
-  // this slide) changes freely underneath it.
-  //
-  // Running inside that iframe, this code can't call requestFullscreen()
-  // on itself (nested browsing contexts can't fullscreen past their parent
-  // without leaving IT fullscreen), so the button instead asks the parent
-  // via postMessage and mirrors back whatever state the parent reports —
-  // see index.html for the other half of this handshake.
-  //
-  // Opened directly (no shell parent — this file on its own, outside the
-  // iframe), it falls back to plain per-document fullscreen: works for
-  // that one slide, resets on the next navigation.
-  const inFrame = window.self !== window.top;
-
-  const fsBtn = el(`
-    <button class="fs-btn" type="button" aria-label="Toggle fullscreen" title="Fullscreen (F)">
-      <svg class="icon-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-           stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H3v6M15 3h6v6M9 21H3v-6M15 21h6v-6" /></svg>
-      <svg class="icon-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-           stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h6V3M21 9h-6V3M3 15h6v6M21 15h-6v6" /></svg>
-    </button>
-  `);
-  slide.appendChild(fsBtn);
-
-  function toggleFullscreen() {
-    if (inFrame) {
-      const wantOn = !document.body.classList.contains("is-fullscreen");
-      window.parent.postMessage({ source: "cmia-deck", type: "fullscreen-toggle", want: wantOn }, "*");
-      return;
-    }
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    } else {
-      document.documentElement.requestFullscreen().catch(() => {});
-    }
-  }
-
-  fsBtn.addEventListener("click", toggleFullscreen);
-
-  if (inFrame) {
-    window.addEventListener("message", (e) => {
-      const data = e.data;
-      if (!data || data.source !== "cmia-deck" || data.type !== "fullscreen-state") return;
-      document.body.classList.toggle("is-fullscreen", Boolean(data.isFullscreen));
-      fit(); // the parent's viewport just changed size
-    });
-    // Ask on load what the parent's current state is, in case this slide
-    // was navigated to while already fullscreen.
-    window.parent.postMessage({ source: "cmia-deck", type: "fullscreen-query" }, "*");
-  } else {
-    document.addEventListener("fullscreenchange", () => {
-      document.body.classList.toggle("is-fullscreen", Boolean(document.fullscreenElement));
-      fit(); // the viewport just changed size
-    });
-  }
-
   // ---------------------------------------------------
   // 3. Prev / next arrows — small, bottom-left
   // ---------------------------------------------------
@@ -281,10 +217,6 @@
         break;
       case "End":
         go(PAGES[PAGES.length - 1]);
-        break;
-      case "f":
-      case "F":
-        toggleFullscreen();
         break;
     }
   });

@@ -276,43 +276,6 @@ html, body{
   pointer-events: none;
 }
 
-/* ---- fullscreen toggle, top-right ---- */
-.fs-btn{
-  all: unset;
-  box-sizing: border-box;
-  position: absolute;
-  right: 30px;
-  top: 26px;
-  z-index: 6;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 7px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.04);
-  color: rgba(255,255,255,.6);
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity .3s ease, background .25s ease,
-              border-color .25s ease, color .25s ease;
-}
-
-.slide:hover .fs-btn,
-.fs-btn:focus-visible{ opacity: 1; }
-
-.fs-btn:hover{
-  background: rgba(255,255,255,.12);
-  border-color: rgba(255,255,255,.5);
-  color: #fff;
-}
-
-.fs-btn:focus-visible{ outline: 2px solid var(--green-deep); outline-offset: 2px; }
-.fs-btn svg{ width: 15px; height: 15px; }
-.fs-btn .icon-exit{ display: none; }
-body.is-fullscreen .fs-btn .icon-exit{ display: block; }
-body.is-fullscreen .fs-btn .icon-enter{ display: none; }
 
 /* ===================================================== */
 /* CONTENT AREA + SHARED TYPOGRAPHY                       */
@@ -449,9 +412,9 @@ h1.slide-title.ink{ color: var(--ink-strong); }
 /* ===================================================== */
 
 @media print{
-  .page-nav, .fs-btn{ display: none; }
+  .page-nav{ display: none; }
 }
 
 @media (prefers-reduced-motion: reduce){
-  .page-nav-btn, .fs-btn{ transition-duration: .01ms; }
+  .page-nav-btn{ transition-duration: .01ms; }
 }

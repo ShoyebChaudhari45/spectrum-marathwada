@@ -22,50 +22,41 @@
   --spec-bg: #04060c;
   --ease-expand: cubic-bezier(.16,.84,.32,1);
 
-  /* ---- layout coordinates (% of the PANEL BOX, not the source image) ---- */
-  /* The panel is 1600x900 (16:9) but the source photo is 1280x853 (3:2), so
-     object-fit:cover on .bg-image scales it to match the panel's width and
-     crops the overflow off the top and bottom equally — 66.5px off each
-     side of the 853px-tall source, leaving a 720px-tall visible window.
-     Every Y-axis number below is that source image's own percentage
-     re-expressed against this cropped, visible window:
-       new% = (orig% * 853 - 66.5) / 720 * 100
-     X-axis numbers are untouched — cover only crops vertically here, since
-     the panel is wider-per-height than the source (object-fit:cover
-     matches on width when that's true), so horizontal percentages still
-     map straight onto the same pixels regardless of panel width.
-     The beams find the panel-list edges by measurement (syncBeams), so
-     moving --panels-* needs no matching change in script.js — but
-     script.js's ORIGIN.y (the light point) is hand-set to line up with
-     --map-top/--map-height below, so it moved too when these did. */
+  /* ---- layout coordinates (% of the 3:2 panel) ---- */
+  /* The panel is locked to 3:2 (1350x900), matching the source photo
+     exactly, so nothing here is cropped — the whole crystal, apex to
+     base, is always in frame. A true 1600x900 full-bleed panel was tried
+     twice (cropping symmetrically, then biased to the bottom) and both
+     cut off part of the crystal either way; there's no way to fill a
+     16:9 frame with a 3:2 image without losing part of it, so this
+     trades the edge-to-edge look for showing the whole map intact. */
   --panels-left: 75%;
   --panels-right: 97.6%;
-  --panels-top: 5.2%;     /* was 12.2% of the uncropped source */
-  --panels-bottom: 77.5%; /* was 73.2% */
+  --panels-top: 12.2%;
+  --panels-bottom: 73.2%;
 
   /* Sized to assets/prism-crystal.jpg's own crystal — measured off its
-     bright-pixel bounding box (22.3%–69.8% wide of the source, untouched;
-     5.6%–88% tall of the source, re-expressed above for the crop). The
-     crop line falls below the crystal's own top edge, so its apex is
-     clipped and --map-top is pinned to 0% rather than going negative. */
+     bright-pixel bounding box (22.3%–69.8% wide, 5.6%–88% tall of the
+     1280x853, exactly-3:2 source). */
   --map-left: 22.3%;
-  --map-top: 0%;
+  --map-top: 5.6%;
   --map-width: 47.5%;
-  --map-height: 95%;      /* was 82.4% */
+  --map-height: 82.4%;
 }
 
 /* ===================================================== */
 /* THE INSET PANEL                                        */
 /* ===================================================== */
 
-/* Full-bleed, same as slides 2/3 — no side margins. This crops the
-   crystal (see the Y-axis note above) rather than letterboxing it, which
-   is the tradeoff that buys the edge-to-edge look. */
+/* 1350x900 is the largest 3:2 box that fits inside the 1600x900 slide
+   without cropping — see the Y-axis note above for why this isn't full
+   width. Logos stay on top (z-index 4 in deck.css vs this panel's 2)
+   rather than being cleared for. */
 .spectrum-panel{
   position: absolute;
-  left: 0;
+  left: 125px;             /* (1600 - 1350) / 2 */
   top: 0;
-  width: 1600px;
+  width: 1350px;
   height: 900px;
   z-index: 2;
   overflow: hidden;
@@ -73,15 +64,16 @@
 }
 
 /* The default top-left logo spot (58px) sits left of the punchline column
-   (.spectrum-punchline, 18px-338px now the panel is full-bleed at left:0)
-   — shifted here so the pair centres directly above it instead of
-   floating off to its side. */
-.slide[data-page="5"] .brand{ left: 26px; }
-.slide[data-page="5"] .jubilee{ left: 220px; }
+   (.spectrum-punchline, ~143px-460px once the panel is at its 125px
+   offset) — shifted here so the pair centres directly above it instead
+   of floating off to its side. */
+.slide[data-page="5"] .brand{ left: 150px; }
+.slide[data-page="5"] .jubilee{ left: 344px; }
 
-/* Full-bleed panel now covers the wave completely (no side margin left
-   for it to peek through), same as slides 2/3's artwork already does —
-   hidden outright rather than left as a dead, invisible element. */
+/* The 125px margin on either side of the panel is too narrow for the
+   bottom wave to read as a deliberate band — it just showed two
+   disconnected slivers of colour either side of the panel's dark base.
+   Hidden here rather than left broken. */
 .slide[data-page="5"] .spectrum-wave{ display: none; }
 
 .stage{
@@ -118,7 +110,12 @@
 .spectrum-punchline{
   position: absolute;
   left: 18px;
-  top: 0;
+  /* Starts below the logo pair (top:24px, ~94px tall) rather than the
+     panel's full 0-900 height — centring within that full height put the
+     logos and this text noticeably out of balance (a big gap under the
+     logos, a much smaller one under the text). Centring within the space
+     actually left below them reads as one balanced group instead. */
+  top: 118px;
   bottom: 0;
   /* --map-left (22.3%, 534px in the slide) is the crystal's overall
      bounding box, but that leftmost point is its floor reflection near
@@ -134,7 +131,6 @@
   text-align: center;
   z-index: 2;
   pointer-events: none;
-  transform: translateY(-46px);
 }
 
 /* nowrap on every line: several of these have spaces ("7 Colours",
@@ -149,15 +145,36 @@
   white-space: nowrap;
 }
 
-/* Tier 1 — "SPECTRUM"'s own treatment in the reference: big, bold, white. */
+/* Tier 1 — "SPECTRUM"'s own treatment in the reference (big, bold), but in
+   the deck's own seven spectrum colours rather than plain white — the
+   one word in this block that's literally named "Colours". Same hues as
+   the bottom wave and the title slide's click-to-rainbow wordmark, and
+   animated the same way: two full colour cycles back to back so looping
+   the background-position has no visible seam, turning it into a flowing
+   wave rather than a static fill. "1 Region" keeps its own plain gold
+   (--pl-place below) — this treatment is scoped to .pl-title only. */
 .pl-title{
   font-size: 48px;
   font-weight: 700;
   letter-spacing: .01em;
   text-transform: uppercase;
-  color: #fdf6e6;
   line-height: 1;
   margin: 0 0 12px;
+  background-image: linear-gradient(100deg,
+    #ff3b30 0%, #ff9500 8.5%, #ffd60a 16.5%,
+    #34c759 25%, #0a84ff 33.5%, #5e5ce6 42%, #ff2d92 50%,
+    #ff3b30 50%, #ff9500 58.5%, #ffd60a 66.5%,
+    #34c759 75%, #0a84ff 83.5%, #5e5ce6 92%, #ff2d92 100%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: plTitleWave 5s linear infinite;
+}
+
+@keyframes plTitleWave{
+  from{ background-position: 0% 0; }
+  to{ background-position: -200% 0; }
 }
 
 /* Tier 2 — "MARATHWADA"'s treatment: same size class, gold. "1 City" is
@@ -375,9 +392,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* No outline here: clicking a card to advance the sequence naturally
+   focuses its button, and that ring was reading as a stray white border
+   around the icon/heading/subtitle block — the .is-active treatment
+   (brighter background, icon glow, bigger type) already marks the
+   current card clearly enough. */
 .section-toggle:focus-visible{
-  outline: 2px solid #fff;
-  outline-offset: -3px;
+  outline: 1px solid rgba(255,255,255,.45);
+  outline-offset: 2px;
 }
 
 .section-panel .icon{
