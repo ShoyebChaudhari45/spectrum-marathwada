@@ -301,6 +301,11 @@ body.is-fullscreen .fs-btn .icon-enter{ display: none; }
 .slide[data-chrome="mark-centered"] .jubilee{
   left: 50%;
   top: 50%;
+  /* Cancels the corner lockup's fixed 94px centring box (deck.css .jubilee)
+     — this pair is already centred as a whole via top:50%/translateY(-50%)
+     below, so the box should hug the mark's own (much bigger) height
+     instead of the small corner size, or the mark drifts off that centre. */
+  height: auto;
   transform: translate(24px, -50%);
 }
 

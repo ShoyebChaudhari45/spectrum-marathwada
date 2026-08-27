@@ -189,6 +189,10 @@
 .slide[data-chrome="centred"] .jubilee{
   left: 50%;
   top: 168px;     /* level with .brand */
+  /* Cancels the corner lockup's fixed 94px centring box (deck.css
+     .jubilee) — this pair shares a top baseline, not a centred one, so
+     the box needs to hug the (larger) mark's own height here instead. */
+  height: auto;
   transform: translateX(24px);
 }
 
@@ -220,6 +224,7 @@
    + wordmark this size produces. */
 .slide[data-page="11"] .brand img{ width: 320px; }
 .slide[data-page="11"] .brand .wordmark{ margin-top: 12px; font-size: 18px; }
+.slide[data-page="11"] .jubilee{ top: 218px; }
 .slide[data-page="11"] .jubilee-mark{ width: 220px; }
 .slide[data-page="11"].title-slide .content{ top: 430px; height: 340px; }
 
