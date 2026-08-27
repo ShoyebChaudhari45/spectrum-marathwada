@@ -508,14 +508,25 @@
   box-shadow: 0 4px 24px rgba(0,0,0,.55);
 }
 
-/* Four delegation photos arranged as a 2 × 2 grid in the empty
-   right-hand column, below the rule that follows the heading block.
-   Width stays 700px; two columns of equal width, two rows. */
+/* Four delegation photos as a 2 × 2 grid in the right-hand column, forming
+   the second column of the band that starts under the rule — so its top
+   (350px) is the top of .rise-list's first line, not a value of its own,
+   and the two columns begin together instead of the slab floating with a
+   176px void under the CSN RISE logo.
+
+   Width is 650px, not 700: at 700 the block started at x=740 and "S —
+   Skilling & MSME Upgradation", the longest line in the list, runs to
+   x=735 — five pixels of clearance, which read as the text touching the
+   first photo. 650 keeps the right edge on 1440 (level with the logo
+   above) and moves the left edge out to 790, giving that line 55px.
+
+   155px rows put the block's bottom on 674 against the list's 673, so the
+   two columns finish level as well as start level. */
 .rise-photos{
   position: absolute;
   right: 160px;
-  top: 430px;
-  width: 700px;
+  top: 350px;
+  width: 650px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 14px;
@@ -524,7 +535,7 @@
 
 .rise-photos img{
   width: 100%;
-  height: 160px;
+  height: 155px;
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,.12);
